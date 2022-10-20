@@ -1,9 +1,6 @@
 package pm.n2.tangerine.gui.renderables;
 
-import gay.eviee.imguiquilt.interfaces.Renderable;
-import gay.eviee.imguiquilt.interfaces.Theme;
 import imgui.ImGui;
-import net.minecraft.client.MinecraftClient;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.gui.TangerineRenderable;
 

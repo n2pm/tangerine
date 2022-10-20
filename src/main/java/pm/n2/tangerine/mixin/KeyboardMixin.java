@@ -12,7 +12,7 @@ import pm.n2.tangerine.Tangerine;
 @Mixin(Keyboard.class)
 public class KeyboardMixin {
 	@Inject(method = "onKey(JIIII)V", at = @At("HEAD"))
-	public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
+	public void tangerine$onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
 		if (key == GLFW.GLFW_KEY_RIGHT_SHIFT) {
 			var mc = MinecraftClient.getInstance();
 			var screen = Tangerine.IMGUI_SCREEN;
