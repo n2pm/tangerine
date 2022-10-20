@@ -21,9 +21,15 @@ public class ImGuiScreen extends Screen {
 	public void tick() {
 		if (shouldClose) {
 			shouldClose = false;
-			Tangerine.imguiScreenOpen = false;
 			closeScreen();
 		}
+
+		super.tick();
+	}
+
+	@Override
+	public boolean isPauseScreen() {
+		return false;
 	}
 
 	@Override

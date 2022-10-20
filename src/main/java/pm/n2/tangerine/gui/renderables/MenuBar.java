@@ -50,6 +50,12 @@ public class MenuBar extends TangerineRenderable {
 
 			if (ImGui.beginMenu("Misc")) {
 				var demoWindow = manager.get("DemoWindow");
+				var aboutWindow = manager.get("AboutWindow");
+
+				if (ImGui.menuItem("About Tangerine", "", aboutWindow.enabled)) {
+					aboutWindow.enabled = !aboutWindow.enabled;
+				}
+
 				if (ImGui.menuItem("Open ImGui demo", "", demoWindow.enabled)) {
 					demoWindow.enabled = !demoWindow.enabled;
 				}
