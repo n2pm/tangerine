@@ -1,0 +1,62 @@
+plugins {
+	id 'maven-publish'
+	alias libs.plugins.quilt.loom
+}
+
+archivesBaseName = project.archives_base_name
+version = "${project.version}+${libs.versions.minecraft.get()}"
+group = project.maven_group
+
+repositories {
+	maven { url "https://maven.eviee.gay/imgui-quilt" }
+	maven { url "https://maven.svc.adryd.com/releases/" }
+}
+
+dependencies {
+	minecraft libs.minecraft
+	mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
+
+	modImplementation libs.quilt.loader
+	modImplementation libs.quilted.fabric.api
+
+	modImplementation libs.imgui
+	include libs.imgui
+
+	modApi libs.cauldron
+}
+
+processResources {
+	inputs.property "version", version
+
+	filesMatching('quilt.mod.json') {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 17
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${archivesBaseName}" }
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {}
+}
