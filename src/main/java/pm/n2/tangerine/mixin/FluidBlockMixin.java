@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pm.n2.tangerine.Tangerine;
+import pm.n2.tangerine.modules.LiquidWalkModule;
 
 @Mixin(FluidBlock.class)
 public class FluidBlockMixin {
@@ -25,7 +26,7 @@ public class FluidBlockMixin {
 
 	@Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
 	public void tangerine$getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-		if (Tangerine.MODULE_STATE.walkOnLiquids
+		if (Tangerine.MODULE_MANAGER.get(LiquidWalkModule.class).enabled
 				&& (this.fluid.matchesType(Fluids.WATER)
 				|| this.fluid.matchesType(Fluids.FLOWING_WATER)
 				|| this.fluid.matchesType(Fluids.LAVA)

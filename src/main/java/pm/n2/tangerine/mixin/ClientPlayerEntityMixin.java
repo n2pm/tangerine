@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import pm.n2.tangerine.Tangerine;
+import pm.n2.tangerine.modules.AntiHungerModule;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
@@ -14,7 +15,7 @@ public class ClientPlayerEntityMixin {
 	// lol
 	@Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V", ordinal = 0))
 	public void tangerine$sendMovementPackets(ClientPlayNetworkHandler instance, Packet<?> packet) {
-		if (Tangerine.MODULE_STATE.antiHunger) return;
+		if (Tangerine.MODULE_MANAGER.get(AntiHungerModule.class).enabled) return;
 		instance.sendPacket(packet);
 	}
 }

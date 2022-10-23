@@ -13,10 +13,11 @@ import pm.n2.tangerine.gui.renderables.MenuBar;
 
 public class Tangerine implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Tangerine");
+	public static String MOD_VERSION;
+
 	public static final ImGuiManager IMGUI_MANAGER = new ImGuiManager();
 	public static final ImGuiScreen IMGUI_SCREEN = new ImGuiScreen(IMGUI_MANAGER);
-	public static final ModuleState MODULE_STATE = new ModuleState();
-	public static String MOD_VERSION = "";
+	public static final ModuleManager MODULE_MANAGER = new ModuleManager();
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
@@ -26,11 +27,17 @@ public class Tangerine implements ClientModInitializer {
 		IMGUI_MANAGER.addRenderable(new DemoWindow());
 		IMGUI_MANAGER.addRenderable(new AboutWindow());
 
+		MODULE_MANAGER.registerModules();
+
+		ClientTickEvents.START.register(mc -> {
+			for (var module : MODULE_MANAGER.getModules()) {
+				module.onStartTick(mc);
+			}
+		});
+
 		ClientTickEvents.END.register(mc -> {
-			if (mc.player != null) {
-				if (MODULE_STATE.flight && !mc.player.isSpectator() && !mc.player.isCreative()) {
-					mc.player.getAbilities().allowFlying = true;
-				}
+			for (var module : MODULE_MANAGER.getModules()) {
+				module.onEndTick(mc);
 			}
 		});
 	}

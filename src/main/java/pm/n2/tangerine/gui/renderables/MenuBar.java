@@ -1,15 +1,40 @@
 package pm.n2.tangerine.gui.renderables;
 
 import imgui.ImGui;
-import net.minecraft.client.MinecraftClient;
+import pm.n2.tangerine.Module;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.gui.TangerineRenderable;
+import pm.n2.tangerine.ModuleCategory;
+
+import java.util.List;
 
 public class MenuBar extends TangerineRenderable {
 	public MenuBar() {
 		super("MenuBar");
 	}
 
+	private void drawMenuTab(String name, List<Module> modules) {
+		if (ImGui.beginMenu(name)) {
+			for (var module : modules) {
+				if (ImGui.menuItem(module.name, "", module.enabled)) {
+					module.enabled = !module.enabled;
+					if (module.enabled) {
+						module.onEnabled();
+					} else {
+						module.onDisabled();
+					}
+				}
+
+				if (ImGui.isItemHovered()) {
+					ImGui.beginTooltip();
+					ImGui.text(module.description);
+					ImGui.endTooltip();
+				}
+			}
+
+			ImGui.endMenu();
+		}
+	}
 	@Override
 	public void draw() {
 		if (ImGui.beginMainMenuBar()) {
@@ -32,34 +57,7 @@ public class MenuBar extends TangerineRenderable {
 				ImGui.endMenu();
 			}
 
-			if (ImGui.beginMenu("Movement")) {
-				if (ImGui.menuItem("Flight", "", Tangerine.MODULE_STATE.flight)) {
-					Tangerine.MODULE_STATE.flight = !Tangerine.MODULE_STATE.flight;
-
-					if (!Tangerine.MODULE_STATE.flight) {
-						var mc = MinecraftClient.getInstance();
-						if (mc.player != null) {
-							if (!mc.player.isSpectator() && !mc.player.isCreative()) {
-								mc.player.getAbilities().allowFlying = false;
-								mc.player.getAbilities().flying = false;
-							}
-						}
-					}
-				}
-
-				if (ImGui.menuItem("No fall damage", "", Tangerine.MODULE_STATE.noFall)) {
-					Tangerine.MODULE_STATE.noFall = !Tangerine.MODULE_STATE.noFall;
-				}
-
-				if (ImGui.menuItem("Walk on liquids", "", Tangerine.MODULE_STATE.walkOnLiquids)) {
-					Tangerine.MODULE_STATE.walkOnLiquids = !Tangerine.MODULE_STATE.walkOnLiquids;
-				}
-
-				ImGui.menuItem("Speedhack");
-				ImGui.menuItem("No slowdown");
-
-				ImGui.endMenu();
-			}
+			drawMenuTab("Movement", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.MOVEMENT));
 
 			if (ImGui.beginMenu("Visuals")) {
 				ImGui.menuItem("ESP");
@@ -72,13 +70,7 @@ public class MenuBar extends TangerineRenderable {
 				ImGui.endMenu();
 			}
 
-			if (ImGui.beginMenu("Player")) {
-				if (ImGui.menuItem("Anti hunger", "", Tangerine.MODULE_STATE.antiHunger)) {
-					Tangerine.MODULE_STATE.antiHunger = !Tangerine.MODULE_STATE.antiHunger;
-				}
-
-				ImGui.endMenu();
-			}
+			drawMenuTab("Player", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.PLAYER));
 
 			if (ImGui.beginMenu("Automation")) {
 				ImGui.menuItem("Auto armor");
@@ -87,14 +79,6 @@ public class MenuBar extends TangerineRenderable {
 				ImGui.menuItem("Auto tool");
 				ImGui.menuItem("Auto walk");
 				ImGui.menuItem("Auto sprint");
-
-				ImGui.endMenu();
-			}
-
-			if (ImGui.beginMenu("LO")) {
-				if (ImGui.menuItem("Movement fix", "", Tangerine.MODULE_STATE.loMovementFix)) {
-					Tangerine.MODULE_STATE.loMovementFix = !Tangerine.MODULE_STATE.loMovementFix;
-				}
 
 				ImGui.endMenu();
 			}

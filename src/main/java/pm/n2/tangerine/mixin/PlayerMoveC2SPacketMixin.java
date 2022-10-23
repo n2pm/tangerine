@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pm.n2.tangerine.Tangerine;
+import pm.n2.tangerine.modules.NoFallModule;
 
 @Mixin(PlayerMoveC2SPacket.class)
 public class PlayerMoveC2SPacketMixin {
@@ -29,13 +30,8 @@ public class PlayerMoveC2SPacketMixin {
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	public void tangerine$init(double x, double y, double z, float yaw, float pitch, boolean onGround, boolean changePosition, boolean changeLook, CallbackInfo ci) {
-		if (Tangerine.MODULE_STATE.noFall) {
+		if (Tangerine.MODULE_MANAGER.get(NoFallModule.class).enabled) {
 			this.onGround = true;
-		}
-
-		if (Tangerine.MODULE_STATE.loMovementFix) {
-			this.x = Math.floor(x * 1000) / 1000d;
-			this.z = Math.floor(z * 1000) / 1000d;
 		}
 	}
 }
