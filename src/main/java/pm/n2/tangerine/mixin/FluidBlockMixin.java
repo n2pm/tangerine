@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pm.n2.tangerine.Tangerine;
-import pm.n2.tangerine.modules.LiquidWalkModule;
+import pm.n2.tangerine.modules.movement.LiquidWalkModule;
 
 @Mixin(FluidBlock.class)
 public class FluidBlockMixin {

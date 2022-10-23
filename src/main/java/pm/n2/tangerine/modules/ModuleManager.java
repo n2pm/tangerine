@@ -1,9 +1,9 @@
-package pm.n2.tangerine;
+package pm.n2.tangerine.modules;
 
-import pm.n2.tangerine.modules.AntiHungerModule;
-import pm.n2.tangerine.modules.FlightModule;
-import pm.n2.tangerine.modules.LiquidWalkModule;
-import pm.n2.tangerine.modules.NoFallModule;
+import pm.n2.tangerine.modules.player.AntiHungerModule;
+import pm.n2.tangerine.modules.movement.FlightModule;
+import pm.n2.tangerine.modules.movement.LiquidWalkModule;
+import pm.n2.tangerine.modules.movement.NoFallModule;
 
 import java.util.ArrayList;
 import java.util.List;

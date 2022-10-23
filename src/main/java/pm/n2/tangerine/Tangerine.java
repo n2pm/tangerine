@@ -10,6 +10,7 @@ import pm.n2.tangerine.gui.ImGuiScreen;
 import pm.n2.tangerine.gui.renderables.AboutWindow;
 import pm.n2.tangerine.gui.renderables.DemoWindow;
 import pm.n2.tangerine.gui.renderables.MenuBar;
+import pm.n2.tangerine.modules.ModuleManager;
 
 public class Tangerine implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Tangerine");

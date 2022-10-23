@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import pm.n2.tangerine.Tangerine;
-import pm.n2.tangerine.modules.AntiHungerModule;
+import pm.n2.tangerine.modules.player.AntiHungerModule;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {

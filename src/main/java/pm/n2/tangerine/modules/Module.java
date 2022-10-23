@@ -1,4 +1,4 @@
-package pm.n2.tangerine;
+package pm.n2.tangerine.modules;
 
 import net.minecraft.client.MinecraftClient;
 

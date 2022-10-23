@@ -1,7 +1,7 @@
-package pm.n2.tangerine.modules;
+package pm.n2.tangerine.modules.player;
 
-import pm.n2.tangerine.Module;
-import pm.n2.tangerine.ModuleCategory;
+import pm.n2.tangerine.modules.Module;
+import pm.n2.tangerine.modules.ModuleCategory;
 
 public class AntiHungerModule extends Module {
 	public AntiHungerModule() {
