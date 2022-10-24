@@ -25,6 +25,14 @@ public class MenuBar extends TangerineRenderable {
 					}
 				}
 
+				if (ImGui.beginPopupContextItem()) {
+					if (ImGui.menuItem("Config")) {
+						module.showConfigWindow();
+					}
+
+					ImGui.endPopup();
+				}
+
 				if (ImGui.isItemHovered()) {
 					ImGui.beginTooltip();
 					ImGui.text(module.description);

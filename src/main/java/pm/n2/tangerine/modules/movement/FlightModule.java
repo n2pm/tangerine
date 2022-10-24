@@ -14,7 +14,7 @@ public class FlightModule extends Module {
 
 	@Override
 	public void onEndTick(MinecraftClient mc) {
-		if (mc.player != null) {
+		if (mc.player != null && this.enabled) {
 			if (flightBypass && flightTicks >= 80) {
 				//Tangerine.LOGGER.info("Flight: Disabling flight for 1 tick");
 				mc.player.getAbilities().flying = false;
@@ -26,7 +26,7 @@ public class FlightModule extends Module {
 				mc.player.getAbilities().flying = true;
 			}
 
-			if (this.enabled && !mc.player.isSpectator() && !mc.player.isCreative()) {
+			if (!mc.player.isSpectator() && !mc.player.isCreative()) {
 				mc.player.getAbilities().allowFlying = true;
 			}
 
