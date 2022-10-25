@@ -2,11 +2,11 @@ package pm.n2.tangerine.gui;
 
 import gay.eviee.imguiquilt.ImGuiQuilt;
 import gay.eviee.imguiquilt.imgui.ImguiLoader;
+import imgui.ImGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
-import pm.n2.tangerine.Tangerine;
 
 public class ImGuiScreen extends Screen {
 	private final ImGuiManager manager;
@@ -37,6 +37,8 @@ public class ImGuiScreen extends Screen {
 		for (TangerineRenderable renderable : manager.renderables) {
 			ImGuiQuilt.renderstack.add(renderable.renderable);
 		}
+
+		ImGui.getIO().setWantCaptureKeyboard(true);
 	}
 
 	@Override
@@ -54,7 +56,10 @@ public class ImGuiScreen extends Screen {
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		//return (ImguiLoader.keyPressed(keyCode, scanCode, modifiers) && super.keyPressed(keyCode, scanCode, modifiers));
-		ImguiLoader.keyPressed(keyCode, scanCode, modifiers);
+		//ImGuiLoader.keyPressed(keyCode, scanCode, modifiers);
+
+		ImGui.getIO().setKeysDown(keyCode, true);
+
 		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
 			shouldClose = true;
 		}
@@ -65,7 +70,10 @@ public class ImGuiScreen extends Screen {
 	@Override
 	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 		//return (ImguiLoader.keyReleased(keyCode, scanCode, modifiers)) && super.keyReleased(keyCode, scanCode, modifiers);
-		ImguiLoader.keyReleased(keyCode, scanCode, modifiers);
+		//ImguiLoader.keyReleased(keyCode, scanCode, modifiers);
+
+		ImGui.getIO().setKeysDown(keyCode, false);
+
 		return false;
 	}
 
@@ -83,6 +91,8 @@ public class ImGuiScreen extends Screen {
 		for (TangerineRenderable tangerineRenderable : manager.renderables) {
 			ImGuiQuilt.renderstack.remove(tangerineRenderable.renderable);
 		}
+
+		ImGui.getIO().setWantCaptureKeyboard(false);
 
 		super.closeScreen();
 	}
