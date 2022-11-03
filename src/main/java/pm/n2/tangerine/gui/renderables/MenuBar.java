@@ -1,9 +1,9 @@
 package pm.n2.tangerine.gui.renderables;
 
 import imgui.ImGui;
-import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.gui.TangerineRenderable;
+import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
 import java.util.List;

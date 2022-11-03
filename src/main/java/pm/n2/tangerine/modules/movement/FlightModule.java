@@ -1,12 +1,18 @@
 package pm.n2.tangerine.modules.movement;
 
+import com.adryd.cauldron.api.config.ConfigBoolean;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import pm.n2.tangerine.mixin.ClientConnectionInvoker;
 import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
 public class FlightModule extends Module {
-	private int flightTicks = 0;
-	private boolean flightBypass = false;
+	public ConfigBoolean flyKickBypass = new ConfigBoolean("Fly kick bypass", false);
+	public ConfigBoolean flyScrollSpeed = new ConfigBoolean("Fly scroll speed", false);
+	public ConfigBoolean flyFriction = new ConfigBoolean("Fly friction", false);
+
+	private int fallingTicks = 0;
 
 	public FlightModule() {
 		super("Flight", "Allows you to fly", ModuleCategory.MOVEMENT);
@@ -15,25 +21,17 @@ public class FlightModule extends Module {
 	@Override
 	public void onEndTick(MinecraftClient mc) {
 		if (mc.player != null && this.enabled) {
-			if (flightBypass && flightTicks >= 80) {
-				//Tangerine.LOGGER.info("Flight: Disabling flight for 1 tick");
-				mc.player.getAbilities().flying = false;
-				flightTicks = -3; // this is a hack
-			}
-
-			if (flightBypass && flightTicks == -1 && !mc.player.isSpectator() && !mc.player.isCreative()) {
-				//Tangerine.LOGGER.info("Flight: Enabling flight after 1 tick");
-				mc.player.getAbilities().flying = true;
-			}
-
 			if (!mc.player.isSpectator() && !mc.player.isCreative()) {
 				mc.player.getAbilities().allowFlying = true;
 			}
 
-			//Tangerine.LOGGER.info("Flying: " + mc.player.getAbilities().flying);
-			if (flightBypass && (mc.player.getAbilities().flying || flightTicks < 0)) {
-				flightTicks++;
-				//Tangerine.LOGGER.info("Flight ticks: " + flightTicks);
+			fallingTicks++;
+
+			if (fallingTicks >= 20) {
+				var packet = new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() - 0.05, mc.player.getZ(), true);
+				((ClientConnectionInvoker) mc.player.networkHandler.getConnection()).invokeSendImmediately(packet, null);
+
+				fallingTicks = 0;
 			}
 		}
 	}
@@ -47,7 +45,5 @@ public class FlightModule extends Module {
 				mc.player.getAbilities().flying = false;
 			}
 		}
-
-		flightTicks = 0;
 	}
 }

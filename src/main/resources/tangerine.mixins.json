@@ -9,7 +9,9 @@
     "KeyboardMixin",
     "PlayerMoveC2SPacketMixin",
     "TitleScreenMixin",
-    "FluidBlockMixin"
+    "FluidBlockMixin",
+    "ClientConnectionInvoker",
+    "MouseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

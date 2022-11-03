@@ -11,6 +11,7 @@ import org.lwjgl.glfw.GLFW;
 public class ImGuiScreen extends Screen {
 	private final ImGuiManager manager;
 	public boolean shouldClose;
+	private static boolean initialized;
 
 	public ImGuiScreen(ImGuiManager manager) {
 		super(Text.of("Tangerine ImGui Screen"));
@@ -34,11 +35,15 @@ public class ImGuiScreen extends Screen {
 
 	@Override
 	public void init() {
-		for (TangerineRenderable renderable : manager.renderables) {
-			ImGuiQuilt.renderstack.add(renderable.renderable);
-		}
+		if (!initialized) {
+			for (TangerineRenderable renderable : manager.renderables) {
+				ImGuiQuilt.renderstack.add(renderable.renderable);
+			}
 
-		ImGui.getIO().setWantCaptureKeyboard(true);
+			ImGui.getIO().setWantCaptureKeyboard(true);
+
+			initialized = true;
+		}
 	}
 
 	@Override
@@ -88,12 +93,15 @@ public class ImGuiScreen extends Screen {
 	}
 
 	public void closeScreen() {
-		for (TangerineRenderable tangerineRenderable : manager.renderables) {
-			ImGuiQuilt.renderstack.remove(tangerineRenderable.renderable);
+		if (initialized) {
+			for (TangerineRenderable tangerineRenderable : manager.renderables) {
+				ImGuiQuilt.renderstack.remove(tangerineRenderable.renderable);
+			}
+
+			ImGui.getIO().setWantCaptureKeyboard(false);
 		}
 
-		ImGui.getIO().setWantCaptureKeyboard(false);
-
 		super.closeScreen();
+		initialized = false;
 	}
 }
