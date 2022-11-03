@@ -2,12 +2,14 @@ package pm.n2.tangerine.gui;
 
 import gay.eviee.imguiquilt.interfaces.Renderable;
 import gay.eviee.imguiquilt.interfaces.Theme;
+import pm.n2.tangerine.Tangerine;
 
 public class TangerineRenderable {
 	public final String name;
 	public boolean enabled;
 
 	public ImGuiManager manager;
+
 	public Renderable renderable = new Renderable() {
 		@Override
 		public String getName() {
@@ -16,7 +18,7 @@ public class TangerineRenderable {
 
 		@Override
 		public Theme getTheme() {
-			return null;
+			return ImGuiManager.theme;
 		}
 
 		@Override

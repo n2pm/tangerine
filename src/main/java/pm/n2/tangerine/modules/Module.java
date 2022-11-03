@@ -1,5 +1,7 @@
 package pm.n2.tangerine.modules;
 
+import com.adryd.cauldron.api.config.ConfigOptionBase;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.MinecraftClient;
 import pm.n2.tangerine.gui.renderables.ConfigWindow;
 
@@ -13,7 +15,7 @@ public class Module {
 	public String description;
 	public ModuleCategory category;
 
-	private ConfigWindow configWindow;
+	protected ConfigWindow configWindow;
 	public int keybind;
 
 	public Module(String name, String description, ModuleCategory category) {
@@ -27,6 +29,7 @@ public class Module {
 	public void onDisabled() { }
 	public void onStartTick(MinecraftClient mc) { }
 	public void onEndTick(MinecraftClient mc) { }
+	public ImmutableList<ConfigOptionBase> getConfigOptions() { return null; }
 
 	public void showConfigWindow() {
 		configWindow.enabled = true;

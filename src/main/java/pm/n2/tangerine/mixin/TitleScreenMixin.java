@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import pm.n2.tangerine.gui.ImGuiManager;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin {
@@ -23,7 +24,7 @@ public class TitleScreenMixin {
 
 		@Override
 		public Theme getTheme() {
-			return null;
+			return ImGuiManager.theme;
 		}
 
 		@Override

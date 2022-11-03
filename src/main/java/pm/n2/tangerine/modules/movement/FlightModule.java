@@ -1,8 +1,11 @@
 package pm.n2.tangerine.modules.movement;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
+import com.adryd.cauldron.api.config.ConfigOptionBase;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import pm.n2.tangerine.gui.renderables.ConfigWindow;
 import pm.n2.tangerine.mixin.ClientConnectionInvoker;
 import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
@@ -16,6 +19,11 @@ public class FlightModule extends Module {
 
 	public FlightModule() {
 		super("Flight", "Allows you to fly", ModuleCategory.MOVEMENT);
+	}
+
+	@Override
+	public ImmutableList<ConfigOptionBase> getConfigOptions() {
+		return ImmutableList.of(flyKickBypass, flyScrollSpeed, flyFriction);
 	}
 
 	@Override
