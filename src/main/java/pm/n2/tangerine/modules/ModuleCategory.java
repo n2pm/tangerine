@@ -4,5 +4,6 @@ public enum ModuleCategory {
 	MOVEMENT,
 	VISUALS,
 	PLAYER,
-	AUTOMATION
+	AUTOMATION,
+	COMBAT
 }

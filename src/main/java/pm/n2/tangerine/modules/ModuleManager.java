@@ -1,9 +1,8 @@
 package pm.n2.tangerine.modules;
 
-import pm.n2.tangerine.modules.player.AntiHungerModule;
-import pm.n2.tangerine.modules.movement.FlightModule;
-import pm.n2.tangerine.modules.movement.LiquidWalkModule;
-import pm.n2.tangerine.modules.movement.NoFallModule;
+import pm.n2.tangerine.modules.combat.*;
+import pm.n2.tangerine.modules.player.*;
+import pm.n2.tangerine.modules.movement.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,8 @@ public class ModuleManager {
 		registerModule(new FlightModule());
 		registerModule(new NoFallModule());
 		registerModule(new LiquidWalkModule());
+
+		registerModule(new CritsModule());
 
 		registerModule(new AntiHungerModule());
 	}

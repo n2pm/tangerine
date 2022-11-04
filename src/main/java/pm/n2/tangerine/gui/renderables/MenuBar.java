@@ -67,6 +67,8 @@ public class MenuBar extends TangerineRenderable {
 
 			drawMenuTab("Movement", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.MOVEMENT));
 
+			drawMenuTab("Combat", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.COMBAT));
+
 			if (ImGui.beginMenu("Visuals")) {
 				ImGui.menuItem("ESP");
 				ImGui.menuItem("Fullbright");

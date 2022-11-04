@@ -11,7 +11,8 @@
     "TitleScreenMixin",
     "FluidBlockMixin",
     "ClientConnectionInvoker",
-    "MouseMixin"
+    "MouseMixin",
+    "ClientPlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
