@@ -29,17 +29,20 @@ public class FlightModule extends Module {
 	@Override
 	public void onEndTick(MinecraftClient mc) {
 		if (mc.player != null && this.enabled) {
+			var abilities = mc.player.getAbilities();
 			if (!mc.player.isSpectator() && !mc.player.isCreative()) {
-				mc.player.getAbilities().allowFlying = true;
+				abilities.allowFlying = true;
 			}
 
-			fallingTicks++;
+			if (abilities.flying) {
+				fallingTicks++;
 
-			if (fallingTicks >= 20) {
-				var packet = new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() - 0.05, mc.player.getZ(), true);
-				((ClientConnectionInvoker) mc.player.networkHandler.getConnection()).invokeSendImmediately(packet, null);
+				if (fallingTicks >= 20) {
+					var packet = new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() - 0.05, mc.player.getZ(), true);
+					((ClientConnectionInvoker) mc.player.networkHandler.getConnection()).invokeSendImmediately(packet, null);
 
-				fallingTicks = 0;
+					fallingTicks = 0;
+				}
 			}
 		}
 	}
