@@ -7,7 +7,6 @@
   "client": [
     "ClientPlayerEntityMixin",
     "KeyboardMixin",
-    "PlayerMoveC2SPacketMixin",
     "TitleScreenMixin",
     "FluidBlockMixin",
     "ClientConnectionInvoker",
