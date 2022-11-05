@@ -11,7 +11,8 @@
     "FluidBlockMixin",
     "ClientConnectionInvoker",
     "MouseMixin",
-    "ClientPlayerInteractionManagerMixin"
+    "ClientPlayerInteractionManagerMixin",
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
