@@ -11,7 +11,11 @@
     "FluidBlockMixin",
     "ClientConnectionInvoker",
     "MouseMixin",
-    "ClientPlayerInteractionManagerMixin"
+    "ClientPlayerInteractionManagerMixin",
+    "BlockMixin",
+    "AbstractClientPlayerEntityMixin",
+    "EntityMixin",
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

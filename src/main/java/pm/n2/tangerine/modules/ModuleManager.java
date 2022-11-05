@@ -18,6 +18,7 @@ public class ModuleManager {
 		registerModule(new FlightModule());
 		registerModule(new NoFallModule());
 		registerModule(new LiquidWalkModule());
+		registerModule(new NoSlowModule());
 
 		registerModule(new CritsModule());
 
