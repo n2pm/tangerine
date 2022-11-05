@@ -16,7 +16,9 @@
     "BlockMixin",
     "AbstractClientPlayerEntityMixin",
     "EntityMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "ClientChunkManagerAccessor",
+    "ClientChunkMapAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

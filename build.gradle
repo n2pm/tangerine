@@ -25,6 +25,10 @@ dependencies {
 	modApi libs.cauldron
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/tangerine.accesswidener")
+}
+
 processResources {
 	inputs.property "version", version
 

@@ -4,6 +4,7 @@ import pm.n2.tangerine.modules.combat.*;
 import pm.n2.tangerine.modules.player.*;
 import pm.n2.tangerine.modules.movement.*;
 import pm.n2.tangerine.modules.visuals.GlowESPModule;
+import pm.n2.tangerine.modules.visuals.StorageESPModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ModuleManager {
 		registerModule(new NoSlowModule());
 
 		registerModule(new GlowESPModule());
+		registerModule(new StorageESPModule());
 
 		registerModule(new CritsModule());
 
