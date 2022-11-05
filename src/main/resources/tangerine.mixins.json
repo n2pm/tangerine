@@ -12,7 +12,14 @@
     "ClientConnectionInvoker",
     "MouseMixin",
     "ClientPlayerInteractionManagerMixin",
+<<<<<<< HEAD
     "MinecraftClientMixin"
+=======
+    "BlockMixin",
+    "AbstractClientPlayerEntityMixin",
+    "EntityMixin",
+    "LivingEntityMixin"
+>>>>>>> eaf7cf5af7ab6b4a5a2fde645e9836cf73d6fbbb
   ],
   "injectors": {
     "defaultRequire": 1
