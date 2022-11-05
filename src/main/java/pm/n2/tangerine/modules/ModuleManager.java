@@ -3,6 +3,7 @@ package pm.n2.tangerine.modules;
 import pm.n2.tangerine.modules.combat.*;
 import pm.n2.tangerine.modules.player.*;
 import pm.n2.tangerine.modules.movement.*;
+import pm.n2.tangerine.modules.visuals.GlowESPModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ public class ModuleManager {
 		registerModule(new NoFallModule());
 		registerModule(new LiquidWalkModule());
 		registerModule(new NoSlowModule());
+
+		registerModule(new GlowESPModule());
 
 		registerModule(new CritsModule());
 

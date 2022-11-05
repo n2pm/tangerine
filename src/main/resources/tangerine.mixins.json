@@ -12,6 +12,7 @@
     "ClientConnectionInvoker",
     "MouseMixin",
     "ClientPlayerInteractionManagerMixin",
+    "MinecraftClientMixin",
     "BlockMixin",
     "AbstractClientPlayerEntityMixin",
     "EntityMixin",
