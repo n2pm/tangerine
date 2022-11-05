@@ -5,5 +5,6 @@ public enum ModuleCategory {
 	VISUALS,
 	PLAYER,
 	AUTOMATION,
-	COMBAT
+	COMBAT,
+	MISC
 }

@@ -66,11 +66,8 @@ public class MenuBar extends TangerineRenderable {
 			}
 
 			drawMenuTab("Movement", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.MOVEMENT));
-
 			drawMenuTab("Combat", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.COMBAT));
-
 			drawMenuTab("Visuals", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.VISUALS));
-
 			drawMenuTab("Player", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.PLAYER));
 
 			if (ImGui.beginMenu("Automation")) {
@@ -83,6 +80,8 @@ public class MenuBar extends TangerineRenderable {
 
 				ImGui.endMenu();
 			}
+
+			drawMenuTab("Misc", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.MISC));
 
 			ImGui.endMainMenuBar();
 		}

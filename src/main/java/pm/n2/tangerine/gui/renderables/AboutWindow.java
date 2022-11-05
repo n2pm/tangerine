@@ -32,7 +32,7 @@ public class AboutWindow extends TangerineRenderable {
 		if (ImGui.begin("About Tangerine", enabled)) {
 			ImGui.textUnformatted("Tangerine, a NotNet project");
 			ImGui.textUnformatted("Powered by Cauldron and imgui-quilt");
-			ImGui.textUnformatted("(c) NotNite and adryd, 2022");
+			ImGui.textUnformatted("(c) NotNite, adryd, Cynosphere, and Murmiration, 2022");
 
 			if (ImGui.button("Open source code")) {
 				Util.getOperatingSystem().open("https://github.com/n2pm/tangerine");
