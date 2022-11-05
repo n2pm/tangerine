@@ -6,7 +6,7 @@ import pm.n2.tangerine.modules.ModuleCategory;
 
 public class GlowESPModule extends Module {
 	public GlowESPModule() {
-			super("Glow ESP", "Sets all Entities to Glow", ModuleCategory.VISUALS);
+			super("Glow ESP", "Sets all entities to glow", ModuleCategory.VISUALS);
 		}
 }
 

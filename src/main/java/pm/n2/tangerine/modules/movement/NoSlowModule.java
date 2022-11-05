@@ -9,7 +9,7 @@ import pm.n2.tangerine.modules.ModuleCategory;
 public class NoSlowModule extends Module {
 	public ConfigBoolean affectSneaking = new ConfigBoolean("Affect sneaking", false);
 
-	public NoSlowModule() { super("No Slowdown", "Prevents you from slowing down", ModuleCategory.MOVEMENT); }
+	public NoSlowModule() { super("No slowdown", "Prevents you from slowing down", ModuleCategory.MOVEMENT); }
 
 	@Override
 	public ImmutableList<ConfigOptionBase> getConfigOptions() {
