@@ -55,7 +55,8 @@ public class ImGuiScreen extends Screen {
 	@Override
 	public boolean charTyped(char chr, int keyCode) {
 		//return (ImguiLoader.charTyped(chr, keyCode) && super.charTyped(chr, keyCode));
-		ImguiLoader.charTyped(chr, keyCode);
+		//ImguiLoader.charTyped(chr, keyCode);
+
 		return false;
 	}
 
@@ -63,8 +64,7 @@ public class ImGuiScreen extends Screen {
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		//return (ImguiLoader.keyPressed(keyCode, scanCode, modifiers) && super.keyPressed(keyCode, scanCode, modifiers));
 		//ImGuiLoader.keyPressed(keyCode, scanCode, modifiers);
-
-		ImGui.getIO().setKeysDown(keyCode, true);
+		//ImGui.getIO().setKeysDown(keyCode, true);
 
 		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
 			shouldClose = true;
@@ -77,8 +77,7 @@ public class ImGuiScreen extends Screen {
 	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 		//return (ImguiLoader.keyReleased(keyCode, scanCode, modifiers)) && super.keyReleased(keyCode, scanCode, modifiers);
 		//ImguiLoader.keyReleased(keyCode, scanCode, modifiers);
-
-		ImGui.getIO().setKeysDown(keyCode, false);
+		//ImGui.getIO().setKeysDown(keyCode, false);
 
 		return false;
 	}
