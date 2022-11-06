@@ -90,7 +90,7 @@ public class OverlayStorageESP extends OverlayRendererBase {
 	@Override
 	public boolean shouldRender() {
 		var storageESP = (StorageESPModule) Tangerine.MODULE_MANAGER.get(StorageESPModule.class);
-		return storageESP.enabled.getBooleanValue();
+		return storageESP.enabled.getBooleanValue() && blockEntities.size() > 0;
 	}
 
 	@Override
