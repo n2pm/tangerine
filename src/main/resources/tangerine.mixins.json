@@ -18,7 +18,8 @@
     "EntityMixin",
     "LivingEntityMixin",
     "ClientChunkManagerAccessor",
-    "ClientChunkMapAccessor"
+    "ClientChunkMapAccessor",
+    "PlayerMoveC2SPacketMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,6 +1,7 @@
 package pm.n2.tangerine.gui.renderables;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
+import com.adryd.cauldron.api.config.ConfigDouble;
 import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
@@ -45,8 +46,16 @@ public class ConfigWindow extends TangerineRenderable {
 			if (configOptions != null) {
 				for (var config : configOptions) {
 					if (config instanceof ConfigBoolean configBoolean) {
-						if (ImGui.checkbox(config.getKey(), configBoolean.getBooleanValue())) {
+						if (ImGui.checkbox(configBoolean.getName(), configBoolean.getBooleanValue())) {
 							configBoolean.toggle();
+						}
+					}
+
+					if (config instanceof ConfigDouble configDouble) {
+						var doubleValue = configDouble.getDoubleValue();
+						var doubleValueArr = new float[]{(float) doubleValue};
+						if (ImGui.dragFloat(configDouble.getName(), doubleValueArr, 0.1f, (float) configDouble.getMinValue(), (float) configDouble.getMaxValue())) {
+							configDouble.setDoubleValue(doubleValueArr[0]);
 						}
 					}
 				}

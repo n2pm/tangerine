@@ -1,6 +1,7 @@
 package pm.n2.tangerine.modules.movement;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
+import com.adryd.cauldron.api.config.ConfigDouble;
 import com.adryd.cauldron.api.config.ConfigOptionBase;
 import com.adryd.cauldron.api.config.IConfigOption;
 import com.google.common.collect.ImmutableList;
@@ -14,9 +15,11 @@ import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
 public class FlightModule extends Module {
-	public ConfigBoolean flyKickBypass = new ConfigBoolean("Fly kick bypass", true);
-	public ConfigBoolean flyScrollSpeed = new ConfigBoolean("Fly scroll speed", false);
-	public ConfigBoolean flyFriction = new ConfigBoolean("Fly friction", false);
+	public ConfigBoolean flyKickBypass = new ConfigBoolean("flight_fly_kick", "Fly kick bypass", true);
+	public ConfigBoolean flyScrollSpeed = new ConfigBoolean("flight_scroll_speed", "Fly scroll speed", false);
+	public ConfigBoolean flyFriction = new ConfigBoolean("flight_friction", "Fly friction", false);
+
+	public ConfigDouble flySpeed = new ConfigDouble("flight_speed", "Fly speed", 1.0, 0.1, 20.0);
 
 	private int fallingTicks = 0;
 	private Vec3d lastPos;
@@ -27,13 +30,15 @@ public class FlightModule extends Module {
 
 	@Override
 	public ImmutableList<IConfigOption> getConfigOptions() {
-		return ImmutableList.of(flyKickBypass, flyScrollSpeed, flyFriction);
+		return ImmutableList.of(flyKickBypass, flyScrollSpeed, flyFriction, flySpeed);
 	}
 
 	@Override
 	public void onEndTick(MinecraftClient mc) {
 		if (mc.player != null && this.enabled.getBooleanValue()) {
 			var abilities = mc.player.getAbilities();
+			abilities.setFlySpeed(((float) flySpeed.getDoubleValue()) / 20);
+
 			var canNormallyFly = mc.player.isSpectator() || mc.player.isCreative();
 			if (!canNormallyFly) {
 				abilities.allowFlying = true;

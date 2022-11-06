@@ -27,7 +27,7 @@ public class Module {
 		this.description = description;
 		this.category = category;
 		this.configWindow = new ConfigWindow(this);
-		this.enabled = new ConfigBoolean(id + "_enabled", false);
+		this.enabled = new ConfigBoolean(id + "_enabled", "Enabled", false);
 	}
 
 	public void onEnabled() { }

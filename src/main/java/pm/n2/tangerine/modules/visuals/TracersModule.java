@@ -10,14 +10,14 @@ import pm.n2.tangerine.modules.ModuleCategory;
 import pm.n2.tangerine.render.OverlayTracers;
 
 public class TracersModule extends Module {
-	public ConfigBoolean drawPlayers = new ConfigBoolean("Draw players", true);
-	public ConfigBoolean drawFriendly = new ConfigBoolean("Draw friendly mobs", true);
-	public ConfigBoolean drawPassive = new ConfigBoolean("Draw passive mobs", true);
-	public ConfigBoolean drawHostile = new ConfigBoolean("Draw hostile mobs", true);
-	public ConfigBoolean drawItems = new ConfigBoolean("Draw items", false);
-	public ConfigBoolean drawOthers = new ConfigBoolean("Draw other entities", false);
+	public ConfigBoolean drawPlayers = new ConfigBoolean("tracers_players", "Draw players", true);
+	public ConfigBoolean drawFriendly = new ConfigBoolean("tracers_friendly", "Draw friendly mobs", true);
+	public ConfigBoolean drawPassive = new ConfigBoolean("tracers_passive", "Draw passive mobs", true);
+	public ConfigBoolean drawHostile = new ConfigBoolean("tracers_hostile", "Draw hostile mobs", true);
+	public ConfigBoolean drawItems = new ConfigBoolean("tracers_items", "Draw items", false);
+	public ConfigBoolean drawOthers = new ConfigBoolean("tracers_others", "Draw other entities", false);
 
-	public ConfigBoolean drawStem = new ConfigBoolean("Draw stem", true);
+	public ConfigBoolean drawStem = new ConfigBoolean("tracers_stem", "Draw stem", true);
 
 	public TracersModule() {
 		super("tracers", "Tracers", "Draws lines towards entities", ModuleCategory.VISUALS);
