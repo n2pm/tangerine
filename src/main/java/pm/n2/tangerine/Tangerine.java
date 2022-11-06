@@ -16,6 +16,7 @@ import pm.n2.tangerine.gui.renderables.AboutWindow;
 import pm.n2.tangerine.gui.renderables.DemoWindow;
 import pm.n2.tangerine.gui.renderables.MenuBar;
 import pm.n2.tangerine.modules.ModuleManager;
+import pm.n2.tangerine.modules.misc.UnifontModule;
 
 import java.nio.ByteBuffer;
 
@@ -61,37 +62,40 @@ public class Tangerine implements ClientModInitializer {
 
 		ClientLifecycleEvents.STOPPING.register(mc -> CONFIG.write());
 
-		try {
-			var ctx = ImGui.createContext();
-			ImGui.setCurrentContext(ctx);
+		var useUnifont = MODULE_MANAGER.get(UnifontModule.class).enabled.getBooleanValue();
+		if (useUnifont) {
+			try {
+				var ctx = ImGui.createContext();
+				ImGui.setCurrentContext(ctx);
 
-			var io = ImGui.getIO();
-			var fonts = io.getFonts();
+				var io = ImGui.getIO();
+				var fonts = io.getFonts();
 
-			var fontStream = Tangerine.class.getResourceAsStream("/assets/tangerine/unifont.otf");
-			if (fontStream != null) {
-				ByteBuffer buffer = TextureUtil.readResource(fontStream);
-				buffer.flip();
-				byte[] arr = new byte[buffer.remaining()];
-				buffer.get(arr);
+				var fontStream = Tangerine.class.getResourceAsStream("/assets/tangerine/unifont.otf");
+				if (fontStream != null) {
+					ByteBuffer buffer = TextureUtil.readResource(fontStream);
+					buffer.flip();
+					byte[] arr = new byte[buffer.remaining()];
+					buffer.get(arr);
 
-				ImFontConfig fontConfig = new ImFontConfig();
+					ImFontConfig fontConfig = new ImFontConfig();
 
-				var font = fonts.addFontFromMemoryTTF(arr, 16, fontConfig);
-				fonts.build();
+					var font = fonts.addFontFromMemoryTTF(arr, 16, fontConfig);
+					fonts.build();
 
-				fontConfig.destroy();
+					fontConfig.destroy();
 
-				IMGUI_MANAGER.setFont(font);
-			} else {
-				LOGGER.info("font stream null");
+					IMGUI_MANAGER.setFont(font);
+				} else {
+					LOGGER.info("font stream null");
+				}
+
+				// causes "free(): invalid size" crash :(
+				// jni can have a bit of used once memory as a treat
+				//ImGui.destroyContext(ctx);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			// causes "free(): invalid size" crash :(
-			// jni can have a bit of used once memory as a treat
-			//ImGui.destroyContext(ctx);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }
