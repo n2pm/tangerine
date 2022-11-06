@@ -1,6 +1,9 @@
 package pm.n2.tangerine;
 
 import com.adryd.cauldron.api.config.ConfigFile;
+import com.mojang.blaze3d.platform.TextureUtil;
+import imgui.ImFontConfig;
+import imgui.ImGui;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
@@ -13,6 +16,8 @@ import pm.n2.tangerine.gui.renderables.AboutWindow;
 import pm.n2.tangerine.gui.renderables.DemoWindow;
 import pm.n2.tangerine.gui.renderables.MenuBar;
 import pm.n2.tangerine.modules.ModuleManager;
+
+import java.nio.ByteBuffer;
 
 public class Tangerine implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Tangerine");
@@ -53,8 +58,40 @@ public class Tangerine implements ClientModInitializer {
 			if (opts != null)
 				CONFIG.addConfigs(opts);
 		}
-		CONFIG.read();
 
 		ClientLifecycleEvents.STOPPING.register(mc -> CONFIG.write());
+
+		try {
+			var ctx = ImGui.createContext();
+			ImGui.setCurrentContext(ctx);
+
+			var io = ImGui.getIO();
+			var fonts = io.getFonts();
+
+			var fontStream = Tangerine.class.getResourceAsStream("/assets/tangerine/unifont.otf");
+			if (fontStream != null) {
+				ByteBuffer buffer = TextureUtil.readResource(fontStream);
+				buffer.flip();
+				byte[] arr = new byte[buffer.remaining()];
+				buffer.get(arr);
+
+				ImFontConfig fontConfig = new ImFontConfig();
+
+				var font = fonts.addFontFromMemoryTTF(arr, 16, fontConfig);
+				fonts.build();
+
+				fontConfig.destroy();
+
+				IMGUI_MANAGER.setFont(font);
+			} else {
+				LOGGER.info("font stream null");
+			}
+
+			// causes "free(): invalid size" crash :(
+			// jni can have a bit of used once memory as a treat
+			//ImGui.destroyContext(ctx);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

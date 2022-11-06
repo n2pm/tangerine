@@ -66,7 +66,7 @@ public class ImGuiScreen extends Screen {
 
 		ImGui.getIO().setKeysDown(keyCode, true);
 
-		if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_RIGHT_SHIFT) {
+		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
 			shouldClose = true;
 		}
 
