@@ -16,7 +16,7 @@ public class LivingEntityMixin {
 		var self = (LivingEntity) (Object) this;
 		if (self instanceof PlayerEntity) {
 			var defaultSpeed = ((PlayerEntity) self).getAbilities().getWalkSpeed();
-			if (Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled && movementSpeed < defaultSpeed) {
+			if (Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled.getBooleanValue() && movementSpeed < defaultSpeed) {
 				ci.cancel();
 			}
 		}

@@ -18,14 +18,14 @@ public class StorageESPModule extends Module {
 	public HashMap<BlockPos, BlockEntity> blockEntities = new HashMap<>();
 
 	public StorageESPModule() {
-		super("Storage ESP", "Highlights storage blocks", ModuleCategory.VISUALS);
+		super("storage_esp", "Storage ESP", "Highlights storage blocks", ModuleCategory.VISUALS);
 		OverlayRenderManager.addRenderer(new OverlayStorageESP());
 	}
 
 	@Override
 	public void onEndTick(MinecraftClient mc) {
 		var world = mc.world;
-		if (mc.world == null || !this.enabled) return;
+		if (mc.world == null || !this.enabled.getBooleanValue()) return;
 
 		var chunkManager = world.getChunkManager();
 

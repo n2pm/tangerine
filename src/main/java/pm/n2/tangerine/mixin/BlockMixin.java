@@ -17,7 +17,7 @@ public abstract class BlockMixin extends AbstractBlock {
 
 	@Inject(method = "getVelocityMultiplier", at = @At("HEAD"), cancellable = true)
 	public void tangerine$noSlow(CallbackInfoReturnable<Float> cir) {
-		if (this.velocityMultiplier < 1.0F && Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled) {
+		if (this.velocityMultiplier < 1.0F && Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled.getBooleanValue()) {
 			cir.setReturnValue(1.0F);
 		}
 	}

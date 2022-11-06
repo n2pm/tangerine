@@ -2,6 +2,7 @@ package pm.n2.tangerine.modules.movement;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
 import com.adryd.cauldron.api.config.ConfigOptionBase;
+import com.adryd.cauldron.api.config.IConfigOption;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -21,17 +22,17 @@ public class FlightModule extends Module {
 	private Vec3d lastPos;
 
 	public FlightModule() {
-		super("Flight", "Allows you to fly", ModuleCategory.MOVEMENT);
+		super("flight", "Flight", "Allows you to fly", ModuleCategory.MOVEMENT);
 	}
 
 	@Override
-	public ImmutableList<ConfigOptionBase> getConfigOptions() {
+	public ImmutableList<IConfigOption> getConfigOptions() {
 		return ImmutableList.of(flyKickBypass, flyScrollSpeed, flyFriction);
 	}
 
 	@Override
 	public void onEndTick(MinecraftClient mc) {
-		if (mc.player != null && this.enabled) {
+		if (mc.player != null && this.enabled.getBooleanValue()) {
 			var abilities = mc.player.getAbilities();
 			var canNormallyFly = mc.player.isSpectator() || mc.player.isCreative();
 			if (!canNormallyFly) {
@@ -63,7 +64,7 @@ public class FlightModule extends Module {
 
 	@Override
 	public void onStartTick(MinecraftClient mc) {
-		if (mc.player != null && this.enabled) {
+		if (mc.player != null && this.enabled.getBooleanValue()) {
 			var abilities = mc.player.getAbilities();
 			var canNormallyFly = mc.player.isSpectator() || mc.player.isCreative();
 

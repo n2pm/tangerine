@@ -20,7 +20,7 @@ public class EntityMixin {
 	@Inject(method = "slowMovement", at = @At("TAIL"))
 	public void tangerine$noSlow(BlockState state, Vec3d multiplier, CallbackInfo ci) {
 		var self = (Entity) (Object) this;
-		if (self instanceof PlayerEntity && Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled) {
+		if (self instanceof PlayerEntity && Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled.getBooleanValue()) {
 			this.movementMultiplier = Vec3d.ZERO;
 		}
 	}

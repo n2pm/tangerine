@@ -11,7 +11,7 @@ import pm.n2.tangerine.modules.movement.NoSlowModule;
 public class AbstractClientPlayerEntityMixin {
 	@ModifyArg(method = "getSpeed", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F"), index = 2)
 	public float tangerine$noSlow(float delta) {
-		if (delta < 1.0F && Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled) {
+		if (delta < 1.0F && Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled.getBooleanValue()) {
 			delta = 1.0F;
 		}
 		return delta;

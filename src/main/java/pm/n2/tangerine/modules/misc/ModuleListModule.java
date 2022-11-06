@@ -28,6 +28,7 @@ public class ModuleListModule extends Module {
 		@Override
 		public void render() {
 			if (!shouldDraw) return;
+			if (!Tangerine.MODULE_MANAGER.get(ModuleListModule.class).enabled.getBooleanValue()) return;
 
 			var windowFlags = ImGuiWindowFlags.NoDecoration |
 					ImGuiWindowFlags.NoInputs |
@@ -35,11 +36,17 @@ public class ModuleListModule extends Module {
 					ImGuiWindowFlags.NoBringToFrontOnFocus |
 					ImGuiWindowFlags.NoFocusOnAppearing;
 
-			StringBuilder moduleListString = new StringBuilder();
+			var moduleListString = new StringBuilder();
+			var anyModulesEnabled = false;
 
 			for (var module : Tangerine.MODULE_MANAGER.getModules()) {
-				if (module.enabled) moduleListString.append(module.name).append("\n");
+				if (module.enabled.getBooleanValue()) {
+					anyModulesEnabled = true;
+					moduleListString.append(module.name).append("\n");
+				}
 			}
+
+			if (!anyModulesEnabled) return;
 
 			var screenSize = ImGui.getMainViewport().getSize();
 			var screenPos = ImGui.getMainViewport().getPos();
@@ -58,7 +65,7 @@ public class ModuleListModule extends Module {
 	};
 
 	public ModuleListModule() {
-		super("Module list", "Shows a list of all enabled modules", ModuleCategory.MISC);
+		super("module_list", "Module list", "Shows a list of all enabled modules", ModuleCategory.MISC);
 	}
 
 	@Override

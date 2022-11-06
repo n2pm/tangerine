@@ -94,6 +94,6 @@ public class OverlayTracers extends OverlayRendererBase {
 
 	@Override
 	public boolean shouldRender() {
-		return Tangerine.MODULE_MANAGER.get(TracersModule.class).enabled;
+		return Tangerine.MODULE_MANAGER.get(TracersModule.class).enabled.getBooleanValue();
 	}
 }

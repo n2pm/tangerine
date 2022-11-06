@@ -2,6 +2,7 @@ package pm.n2.tangerine.modules.movement;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
 import com.adryd.cauldron.api.config.ConfigOptionBase;
+import com.adryd.cauldron.api.config.IConfigOption;
 import com.google.common.collect.ImmutableList;
 import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
@@ -9,10 +10,10 @@ import pm.n2.tangerine.modules.ModuleCategory;
 public class NoSlowModule extends Module {
 	public ConfigBoolean affectSneaking = new ConfigBoolean("Affect sneaking", false);
 
-	public NoSlowModule() { super("No slowdown", "Prevents you from slowing down", ModuleCategory.MOVEMENT); }
+	public NoSlowModule() { super("no_slowdown", "No slowdown", "Prevents you from slowing down", ModuleCategory.MOVEMENT); }
 
 	@Override
-	public ImmutableList<ConfigOptionBase> getConfigOptions() {
+	public ImmutableList<IConfigOption> getConfigOptions() {
 		return ImmutableList.of(affectSneaking);
 	}
 }

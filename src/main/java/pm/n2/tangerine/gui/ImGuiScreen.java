@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
+import pm.n2.tangerine.Tangerine;
 
 public class ImGuiScreen extends Screen {
 	private final ImGuiManager manager;
@@ -100,6 +101,8 @@ public class ImGuiScreen extends Screen {
 
 			ImGui.getIO().setWantCaptureKeyboard(false);
 		}
+
+		Tangerine.CONFIG.write();
 
 		super.closeScreen();
 		initialized = false;

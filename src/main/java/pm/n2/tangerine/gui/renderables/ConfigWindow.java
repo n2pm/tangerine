@@ -26,9 +26,9 @@ public class ConfigWindow extends TangerineRenderable {
 	public void draw() {
 		var enabled = new ImBoolean(this.enabled);
 		if (ImGui.begin(module.name, enabled)) {
-			if (ImGui.checkbox("Enabled", module.enabled)) {
-				module.enabled = !module.enabled;
-				if (module.enabled) {
+			if (ImGui.checkbox("Enabled", module.enabled.getBooleanValue())) {
+				module.enabled.toggle();
+				if (module.enabled.getBooleanValue()) {
 					module.onEnabled();
 				} else {
 					module.onDisabled();

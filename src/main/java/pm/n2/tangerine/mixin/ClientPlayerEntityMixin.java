@@ -18,21 +18,21 @@ public class ClientPlayerEntityMixin {
 	// lol
 	@Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V", ordinal = 0))
 	public void tangerine$sendMovementPackets(ClientPlayNetworkHandler instance, Packet<?> packet) {
-		if (Tangerine.MODULE_MANAGER.get(AntiHungerModule.class).enabled) return;
+		if (Tangerine.MODULE_MANAGER.get(AntiHungerModule.class).enabled.getBooleanValue()) return;
 		instance.sendPacket(packet);
 	}
 
 	@Inject(method = "shouldSlowDown", at = @At("HEAD"), cancellable = true)
 	public void tangerine$noSlow(CallbackInfoReturnable<Boolean> cir) {
 		var noSlowMod = (NoSlowModule) Tangerine.MODULE_MANAGER.get(NoSlowModule.class);
-		if (noSlowMod.enabled && noSlowMod.affectSneaking.getBooleanValue()) {
+		if (noSlowMod.enabled.getBooleanValue() && noSlowMod.affectSneaking.getBooleanValue()) {
 			cir.setReturnValue(((ClientPlayerEntity) (Object) this).shouldLeaveSwimmingPose());
 		}
 	}
 
 	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
 	public boolean tangerine$noSlow_items(ClientPlayerEntity instance) {
-		if (Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled) {
+		if (Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled.getBooleanValue()) {
 			return false;
 		}
 		return instance.isUsingItem();

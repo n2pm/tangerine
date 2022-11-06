@@ -16,9 +16,9 @@ public class MenuBar extends TangerineRenderable {
 	private void drawMenuTab(String name, List<Module> modules) {
 		if (ImGui.beginMenu(name)) {
 			for (var module : modules) {
-				if (ImGui.menuItem(module.name, "", module.enabled)) {
-					module.enabled = !module.enabled;
-					if (module.enabled) {
+				if (ImGui.menuItem(module.name, "", module.enabled.getBooleanValue())) {
+					module.enabled.toggle();
+					if (module.enabled.getBooleanValue()) {
 						module.onEnabled();
 					} else {
 						module.onDisabled();

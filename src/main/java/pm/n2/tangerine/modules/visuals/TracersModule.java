@@ -2,6 +2,7 @@ package pm.n2.tangerine.modules.visuals;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
 import com.adryd.cauldron.api.config.ConfigOptionBase;
+import com.adryd.cauldron.api.config.IConfigOption;
 import com.adryd.cauldron.api.render.helper.OverlayRenderManager;
 import com.google.common.collect.ImmutableList;
 import pm.n2.tangerine.modules.Module;
@@ -19,12 +20,12 @@ public class TracersModule extends Module {
 	public ConfigBoolean drawStem = new ConfigBoolean("Draw stem", true);
 
 	public TracersModule() {
-		super("Tracers", "Draws lines towards entities", ModuleCategory.VISUALS);
+		super("tracers", "Tracers", "Draws lines towards entities", ModuleCategory.VISUALS);
 		OverlayRenderManager.addRenderer(new OverlayTracers());
 	}
 
 	@Override
-	public ImmutableList<ConfigOptionBase> getConfigOptions() {
+	public ImmutableList<IConfigOption> getConfigOptions() {
 		return ImmutableList.of(
 				drawPlayers,
 				drawFriendly,

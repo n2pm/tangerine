@@ -5,6 +5,6 @@ import pm.n2.tangerine.modules.ModuleCategory;
 
 public class LiquidWalkModule extends Module {
 	public LiquidWalkModule() {
-		super("Walk on liquids", "Treats water and lava like solid blocks", ModuleCategory.MOVEMENT);
+		super("jesus", "Walk on liquids", "Treats water and lava like solid blocks", ModuleCategory.MOVEMENT);
 	}
 }

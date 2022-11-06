@@ -12,12 +12,12 @@ import pm.n2.tangerine.modules.Module;
 
 public class NoFallModule extends Module {
 	public NoFallModule() {
-		super("No fall damage", "Prevents you from taking fall damage", ModuleCategory.MOVEMENT);
+		super("no_fall", "No fall damage", "Prevents you from taking fall damage", ModuleCategory.MOVEMENT);
 	}
 
 	@Override
 	public void onEndTick(MinecraftClient mc) {
-		if (mc.player != null && mc.world != null && this.enabled) {
+		if (mc.player != null && mc.world != null && this.enabled.getBooleanValue()) {
 			if (mc.player.fallDistance > 3F) {
 				var pos = mc.player.getPos();
 

@@ -5,6 +5,6 @@ import pm.n2.tangerine.modules.ModuleCategory;
 
 public class AntiHungerModule extends Module {
 	public AntiHungerModule() {
-		super("Anti hunger", "Prevents you from losing hunger", ModuleCategory.PLAYER);
+		super("anti_hunger", "Anti hunger", "Prevents you from losing hunger", ModuleCategory.PLAYER);
 	}
 }
