@@ -10,6 +10,7 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pm.n2.tangerine.commands.CommandManager;
 import pm.n2.tangerine.gui.ImGuiManager;
 import pm.n2.tangerine.gui.ImGuiScreen;
 import pm.n2.tangerine.gui.renderables.AboutWindow;
@@ -27,7 +28,9 @@ public class Tangerine implements ClientModInitializer {
 
 	public static final ImGuiManager IMGUI_MANAGER = new ImGuiManager();
 	public static final ImGuiScreen IMGUI_SCREEN = new ImGuiScreen(IMGUI_MANAGER);
+
 	public static final ModuleManager MODULE_MANAGER = new ModuleManager();
+	public static final CommandManager COMMAND_MANAGER = new CommandManager();
 
 	public static final ConfigFile CONFIG = new ConfigFile(MOD_ID);
 
@@ -40,6 +43,7 @@ public class Tangerine implements ClientModInitializer {
 		IMGUI_MANAGER.addRenderable(new AboutWindow());
 
 		MODULE_MANAGER.registerModules();
+		COMMAND_MANAGER.registerCommands();
 
 		ClientTickEvents.START.register(mc -> {
 			for (var module : MODULE_MANAGER.getModules()) {
