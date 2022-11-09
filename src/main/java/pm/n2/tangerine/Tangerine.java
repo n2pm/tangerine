@@ -2,6 +2,7 @@ package pm.n2.tangerine;
 
 import com.adryd.cauldron.api.config.ConfigFile;
 import com.mojang.blaze3d.platform.TextureUtil;
+import imgui.ImFont;
 import imgui.ImFontConfig;
 import imgui.ImGui;
 import org.quiltmc.loader.api.ModContainer;
@@ -28,6 +29,8 @@ public class Tangerine implements ClientModInitializer {
 
 	public static final ImGuiManager IMGUI_MANAGER = new ImGuiManager();
 	public static final ImGuiScreen IMGUI_SCREEN = new ImGuiScreen(IMGUI_MANAGER);
+	public static ImFont IMGUI_FONT_DEFAULT;
+	public static ImFont IMGUI_FONT_UNIFONT;
 
 	public static final ModuleManager MODULE_MANAGER = new ModuleManager();
 	public static final CommandManager COMMAND_MANAGER = new CommandManager();
@@ -67,7 +70,7 @@ public class Tangerine implements ClientModInitializer {
 		ClientLifecycleEvents.STOPPING.register(mc -> CONFIG.write());
 
 		var useUnifont = MODULE_MANAGER.get(UnifontModule.class).enabled.getBooleanValue();
-		if (useUnifont) {
+		//if (useUnifont) {
 			try {
 				var ctx = ImGui.createContext();
 				ImGui.setCurrentContext(ctx);
@@ -84,12 +87,17 @@ public class Tangerine implements ClientModInitializer {
 
 					ImFontConfig fontConfig = new ImFontConfig();
 
-					var font = fonts.addFontFromMemoryTTF(arr, 16, fontConfig);
+					IMGUI_FONT_DEFAULT = fonts.addFontDefault(fontConfig);
+					IMGUI_FONT_UNIFONT = fonts.addFontFromMemoryTTF(arr, 16, fontConfig);
 					fonts.build();
 
 					fontConfig.destroy();
 
-					IMGUI_MANAGER.setFont(font);
+					if (useUnifont) {
+						IMGUI_MANAGER.setFont(IMGUI_FONT_UNIFONT);
+					} else {
+						IMGUI_MANAGER.setFont(IMGUI_FONT_DEFAULT);
+					}
 				} else {
 					LOGGER.info("font stream null");
 				}
@@ -100,6 +108,6 @@ public class Tangerine implements ClientModInitializer {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		//}
 	}
 }

@@ -8,6 +8,7 @@ import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
 import net.minecraft.client.MinecraftClient;
 import pm.n2.tangerine.Tangerine;
+import pm.n2.tangerine.gui.ImGuiManager;
 import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
@@ -22,7 +23,7 @@ public class ModuleListModule extends Module {
 
 		@Override
 		public Theme getTheme() {
-			return null;
+			return ImGuiManager.theme;
 		}
 
 		@Override

@@ -10,6 +10,20 @@ import static pm.n2.tangerine.Tangerine.IMGUI_MANAGER;
 
 public class UnifontModule extends Module {
 	public UnifontModule() {
-		super("unifont", "Unifont", "Makes all text use the Unifont font (requires game restart)", ModuleCategory.MISC);
+		super("unifont", "Unifont", "Makes all text use the Unifont font", ModuleCategory.MISC);
+	}
+
+	@Override
+	public void onEnabled() {
+		if (Tangerine.IMGUI_FONT_UNIFONT != null) {
+			IMGUI_MANAGER.setFont(Tangerine.IMGUI_FONT_UNIFONT);
+		}
+	}
+
+	@Override
+	public void onDisabled() {
+		if (Tangerine.IMGUI_FONT_DEFAULT != null) {
+			IMGUI_MANAGER.setFont(Tangerine.IMGUI_FONT_DEFAULT);
+		}
 	}
 }
