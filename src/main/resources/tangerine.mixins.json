@@ -20,7 +20,8 @@
     "ClientChunkManagerAccessor",
     "ClientChunkMapAccessor",
     "PlayerMoveC2SPacketMixin",
-    "AbstractBlockMixin"
+    "AbstractBlockMixin",
+    "InputMixin"
   ],
   "injectors": {
     "defaultRequire": 1

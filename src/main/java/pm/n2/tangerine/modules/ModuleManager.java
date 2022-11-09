@@ -20,19 +20,27 @@ public class ModuleManager {
 	}
 
 	public void registerModules() {
+		// movement
 		registerModule(new FlightModule());
 		registerModule(new NoFallModule());
 		registerModule(new LiquidWalkModule());
 		registerModule(new NoSlowModule());
+		registerModule(new OmniSprintModule());
 
+		// combat
+		registerModule(new CritsModule());
+
+		// visuals
 		registerModule(new GlowESPModule());
 		registerModule(new StorageESPModule());
 		registerModule(new TracersModule());
 
-		registerModule(new CritsModule());
-
+		// player
 		registerModule(new AntiHungerModule());
 
+		// automation
+
+		// misc
 		registerModule(new ModuleListModule());
 		registerModule(new UnifontModule());
 	}

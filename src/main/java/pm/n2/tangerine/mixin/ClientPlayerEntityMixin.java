@@ -1,5 +1,6 @@
 package pm.n2.tangerine.mixin;
 
+import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.network.Packet;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
+import pm.n2.tangerine.modules.movement.OmniSprintModule;
 import pm.n2.tangerine.modules.player.AntiHungerModule;
 
 @Mixin(ClientPlayerEntity.class)
@@ -36,5 +38,13 @@ public class ClientPlayerEntityMixin {
 			return false;
 		}
 		return instance.isUsingItem();
+	}
+
+	@Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
+	public void tangerine$omniSprint(CallbackInfoReturnable<Boolean> cir) {
+		var self = (ClientPlayerEntity) (Object) this;
+		if (Tangerine.MODULE_MANAGER.get(OmniSprintModule.class).enabled.getBooleanValue()) {
+			cir.setReturnValue(self.isSubmergedInWater() ? self.input.hasForwardMovement() : (self.input.forwardMovement >= 0.8 || self.input.forwardMovement <= -0.8 || self.input.sidewaysMovement >= 0.8 || self.input.sidewaysMovement <= -0.8));
+		}
 	}
 }
