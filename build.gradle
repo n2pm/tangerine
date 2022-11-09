@@ -23,6 +23,7 @@ dependencies {
 	include libs.imgui
 
 	modApi libs.cauldron
+	include libs.cauldron
 }
 
 loom {
