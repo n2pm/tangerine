@@ -11,7 +11,6 @@ import pm.n2.tangerine.gui.TangerineRenderable;
 import pm.n2.tangerine.modules.Module;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ConfigWindow extends TangerineRenderable {
 	private final Module module;

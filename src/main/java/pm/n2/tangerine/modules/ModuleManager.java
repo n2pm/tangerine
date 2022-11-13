@@ -1,10 +1,10 @@
 package pm.n2.tangerine.modules;
 
-import pm.n2.tangerine.modules.combat.*;
+import pm.n2.tangerine.modules.combat.CritsModule;
 import pm.n2.tangerine.modules.misc.ModuleListModule;
 import pm.n2.tangerine.modules.misc.UnifontModule;
-import pm.n2.tangerine.modules.player.*;
 import pm.n2.tangerine.modules.movement.*;
+import pm.n2.tangerine.modules.player.AntiHungerModule;
 import pm.n2.tangerine.modules.visuals.GlowESPModule;
 import pm.n2.tangerine.modules.visuals.StorageESPModule;
 import pm.n2.tangerine.modules.visuals.TracersModule;

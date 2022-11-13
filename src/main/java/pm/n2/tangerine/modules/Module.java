@@ -1,14 +1,10 @@
 package pm.n2.tangerine.modules;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
-import com.adryd.cauldron.api.config.ConfigOptionBase;
 import com.adryd.cauldron.api.config.IConfigOption;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.MinecraftClient;
 import pm.n2.tangerine.gui.renderables.ConfigWindow;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class Module {
 	public ConfigBoolean enabled;

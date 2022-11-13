@@ -4,7 +4,6 @@ import com.adryd.cauldron.api.render.helper.OverlayRenderManager;
 import net.minecraft.block.entity.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.mixin.ClientChunkManagerAccessor;
 import pm.n2.tangerine.mixin.ClientChunkMapAccessor;
 import pm.n2.tangerine.modules.Module;

@@ -1,7 +1,6 @@
 package pm.n2.tangerine.modules.movement;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
-import com.adryd.cauldron.api.config.ConfigOptionBase;
 import com.adryd.cauldron.api.config.IConfigOption;
 import com.google.common.collect.ImmutableList;
 import pm.n2.tangerine.modules.Module;

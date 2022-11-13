@@ -1,7 +1,6 @@
 package pm.n2.tangerine.gui.renderables;
 
 import imgui.ImGui;
-import imgui.extension.imguizmo.ImGuizmo;
 import imgui.extension.implot.ImPlot;
 import imgui.type.ImBoolean;
 import pm.n2.tangerine.gui.TangerineRenderable;

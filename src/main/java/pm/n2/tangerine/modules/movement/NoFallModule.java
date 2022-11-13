@@ -1,17 +1,13 @@
 package pm.n2.tangerine.modules.movement;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import pm.n2.tangerine.Tangerine;
-import pm.n2.tangerine.modules.ModuleCategory;
 import pm.n2.tangerine.modules.Module;
+import pm.n2.tangerine.modules.ModuleCategory;
 
 public class NoFallModule extends Module {
 	public NoFallModule() {

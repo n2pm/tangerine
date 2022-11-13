@@ -2,14 +2,11 @@ package pm.n2.tangerine.modules.movement;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
 import com.adryd.cauldron.api.config.ConfigDouble;
-import com.adryd.cauldron.api.config.ConfigOptionBase;
 import com.adryd.cauldron.api.config.IConfigOption;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
-import pm.n2.tangerine.Tangerine;
-import pm.n2.tangerine.gui.renderables.ConfigWindow;
 import pm.n2.tangerine.mixin.ClientConnectionInvoker;
 import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;

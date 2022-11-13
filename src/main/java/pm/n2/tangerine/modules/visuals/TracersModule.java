@@ -1,7 +1,6 @@
 package pm.n2.tangerine.modules.visuals;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
-import com.adryd.cauldron.api.config.ConfigOptionBase;
 import com.adryd.cauldron.api.config.IConfigOption;
 import com.adryd.cauldron.api.render.helper.OverlayRenderManager;
 import com.google.common.collect.ImmutableList;

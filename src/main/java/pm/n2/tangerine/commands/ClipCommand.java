@@ -5,8 +5,6 @@ import com.adryd.cauldron.api.command.ClientCommandManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.Vec3d;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 

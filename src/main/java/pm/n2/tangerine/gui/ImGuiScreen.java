@@ -1,7 +1,6 @@
 package pm.n2.tangerine.gui;
 
 import gay.eviee.imguiquilt.ImGuiQuilt;
-import gay.eviee.imguiquilt.imgui.ImguiLoader;
 import imgui.ImGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
