@@ -1,5 +1,7 @@
 package pm.n2.tangerine.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
@@ -13,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.LiquidWalkModule;
 
+@Environment(EnvType.CLIENT)
 @Mixin(AbstractBlock.class)
 public class AbstractBlockMixin {
 	@Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)

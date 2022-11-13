@@ -1,5 +1,7 @@
 package pm.n2.tangerine.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.input.Input;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +16,7 @@ import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 
+@Environment(EnvType.CLIENT)
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 	@Inject(method = "setMovementSpeed", at = @At("HEAD"), cancellable = true)

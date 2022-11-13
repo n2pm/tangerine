@@ -6,6 +6,8 @@ import gay.eviee.imguiquilt.interfaces.Theme;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import pm.n2.tangerine.Tangerine;
 import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pm.n2.tangerine.gui.ImGuiManager;
 
+@Environment(EnvType.CLIENT)
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin {
 	private final Renderable renderable = new Renderable() {

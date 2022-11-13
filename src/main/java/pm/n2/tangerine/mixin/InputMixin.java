@@ -1,5 +1,7 @@
 package pm.n2.tangerine.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.input.Input;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 
+@Environment(EnvType.CLIENT)
 @Mixin(Input.class)
 public class InputMixin {
 	@Inject(method = "hasForwardMovement", at = @At("HEAD"), cancellable = true)

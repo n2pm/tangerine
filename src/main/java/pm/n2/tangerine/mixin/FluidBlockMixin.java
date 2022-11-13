@@ -1,5 +1,7 @@
 package pm.n2.tangerine.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.ShapeContext;
@@ -18,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.LiquidWalkModule;
 
+@Environment(EnvType.CLIENT)
 @Mixin(FluidBlock.class)
 public class FluidBlockMixin {
 	@Final

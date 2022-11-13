@@ -1,5 +1,7 @@
 package pm.n2.tangerine.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 
+@Environment(EnvType.CLIENT)
 @Mixin(Block.class)
 public abstract class BlockMixin extends AbstractBlock {
 	public BlockMixin(Settings settings) {

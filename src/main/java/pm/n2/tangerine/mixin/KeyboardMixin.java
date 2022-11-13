@@ -1,5 +1,7 @@
 package pm.n2.tangerine.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
@@ -9,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pm.n2.tangerine.Tangerine;
 
+@Environment(EnvType.CLIENT)
 @Mixin(Keyboard.class)
 public class KeyboardMixin {
 	@Inject(method = "onKey(JIIII)V", at = @At("HEAD"))

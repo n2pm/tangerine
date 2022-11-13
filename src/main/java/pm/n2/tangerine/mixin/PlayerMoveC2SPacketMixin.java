@@ -1,5 +1,7 @@
 package pm.n2.tangerine.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import org.spongepowered.asm.mixin.Final;
@@ -13,6 +15,7 @@ import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.FlightModule;
 import pm.n2.tangerine.modules.movement.NoFallModule;
 
+@Environment(EnvType.CLIENT)
 @Mixin(PlayerMoveC2SPacket.class)
 public class PlayerMoveC2SPacketMixin {
 	@Shadow
