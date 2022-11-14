@@ -49,11 +49,11 @@ public class OverlayStorageESP extends OverlayRendererBase {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, Matrix4f positionMatrix, float tickDelta) {
+	public void render(float tickDelta, Camera camera) {
 		RenderSystem.disableDepthTest();
 		RenderSystem.lineWidth(1f);
 
-		super.render(matrices, positionMatrix, tickDelta);
+		super.render(tickDelta, camera);
 	}
 
 	private Color4f getColor(BlockEntity be) {
@@ -82,10 +82,10 @@ public class OverlayStorageESP extends OverlayRendererBase {
 
 		var be = blockEntities.clone();
 		for (var be2 : blockEntities.values()) {
-			LineDrawing.drawBox(new Box(be2.getPos()), getColor(be2), linesBuf);
+			LineDrawing.drawBox(new Box(be2.getPos()), getColor(be2), camera, linesBuf);
 		}
 
-		renderLines.endBuffer();
+		renderLines.endBuffer(camera);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class OverlayStorageESP extends OverlayRendererBase {
 	}
 
 	@Override
-	public boolean shouldUpdate() {
+	public boolean shouldUpdate(Camera camera) {
 		var storageESP = (StorageESPModule) Tangerine.MODULE_MANAGER.get(StorageESPModule.class);
 		var be = (HashMap) storageESP.blockEntities.clone();
 		if (!be.equals(this.blockEntities)) {

@@ -28,11 +28,11 @@ public class OverlayTracers extends OverlayRendererBase {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, Matrix4f positionMatrix, float tickDelta) {
+	public void render(float tickDelta, Camera camera) {
 		RenderSystem.disableDepthTest();
 		RenderSystem.lineWidth(1f);
 
-		super.render(matrices, positionMatrix, tickDelta);
+		super.render(tickDelta, camera);
 	}
 
 	@Override
@@ -59,15 +59,15 @@ public class OverlayTracers extends OverlayRendererBase {
 			cameraPos = cameraPos.rotateY((float) -Math.toRadians(mc.gameRenderer.getCamera().getYaw()));
 			cameraPos = cameraPos.add(mc.cameraEntity.getEyePos());
 
-			LineDrawing.drawLine(entityPos.x, entityPos.y, entityPos.z, cameraPos.x, cameraPos.y, cameraPos.z, color, linesBuf);
+			LineDrawing.drawLine(entityPos.x, entityPos.y, entityPos.z, cameraPos.x, cameraPos.y, cameraPos.z, color, camera, linesBuf);
 
 			if (tracersModule.drawStem.getBooleanValue()) {
 				var entityHeight = entity.getHeight();
-				LineDrawing.drawLine(entityPos.x, entityPos.y + entityHeight, entityPos.z, entityPos.x, entityPos.y, entityPos.z, color, linesBuf);
+				LineDrawing.drawLine(entityPos.x, entityPos.y + entityHeight, entityPos.z, entityPos.x, entityPos.y, entityPos.z, color, camera, linesBuf);
 			}
 		}
 
-		renderLines.endBuffer();
+		renderLines.endBuffer(camera);
 	}
 
 	private Color4f getColor(Entity entity) {
@@ -85,11 +85,6 @@ public class OverlayTracers extends OverlayRendererBase {
 		if (entity instanceof ItemEntity) return tracersModule.drawItems.getBooleanValue() ? RenderColors.OUTLINE_LIGHT_GRAY : null;
 
 		return tracersModule.drawOthers.getBooleanValue() ? RenderColors.OUTLINE_DARK_GRAY : null;
-	}
-
-	@Override
-	public boolean shouldUpdate() {
-		return super.shouldUpdate();
 	}
 
 	@Override
