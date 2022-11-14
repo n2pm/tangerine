@@ -26,7 +26,7 @@ repositories {
 		}
 	}
 	maven {
-		url "https://maven.svc.adryd.com/snapshots/"
+		url "https://maven.svc.adryd.com/releases/"
 		content {
 			includeGroup "com.adryd"
 		}

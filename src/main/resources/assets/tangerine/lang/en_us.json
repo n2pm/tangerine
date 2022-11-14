@@ -1,0 +1,16 @@
+{
+  "tangerine.config.boatfly_speed": "Flight Speed",
+  "tangerine.config.boatfly_landspeed": "Apply flight speed to land",
+  "tangerine.config.flight_fly_kick": "Fly kick bypass",
+  "tangerine.config.flight_scroll_speed": "Fly scroll speed",
+  "tangerine.config.flight_friction": "Fly friction",
+  "tangerine.config.flight_speed": "Fly speed",
+  "tangerine.config.no_slowdown_affect_sneaking": "Affect sneaking",
+  "tangerine.config.tracers_players": "Draw players",
+  "tangerine.config.tracers_friendly": "Draw friendly mobs",
+  "tangerine.config.tracers_passive": "Draw passive mobs",
+  "tangerine.config.tracers_hostile": "Draw hostile mobs",
+  "tangerine.config.tracers_items": "Draw items",
+  "tangerine.config.tracers_other": "Draw other entities",
+  "tangerine.config.tracers_stem": "Draw stem"
+}

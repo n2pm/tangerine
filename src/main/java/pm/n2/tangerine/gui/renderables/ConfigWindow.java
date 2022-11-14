@@ -5,6 +5,7 @@ import com.adryd.cauldron.api.config.ConfigDouble;
 import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
+import net.minecraft.client.resource.language.I18n;
 import org.lwjgl.glfw.GLFW;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.gui.TangerineRenderable;
@@ -45,7 +46,7 @@ public class ConfigWindow extends TangerineRenderable {
 			if (configOptions != null) {
 				for (var config : configOptions) {
 					if (config instanceof ConfigBoolean configBoolean) {
-						if (ImGui.checkbox(configBoolean.getName(), configBoolean.getBooleanValue())) {
+						if (ImGui.checkbox(I18n.translate("tangerine.config." + configBoolean.getKey()), configBoolean.getBooleanValue())) {
 							configBoolean.toggle();
 						}
 					}
@@ -53,7 +54,7 @@ public class ConfigWindow extends TangerineRenderable {
 					if (config instanceof ConfigDouble configDouble) {
 						var doubleValue = configDouble.getDoubleValue();
 						var doubleValueArr = new float[]{(float) doubleValue};
-						if (ImGui.dragFloat(configDouble.getName(), doubleValueArr, 0.1f, (float) configDouble.getMinValue(), (float) configDouble.getMaxValue())) {
+						if (ImGui.dragFloat(I18n.translate("tangerine.config." + configDouble.getKey()), doubleValueArr, 0.1f, (float) configDouble.getMinValue(), (float) configDouble.getMaxValue())) {
 							configDouble.setDoubleValue(doubleValueArr[0]);
 						}
 					}

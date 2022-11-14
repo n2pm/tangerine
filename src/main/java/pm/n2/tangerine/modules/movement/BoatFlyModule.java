@@ -13,8 +13,8 @@ import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
 public class BoatFlyModule extends Module {
-	public ConfigDouble flySpeed = new ConfigDouble("boatfly_speed", "Flight Speed", 1.0, 0.1, 5.0);
-	public ConfigBoolean landSpeed = new ConfigBoolean("boatfly_landspeed", "Apply flight speed to land", false);
+	public ConfigDouble flySpeed = new ConfigDouble("boatfly_speed", 1.0, 0.1, 5.0);
+	public ConfigBoolean landSpeed = new ConfigBoolean("boatfly_landspeed", false);
 
 	public BoatFlyModule() {
 		super("boatfly", "Boat Fly", "magic carpet lookin ass", ModuleCategory.MOVEMENT);
