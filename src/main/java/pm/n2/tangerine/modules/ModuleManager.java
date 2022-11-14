@@ -26,6 +26,7 @@ public class ModuleManager {
 		registerModule(new LiquidWalkModule());
 		registerModule(new NoSlowModule());
 		registerModule(new OmniSprintModule());
+		registerModule(new BoatFlyModule());
 
 		// combat
 		registerModule(new CritsModule());
