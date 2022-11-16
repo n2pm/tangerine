@@ -12,11 +12,11 @@ import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
 public class FlightModule extends Module {
-	public ConfigBoolean flyKickBypass = new ConfigBoolean("flight_fly_kick", true);
-	public ConfigBoolean flyScrollSpeed = new ConfigBoolean("flight_scroll_speed", false);
-	public ConfigBoolean flyFriction = new ConfigBoolean("flight_friction", false);
+	public ConfigBoolean flyKickBypass = new ConfigBoolean("flight.fly_kick", true);
+	public ConfigBoolean flyScrollSpeed = new ConfigBoolean("flight.scroll_speed", false);
+	public ConfigBoolean flyFriction = new ConfigBoolean("flight.friction", false);
 
-	public ConfigDouble flySpeed = new ConfigDouble("flight_speed", 1.0, 0.1, 20.0);
+	public ConfigDouble flySpeed = new ConfigDouble("flight.speed", 1.0, 0.1, 20.0);
 
 	private int fallingTicks = 0;
 	private Vec3d lastPos;

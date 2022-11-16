@@ -7,7 +7,7 @@ import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
 public class NoSlowModule extends Module {
-	public ConfigBoolean affectSneaking = new ConfigBoolean("no_slowdown_affect_sneaking", false);
+	public ConfigBoolean affectSneaking = new ConfigBoolean("no_slowdown.affect_sneaking", false);
 
 	public NoSlowModule() { super("no_slowdown", "No slowdown", "Prevents you from slowing down", ModuleCategory.MOVEMENT); }
 
