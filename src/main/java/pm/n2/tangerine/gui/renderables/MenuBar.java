@@ -69,18 +69,7 @@ public class MenuBar extends TangerineRenderable {
 			drawMenuTab("Combat", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.COMBAT));
 			drawMenuTab("Visuals", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.VISUALS));
 			drawMenuTab("Player", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.PLAYER));
-
-			if (ImGui.beginMenu("Automation")) {
-				ImGui.menuItem("Auto armor");
-				ImGui.menuItem("Auto eat");
-				ImGui.menuItem("Auto mine");
-				ImGui.menuItem("Auto tool");
-				ImGui.menuItem("Auto walk");
-				ImGui.menuItem("Auto sprint");
-
-				ImGui.endMenu();
-			}
-
+			drawMenuTab("Automation", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.AUTOMATION));
 			drawMenuTab("Misc", Tangerine.MODULE_MANAGER.getModulesByCategory(ModuleCategory.MISC));
 
 			ImGui.endMainMenuBar();

@@ -1,5 +1,6 @@
 package pm.n2.tangerine.modules;
 
+import pm.n2.tangerine.modules.automation.AutowalkModule;
 import pm.n2.tangerine.modules.combat.CritsModule;
 import pm.n2.tangerine.modules.misc.ModuleListModule;
 import pm.n2.tangerine.modules.misc.UnifontModule;
@@ -40,6 +41,7 @@ public class ModuleManager {
 		registerModule(new AntiHungerModule());
 
 		// automation
+		registerModule(new AutowalkModule());
 
 		// misc
 		registerModule(new ModuleListModule());
