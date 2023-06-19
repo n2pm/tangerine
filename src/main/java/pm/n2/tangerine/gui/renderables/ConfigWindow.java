@@ -2,6 +2,7 @@ package pm.n2.tangerine.gui.renderables;
 
 import com.adryd.cauldron.api.config.ConfigBoolean;
 import com.adryd.cauldron.api.config.ConfigDouble;
+import com.google.common.collect.ImmutableList;
 import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
@@ -14,8 +15,9 @@ import pm.n2.tangerine.modules.Module;
 import java.util.ArrayList;
 
 public class ConfigWindow extends TangerineRenderable {
+	private final static ArrayList<Integer> blacklistedKeys = new ArrayList<>(ImmutableList.of(0, GLFW.GLFW_KEY_ESCAPE));
+
 	private final Module module;
-	private final static ArrayList<Integer> blacklistedKeys = new ArrayList<>(GLFW.GLFW_KEY_ESCAPE);
 
 	public ConfigWindow(Module module) {
 		super("ConfigWindow##" + module.name, false);
@@ -36,7 +38,7 @@ public class ConfigWindow extends TangerineRenderable {
 				}
 			}
 
-			ImGui.text("Current keybind: " + GLFW.glfwGetKeyName(module.keybind, 0));
+			ImGui.text("Current keybind: " + GLFW.glfwGetKeyName(module.keybind.getIntegerValue(), 0));
 			ImGui.sameLine();
 			if (ImGui.button("Assign keybind")) {
 				ImGui.openPopup("Assign keybind##" + module.name);
@@ -62,18 +64,18 @@ public class ConfigWindow extends TangerineRenderable {
 			}
 
 			var flags = ImGuiWindowFlags.NoCollapse
-					| ImGuiWindowFlags.NoResize
-					| ImGuiWindowFlags.NoMove
-					| ImGuiWindowFlags.AlwaysAutoResize;
+				| ImGuiWindowFlags.NoResize
+				| ImGuiWindowFlags.NoMove
+				| ImGuiWindowFlags.AlwaysAutoResize;
 
 			if (ImGui.beginPopupModal("Assign keybind##" + module.name, new ImBoolean(true), flags)) {
 				ImGui.text("Press a key to assign it to this module.");
 
 				for (int i = 0; i < 512; i++) {
 					if (blacklistedKeys.contains(i)) continue;
-					if (ImGui.getIO().getKeysDown(i)) {
+					if (Tangerine.KEYBOARD_MANAGER.isKeyPressed(i)) {
 						Tangerine.LOGGER.info("Keybind for {} set to {}", module.name, i);
-						module.keybind = i;
+						module.keybind.setIntegerValue(i);
 						ImGui.closeCurrentPopup();
 						break;
 					}

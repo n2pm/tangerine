@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
-import pm.n2.tangerine.mixin.ClientConnectionInvoker;
 import pm.n2.tangerine.modules.Module;
 import pm.n2.tangerine.modules.ModuleCategory;
 
@@ -55,7 +54,7 @@ public class FlightModule extends Module {
 
 					if (shouldAntiKick) {
 						var packet = new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() - 0.03126, mc.player.getZ(), true);
-						((ClientConnectionInvoker) mc.player.networkHandler.getConnection()).invokeSendImmediately(packet, null);
+						mc.player.networkHandler.sendPacket(packet);
 					}
 
 					fallingTicks = 0;

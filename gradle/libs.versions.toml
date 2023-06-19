@@ -1,14 +1,14 @@
 [versions]
-minecraft = "1.19.2"
-quilt_mappings = "1.19.2+build.21"
-quilt_loader = "0.17.5-beta.9"
+minecraft = "1.20"
+quilt_mappings = "1.20+build.1"
+quilt_loader = "0.19.0-beta.18"
 
-quilted_fabric_api = "4.0.0-beta.15+0.63.0-1.19.2"
+quilted_fabric_api = "7.0.1+0.83.0-1.20"
 
-#imgui = "1.0.2+1.19"
-imgui = "1.0.2"
-cauldron = "0.1.5-alpha1"
+imgui = "6lytd87M" # 1.0.2 for 1.20
+cauldron = "0.1.8"
 lib39 = "1.3.1"
+devauth = "1.1.2"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -18,10 +18,10 @@ quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loade
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
 quilted_fabric_api_deprecated = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api-deprecated", version.ref = "quilted_fabric_api" }
 
-#imgui = { module = "gay.eviee:imgui-quilt", version.ref = "imgui" }
 imgui = { module = "maven.modrinth:imgui-quilt", version.ref = "imgui" }
 cauldron = { module = "com.adryd:cauldron", version.ref = "cauldron" }
 lib39core = { module = "com.unascribed:lib39-core", version.ref = "lib39" }
+devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
 
 [bundles]
 quilted_fabric_api = ["quilted_fabric_api", "quilted_fabric_api_deprecated"]

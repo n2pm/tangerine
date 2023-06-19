@@ -29,7 +29,9 @@ public class FluidBlockMixin {
 
 	@Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
 	public void tangerine$getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-		if (Tangerine.MODULE_MANAGER.get(LiquidWalkModule.class).enabled.getBooleanValue()
+		var liquidWalk = Tangerine.MODULE_MANAGER.get(LiquidWalkModule.class);
+		if (liquidWalk == null) return;
+		if (liquidWalk.enabled.getBooleanValue()
 				&& (this.fluid.matchesType(Fluids.WATER)
 				|| this.fluid.matchesType(Fluids.FLOWING_WATER)
 				|| this.fluid.matchesType(Fluids.LAVA)

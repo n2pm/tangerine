@@ -11,6 +11,6 @@
   "tangerine.config.tracers.passive": "Draw passive mobs",
   "tangerine.config.tracers.hostile": "Draw hostile mobs",
   "tangerine.config.tracers.items": "Draw items",
-  "tangerine.config.tracers.other": "Draw other entities",
+  "tangerine.config.tracers.others": "Draw other entities",
   "tangerine.config.tracers.stem": "Draw stem"
 }

@@ -2,6 +2,7 @@ package pm.n2.tangerine.gui;
 
 import gay.eviee.imguiquilt.ImGuiQuilt;
 import imgui.ImGui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -47,7 +48,7 @@ public class ImGuiScreen extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		// noop
 	}
 

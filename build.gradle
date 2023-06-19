@@ -8,12 +8,6 @@ version = "${project.version}+${libs.versions.minecraft.get()}"
 group = project.maven_group
 
 repositories {
-	/*maven {
-		url "https://maven.eviee.gay/imgui-quilt"
-		content {
-			includeGroup "gay.eviee"
-		}
-	}*/
 	exclusiveContent {
 		forRepository {
 			maven {
@@ -25,16 +19,25 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+
 	maven {
 		url "https://maven.svc.adryd.com/releases/"
 		content {
 			includeGroup "com.adryd"
 		}
 	}
+
 	maven {
 		url "https://repo.sleeping.town"
 		content {
 			includeGroup "com.unascribed"
+		}
+	}
+
+	maven {
+		url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1"
+		content {
+			includeGroup "me.djtheredstoner"
 		}
 	}
 }
@@ -49,23 +52,19 @@ dependencies {
 	modImplementation libs.imgui
 	include libs.imgui
 
-	modApi libs.cauldron
-	include libs.cauldron
+	//modApi libs.cauldron
+	//include libs.cauldron
+	modApi files("libs/cauldron-mc1.20-0.1.8+20230619.124218.jar")
+	include files("libs/cauldron-mc1.20-0.1.8+20230619.124218.jar")
 
 	modApi libs.lib39core
 	include libs.lib39core
+
+	modRuntimeOnly libs.devauth
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/tangerine.accesswidener")
-}
-
-processResources {
-	inputs.property "version", version
-
-	filesMatching('quilt.mod.json') {
-		expand "version": version
-	}
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -86,12 +85,10 @@ jar {
 	}
 }
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
+processResources {
+	inputs.property "version", version
 
-	repositories {}
+	filesMatching("quilt.mod.json") {
+		expand project.properties
+	}
 }

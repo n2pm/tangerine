@@ -17,7 +17,6 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.visuals.TracersModule;
@@ -73,8 +72,10 @@ public class OverlayTracers extends OverlayRendererBase {
 	private Color4f getColor(Entity entity) {
 		var tracersModule = (TracersModule) Tangerine.MODULE_MANAGER.get(TracersModule.class);
 
-		if (entity instanceof PlayerEntity) return tracersModule.drawPlayers.getBooleanValue() ? RenderColors.LIGHT_BLUE : null;
-		if (entity instanceof PassiveEntity) return tracersModule.drawFriendly.getBooleanValue() ? RenderColors.OUTLINE_GREEN : null;
+		if (entity instanceof PlayerEntity)
+			return tracersModule.drawPlayers.getBooleanValue() ? RenderColors.LIGHT_BLUE : null;
+		if (entity instanceof PassiveEntity)
+			return tracersModule.drawFriendly.getBooleanValue() ? RenderColors.OUTLINE_GREEN : null;
 		if (entity instanceof HostileEntity) {
 			if (entity instanceof Angerable) {
 				return tracersModule.drawPassive.getBooleanValue() ? RenderColors.OUTLINE_YELLOW : null;
@@ -82,7 +83,8 @@ public class OverlayTracers extends OverlayRendererBase {
 				return tracersModule.drawHostile.getBooleanValue() ? RenderColors.OUTLINE_RED : null;
 			}
 		}
-		if (entity instanceof ItemEntity) return tracersModule.drawItems.getBooleanValue() ? RenderColors.OUTLINE_LIGHT_GRAY : null;
+		if (entity instanceof ItemEntity)
+			return tracersModule.drawItems.getBooleanValue() ? RenderColors.OUTLINE_LIGHT_GRAY : null;
 
 		return tracersModule.drawOthers.getBooleanValue() ? RenderColors.OUTLINE_DARK_GRAY : null;
 	}

@@ -46,7 +46,6 @@ public class ModuleManager {
 		registerModule(new UnifontModule());
 	}
 
-	// FIXME: hack
 	public <T> Module get(T module) {
 		return modules.stream().filter(m -> m.getClass().equals(module)).findFirst().orElse(null);
 	}

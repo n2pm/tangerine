@@ -24,18 +24,21 @@ import java.nio.ByteBuffer;
 
 public class Tangerine implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Tangerine");
-	public static String MOD_VERSION;
 	public static final String MOD_ID = "tangerine";
+	public static final ConfigFile CONFIG = new ConfigFile(MOD_ID);
 
 	public static final ImGuiManager IMGUI_MANAGER = new ImGuiManager();
 	public static final ImGuiScreen IMGUI_SCREEN = new ImGuiScreen(IMGUI_MANAGER);
-	public static ImFont IMGUI_FONT_DEFAULT;
-	public static ImFont IMGUI_FONT_UNIFONT;
+
 
 	public static final ModuleManager MODULE_MANAGER = new ModuleManager();
 	public static final CommandManager COMMAND_MANAGER = new CommandManager();
+	public static final KeyboardManager KEYBOARD_MANAGER = new KeyboardManager();
 
-	public static final ConfigFile CONFIG = new ConfigFile(MOD_ID);
+
+	public static String MOD_VERSION;
+	public static ImFont IMGUI_FONT_DEFAULT;
+	public static ImFont IMGUI_FONT_UNIFONT;
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
@@ -60,8 +63,16 @@ public class Tangerine implements ClientModInitializer {
 			}
 		});
 
+		KEYBOARD_MANAGER.KEY_PRESS.register(key -> {
+			for (var module : MODULE_MANAGER.getModules()) {
+				var value = module.keybind.getIntegerValue();
+				if (value != 0 && value == key) module.enabled.toggle();
+			}
+		});
+
 		for (var module : MODULE_MANAGER.getModules()) {
 			CONFIG.addConfig(module.enabled);
+			CONFIG.addConfig(module.keybind);
 			var opts = module.getConfigOptions();
 			if (opts != null)
 				CONFIG.addConfigs(opts);
@@ -70,44 +81,42 @@ public class Tangerine implements ClientModInitializer {
 		ClientLifecycleEvents.STOPPING.register(mc -> CONFIG.write());
 
 		var useUnifont = MODULE_MANAGER.get(UnifontModule.class).enabled.getBooleanValue();
-		//if (useUnifont) {
-			try {
-				var ctx = ImGui.createContext();
-				ImGui.setCurrentContext(ctx);
+		try {
+			var ctx = ImGui.createContext();
+			ImGui.setCurrentContext(ctx);
 
-				var io = ImGui.getIO();
-				var fonts = io.getFonts();
+			var io = ImGui.getIO();
+			var fonts = io.getFonts();
 
-				var fontStream = Tangerine.class.getResourceAsStream("/assets/tangerine/unifont.otf");
-				if (fontStream != null) {
-					ByteBuffer buffer = TextureUtil.readResource(fontStream);
-					buffer.flip();
-					byte[] arr = new byte[buffer.remaining()];
-					buffer.get(arr);
+			var fontStream = Tangerine.class.getResourceAsStream("/assets/tangerine/unifont.otf");
+			if (fontStream != null) {
+				ByteBuffer buffer = TextureUtil.readResource(fontStream);
+				buffer.flip();
+				byte[] arr = new byte[buffer.remaining()];
+				buffer.get(arr);
 
-					ImFontConfig fontConfig = new ImFontConfig();
+				ImFontConfig fontConfig = new ImFontConfig();
 
-					IMGUI_FONT_DEFAULT = fonts.addFontDefault(fontConfig);
-					IMGUI_FONT_UNIFONT = fonts.addFontFromMemoryTTF(arr, 16, fontConfig);
-					fonts.build();
+				IMGUI_FONT_DEFAULT = fonts.addFontDefault(fontConfig);
+				IMGUI_FONT_UNIFONT = fonts.addFontFromMemoryTTF(arr, 16, fontConfig);
+				fonts.build();
 
-					fontConfig.destroy();
+				fontConfig.destroy();
 
-					if (useUnifont) {
-						IMGUI_MANAGER.setFont(IMGUI_FONT_UNIFONT);
-					} else {
-						IMGUI_MANAGER.setFont(IMGUI_FONT_DEFAULT);
-					}
+				if (useUnifont) {
+					IMGUI_MANAGER.setFont(IMGUI_FONT_UNIFONT);
 				} else {
-					LOGGER.info("font stream null");
+					IMGUI_MANAGER.setFont(IMGUI_FONT_DEFAULT);
 				}
-
-				// causes "free(): invalid size" crash :(
-				// jni can have a bit of used once memory as a treat
-				//ImGui.destroyContext(ctx);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} else {
+				LOGGER.info("font stream null");
 			}
-		//}
+
+			// causes "free(): invalid size" crash :(
+			// jni can have a bit of used once memory as a treat
+			//ImGui.destroyContext(ctx);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
