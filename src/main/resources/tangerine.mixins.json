@@ -3,8 +3,25 @@
   "minVersion": "0.8",
   "package": "pm.n2.tangerine.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [],
-  "plugin": "pm.n2.tangerine.AutoMixinPlugin",
+  "client": [
+    "AbstractBlockMixin",
+    "AbstractClientPlayerEntityMixin",
+    "BlockMixin",
+    "BoatEntityAccessor",
+    "ClientChunkManagerAccessor",
+    "ClientChunkMapAccessor",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
+    "EntityMixin",
+    "FluidBlockMixin",
+    "InputMixin",
+    "KeyboardMixin",
+    "LivingEntityMixin",
+    "MinecraftClientMixin",
+    "MouseMixin",
+    "PlayerMoveC2SPacketMixin",
+    "TitleScreenMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

@@ -49,13 +49,11 @@ dependencies {
 	modImplementation libs.quilt.loader
 	modImplementation libs.quilted.fabric.api
 
-	modImplementation libs.imgui
+	modApi libs.imgui
 	include libs.imgui
 
-	//modApi libs.cauldron
-	//include libs.cauldron
-	modApi files("libs/cauldron-mc1.20-0.1.8+20230619.124218.jar")
-	include files("libs/cauldron-mc1.20-0.1.8+20230619.124218.jar")
+	modApi libs.cauldron
+	include libs.cauldron
 
 	modApi libs.lib39core
 	include libs.lib39core
