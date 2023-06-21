@@ -1,6 +1,6 @@
 plugins {
-	id 'maven-publish'
-	alias libs.plugins.quilt.loom
+    alias libs.plugins.quilt.loom
+    alias libs.plugins.kotlin
 }
 
 archivesBaseName = project.archives_base_name
@@ -8,85 +8,91 @@ version = "${project.version}+${libs.versions.minecraft.get()}"
 group = project.maven_group
 
 repositories {
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = "Modrinth"
-				url = "https://api.modrinth.com/maven"
-			}
-		}
-		filter {
-			includeGroup "maven.modrinth"
-		}
-	}
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 
-	maven {
-		url "https://maven.svc.adryd.com/releases/"
-		content {
-			includeGroup "com.adryd"
-		}
-	}
+    maven {
+        url "https://maven.svc.adryd.com/releases/"
+        content {
+            includeGroup "com.adryd"
+        }
+    }
 
-	maven {
-		url "https://repo.sleeping.town"
-		content {
-			includeGroup "com.unascribed"
-		}
-	}
+    maven {
+        url "https://repo.sleeping.town"
+        content {
+            includeGroup "com.unascribed"
+        }
+    }
 
-	maven {
-		url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1"
-		content {
-			includeGroup "me.djtheredstoner"
-		}
-	}
+    maven {
+        url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1"
+        content {
+            includeGroup "me.djtheredstoner"
+        }
+    }
 }
 
 dependencies {
-	minecraft libs.minecraft
-	mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
+    minecraft libs.minecraft
+    mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
 
-	modImplementation libs.quilt.loader
-	modImplementation libs.quilted.fabric.api
+    modImplementation libs.quilt.loader
+    modImplementation libs.quilted.fabric.api
+    modImplementation libs.quilt.kotlin.libraries
 
-	modApi libs.imgui
-	include libs.imgui
+    modApi libs.imgui
+    include libs.imgui
 
-	modApi libs.cauldron
-	include libs.cauldron
+    modApi libs.cauldron
+    include libs.cauldron
 
-	modApi libs.lib39core
-	include libs.lib39core
+    modApi libs.lib39core
+    include libs.lib39core
 
-	modRuntimeOnly libs.devauth
+    modRuntimeOnly libs.devauth
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/tangerine.accesswidener")
+    accessWidenerPath = file("src/main/resources/tangerine.accesswidener")
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
-	it.options.release = 17
+    it.options.encoding = "UTF-8"
+    it.options.release = 17
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = 17
+    }
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
-
-	withSourcesJar()
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${archivesBaseName}" }
-	}
+    from("LICENSE") {
+        rename { "${it}_${archivesBaseName}" }
+    }
 }
 
 processResources {
-	inputs.property "version", version
+    inputs.property "version", version
 
-	filesMatching("quilt.mod.json") {
-		expand project.properties
-	}
+    filesMatching("quilt.mod.json") {
+        expand project.properties
+    }
 }

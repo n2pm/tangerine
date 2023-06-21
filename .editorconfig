@@ -3,32 +3,14 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
-insert_final_newline = true
+indent_style = space
 tab_width = 4
 trim_trailing_whitespace = true
+insert_final_newline = true
 
-[*.gradle]
-indent_style = tab
-
-[*.java]
-indent_style = tab
-
-[*.json]
-indent_style = space
+[{*.json,*.toml,*.properties,.editorconfig}]
 indent_size = 2
-
-[quilt.mod.json]
-indent_style = tab
-tab_width = 2
-
-[*.toml]
-indent_style = tab
-tab_width = 2
 
 [*.properties]
-indent_style = space
-indent_size = 2
-
-[.editorconfig]
-indent_style = space
-indent_size = 4
+ij_properties_keep_blank_lines = true
+ij_properties_spaces_around_key_value_delimiter = true

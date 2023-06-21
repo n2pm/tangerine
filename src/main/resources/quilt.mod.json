@@ -1,51 +1,55 @@
 {
-	"schema_version": 1,
-	"quilt_loader": {
-		"group": "pm.n2",
-		"id": "tangerine",
-		"version": "${version}",
-		"metadata": {
-			"name": "Tangerine",
-			"description": "unethical minecraft modding",
-			"contributors": {
-				"NotNite": "Owner",
-				"adryd": "Owner"
-			},
-			"contact": {
-				"homepage": "https://github.com/n2pm/tangerine",
-				"issues": "https://github.com/n2pm/tangerine/issues",
-				"sources": "https://github.com/n2pm/tangerine"
-			},
-			"icon": "assets/tangerine/icon.png"
-		},
-		"intermediate_mappings": "net.fabricmc:intermediary",
-		"entrypoints": {
-			"client_init": ["pm.n2.tangerine.Tangerine"]
-		},
-		"depends": [
-			{
-				"id": "quilt_loader",
-				"versions": ">=0.17.0-"
-			},
-			{
-				"id": "quilted_fabric_api",
-				"versions": ">=4.0.0-"
-			},
-			{
-				"id": "minecraft",
-				"versions": ">=1.19.2"
-			},
-
-			{
-				"id": "cauldron",
-				"versions": "*"
-			},
-			{
-				"id": "imguiquilt",
-				"versions": "*"
-			}
-		]
-	},
-	"mixin": "tangerine.mixins.json",
-	"access_widener": "tangerine.accesswidener"
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "pm.n2",
+    "id": "tangerine",
+    "version": "${version}",
+    "metadata": {
+      "name": "Tangerine",
+      "description": "unethical minecraft modding",
+      "contributors": {
+        "NotNite": "Owner",
+        "adryd": "Owner"
+      },
+      "contact": {
+        "homepage": "https://github.com/n2pm/tangerine",
+        "issues": "https://github.com/n2pm/tangerine/issues",
+        "sources": "https://github.com/n2pm/tangerine"
+      },
+      "icon": "assets/tangerine/icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "client_init": [
+        {
+          "value": "pm.n2.tangerine.Tangerine",
+          "adapter": "kotlin"
+        }
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": ">=0.17.0-"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "versions": ">=4.0.0-"
+      },
+      {
+        "id": "minecraft",
+        "versions": ">=1.19.2"
+      },
+      {
+        "id": "cauldron",
+        "versions": "*"
+      },
+      {
+        "id": "imguiquilt",
+        "versions": "*"
+      }
+    ]
+  },
+  "mixin": "tangerine.mixins.json",
+  "access_widener": "tangerine.accesswidener"
 }

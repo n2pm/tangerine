@@ -13,21 +13,19 @@ import pm.n2.tangerine.Tangerine;
 @ClientOnly
 @Mixin(Keyboard.class)
 public class KeyboardMixin {
-	@Inject(method = "onKey(JIIII)V", at = @At("HEAD"))
-	public void tangerine$onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-		if (action == GLFW.GLFW_PRESS) {
-			Tangerine.KEYBOARD_MANAGER.keyPress(key);
-		} else if (action == GLFW.GLFW_RELEASE) {
-			Tangerine.KEYBOARD_MANAGER.keyRelease(key);
-		}
+    @Inject(method = "onKey(JIIII)V", at = @At("HEAD"))
+    public void tangerine$onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
+        if (action == GLFW.GLFW_PRESS) {
+            Tangerine.INSTANCE.getKeyboardManager().registerKeyPress(key);
+        } else if (action == GLFW.GLFW_RELEASE) {
+            Tangerine.INSTANCE.getKeyboardManager().registerKeyRelease(key);
+        }
 
-		if (key == GLFW.GLFW_KEY_RIGHT_SHIFT) {
-			var mc = MinecraftClient.getInstance();
-			var screen = Tangerine.IMGUI_SCREEN;
+        if (key == GLFW.GLFW_KEY_RIGHT_SHIFT) {
+            var mc = MinecraftClient.getInstance();
+            var screen = Tangerine.INSTANCE.getImguiScreen();
 
-			if (mc.currentScreen == null) {
-				mc.setScreen(screen);
-			}
-		}
-	}
+            if (mc.currentScreen == null) mc.setScreen(screen);
+        }
+    }
 }

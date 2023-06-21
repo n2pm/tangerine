@@ -4,6 +4,7 @@ quilt_mappings = "1.20+build.1"
 quilt_loader = "0.19.0-beta.18"
 
 quilted_fabric_api = "7.0.1+0.83.0-1.20"
+quilt_kotlin_libraries = "2.1.0+kt.1.8.22+flk.1.9.4"
 
 imgui = "6lytd87M" # 1.0.2 for 1.20
 cauldron = "0.1.9"
@@ -16,15 +17,13 @@ quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_m
 quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
 
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
-quilted_fabric_api_deprecated = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api-deprecated", version.ref = "quilted_fabric_api" }
+quilt_kotlin_libraries = { module = "org.quiltmc.quilt-kotlin-libraries:quilt-kotlin-libraries", version.ref = "quilt_kotlin_libraries" }
 
 imgui = { module = "maven.modrinth:imgui-quilt", version.ref = "imgui" }
 cauldron = { module = "com.adryd:cauldron", version.ref = "cauldron" }
 lib39core = { module = "com.unascribed:lib39-core", version.ref = "lib39" }
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
 
-[bundles]
-quilted_fabric_api = ["quilted_fabric_api", "quilted_fabric_api_deprecated"]
-
 [plugins]
 quilt_loom = { id = "org.quiltmc.loom", version = "1.0.+" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version = "1.8.22" }

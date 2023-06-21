@@ -16,14 +16,14 @@ import pm.n2.tangerine.modules.movement.NoSlowModule;
 @ClientOnly
 @Mixin(Entity.class)
 public class EntityMixin {
-	@Shadow
-	protected Vec3d movementMultiplier;
+    @Shadow
+    protected Vec3d movementMultiplier;
 
-	@Inject(method = "move", at = @At("HEAD"))
-	public void tangerine$noSlow(MovementType movementType, Vec3d movement, CallbackInfo ci) {
-		var self = (Entity) (Object) this;
-		if (self instanceof PlayerEntity && Tangerine.MODULE_MANAGER.get(NoSlowModule.class).enabled.getBooleanValue()) {
-			this.movementMultiplier = Vec3d.ZERO;
-		}
-	}
+    @Inject(method = "move", at = @At("HEAD"))
+    public void tangerine$noSlow(MovementType movementType, Vec3d movement, CallbackInfo ci) {
+        var self = (Entity) (Object) this;
+        if (self instanceof PlayerEntity && Tangerine.INSTANCE.getModuleManager().get(NoSlowModule.class).getEnabled().getBooleanValue()) {
+            this.movementMultiplier = Vec3d.ZERO;
+        }
+    }
 }

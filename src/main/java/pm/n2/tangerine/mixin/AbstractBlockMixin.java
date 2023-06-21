@@ -19,14 +19,12 @@ import pm.n2.tangerine.modules.movement.LiquidWalkModule;
 @ClientOnly
 @Mixin(AbstractBlock.class)
 public class AbstractBlockMixin {
-	@Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
-	public void tangerine$jesus_waterlogged(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-		var liquidWalk = Tangerine.MODULE_MANAGER.get(LiquidWalkModule.class);
-		if (liquidWalk == null) return;
-		if (liquidWalk.enabled.getBooleanValue()
-			&& state.getFluidState() != Fluids.EMPTY.getDefaultState()
-		) {
-			cir.setReturnValue(VoxelShapes.fullCube());
-		}
-	}
+    @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
+    public void tangerine$jesus_waterlogged(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
+        var liquidWalk = Tangerine.INSTANCE.getModuleManager().get(LiquidWalkModule.class);
+        if (liquidWalk.getEnabled().getBooleanValue()
+                && state.getFluidState() != Fluids.EMPTY.getDefaultState()) {
+            cir.setReturnValue(VoxelShapes.fullCube());
+        }
+    }
 }

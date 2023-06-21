@@ -6,9 +6,8 @@ import gay.eviee.imguiquilt.interfaces.Theme;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.TitleScreen;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,57 +15,57 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.gui.ImGuiManager;
 
-@Environment(EnvType.CLIENT)
+@ClientOnly
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin {
-	private final Renderable renderable = new Renderable() {
-		@Override
-		public String getName() {
-			return "Tangerine";
-		}
+    private final Renderable renderable = new Renderable() {
+        @Override
+        public String getName() {
+            return "Tangerine";
+        }
 
-		@Override
-		public Theme getTheme() {
-			return ImGuiManager.theme;
-		}
+        @Override
+        public Theme getTheme() {
+            return ImGuiManager.Companion.getTheme();
+        }
 
-		@Override
-		public void render() {
-			var windowFlags = ImGuiWindowFlags.NoDecoration |
-					ImGuiWindowFlags.NoInputs |
-					ImGuiWindowFlags.NoBackground |
-					ImGuiWindowFlags.NoBringToFrontOnFocus |
-					ImGuiWindowFlags.NoFocusOnAppearing;
-			var text = String.format("tangerine %s\nmade with love by notnet", Tangerine.MOD_VERSION);
+        @Override
+        public void render() {
+            var windowFlags = ImGuiWindowFlags.NoDecoration |
+                    ImGuiWindowFlags.NoInputs |
+                    ImGuiWindowFlags.NoBackground |
+                    ImGuiWindowFlags.NoBringToFrontOnFocus |
+                    ImGuiWindowFlags.NoFocusOnAppearing;
+            var text = String.format("tangerine %s\nmade with love by notnet", Tangerine.INSTANCE.getVersion());
 
-			// ???
-			var size = new ImVec2();
-			ImGui.calcTextSize(size, text);
-			// not sure why i have to do this but i did it in cl_showpos so ???????
-			size = new ImVec2(size.x + 25, size.y + 25);
+            // ???
+            var size = new ImVec2();
+            ImGui.calcTextSize(size, text);
+            // not sure why i have to do this but i did it in cl_showpos so ???????
+            size = new ImVec2(size.x + 25, size.y + 25);
 
-			ImGui.setNextWindowSize(size.x, size.y);
+            ImGui.setNextWindowSize(size.x, size.y);
 
-			var windowCorner = ImGui.getMainViewport().getPos();
-			ImGui.setNextWindowPos(windowCorner.x, windowCorner.y);
+            var windowCorner = ImGui.getMainViewport().getPos();
+            ImGui.setNextWindowPos(windowCorner.x, windowCorner.y);
 
-			if (ImGui.begin("##Tangerine Splash Text", windowFlags)) {
-				ImGui.textUnformatted(text);
-			}
+            if (ImGui.begin("##Tangerine Splash Text", windowFlags)) {
+                ImGui.textUnformatted(text);
+            }
 
-			ImGui.end();
-		}
-	};
+            ImGui.end();
+        }
+    };
 
-	@Inject(method = "init", at = @At("TAIL"))
-	public void tangerine$onInit(CallbackInfo ci) {
-		if (!ImGuiQuilt.renderstack.contains(renderable)) {
-			ImGuiQuilt.renderstack.add(renderable);
-		}
-	}
+    @Inject(method = "init", at = @At("TAIL"))
+    public void tangerine$onInit(CallbackInfo ci) {
+        if (!ImGuiQuilt.renderstack.contains(renderable)) {
+            ImGuiQuilt.renderstack.add(renderable);
+        }
+    }
 
-	@Inject(method = "removed", at = @At("HEAD"))
-	public void tangerine$onRemoved(CallbackInfo ci) {
-		ImGuiQuilt.renderstack.remove(renderable);
-	}
+    @Inject(method = "removed", at = @At("HEAD"))
+    public void tangerine$onRemoved(CallbackInfo ci) {
+        ImGuiQuilt.renderstack.remove(renderable);
+    }
 }

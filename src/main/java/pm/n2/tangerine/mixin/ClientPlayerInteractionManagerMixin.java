@@ -20,28 +20,28 @@ import pm.n2.tangerine.modules.combat.CritsModule;
 @Environment(EnvType.CLIENT)
 @Mixin(ClientPlayerInteractionManager.class)
 public class ClientPlayerInteractionManagerMixin {
-	@Shadow
-	@Final
-	private ClientPlayNetworkHandler networkHandler;
+    @Shadow
+    @Final
+    private ClientPlayNetworkHandler networkHandler;
 
-	@Inject(method = "attackEntity", at = @At("HEAD"))
-	public void tangerine$crits(PlayerEntity player, Entity target, CallbackInfo ci) {
-		if (Tangerine.MODULE_MANAGER.get(CritsModule.class).enabled.getBooleanValue()) {
-			var sprinting = player.isSprinting();
+    @Inject(method = "attackEntity", at = @At("HEAD"))
+    public void tangerine$crits(PlayerEntity player, Entity target, CallbackInfo ci) {
+        if (Tangerine.INSTANCE.getModuleManager().get(CritsModule.class).getEnabled().getBooleanValue()) {
+            var sprinting = player.isSprinting();
 
-			if (sprinting) {
-				player.setSprinting(false);
-				this.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
-			}
+            if (sprinting) {
+                player.setSprinting(false);
+                this.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.STOP_SPRINTING));
+            }
 
-			var pos = player.getPos();
-			this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(pos.getX(), pos.getY() + 0.05, pos.getZ(), false));
-			this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(pos.getX(), pos.getY(), pos.getZ(), false));
+            var pos = player.getPos();
+            this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(pos.getX(), pos.getY() + 0.05, pos.getZ(), false));
+            this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(pos.getX(), pos.getY(), pos.getZ(), false));
 
-			if (sprinting) {
-				player.setSprinting(true);
-				this.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_SPRINTING));
-			}
-		}
-	}
+            if (sprinting) {
+                player.setSprinting(true);
+                this.networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+            }
+        }
+    }
 }
