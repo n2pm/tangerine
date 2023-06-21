@@ -10,30 +10,27 @@ group = project.maven_group
 repositories {
     maven {
         url "https://git.gaycatgirl.sex/api/v4/projects/32/packages/maven"
-        content {
-            includeGroup "gay.eviee"
-        }
+        content { includeGroup "gay.eviee" }
     }
 
     maven {
         url "https://maven.svc.adryd.com/releases/"
-        content {
-            includeGroup "com.adryd"
-        }
+        content { includeGroup "com.adryd" }
     }
 
     maven {
         url "https://repo.sleeping.town"
-        content {
-            includeGroup "com.unascribed"
-        }
+        content { includeGroup "com.unascribed" }
     }
 
     maven {
         url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1"
-        content {
-            includeGroup "me.djtheredstoner"
-        }
+        content { includeGroup "me.djtheredstoner" }
+    }
+
+    maven {
+        url "https://maven.terraformersmc.com/releases/"
+        content { includeGroup "com.terraformersmc" }
     }
 }
 
@@ -54,6 +51,7 @@ dependencies {
     modApi libs.lib39core
     include libs.lib39core
 
+    modCompileOnly libs.modmenu
     modRuntimeOnly libs.devauth
 }
 

@@ -25,6 +25,12 @@
           "value": "pm.n2.tangerine.Tangerine",
           "adapter": "kotlin"
         }
+      ],
+      "modmenu": [
+        {
+          "value": "pm.n2.tangerine.compat.TangerineModMenu",
+          "adapter": "kotlin"
+        }
       ]
     },
     "depends": [
@@ -47,6 +53,11 @@
       {
         "id": "imguiquilt",
         "versions": "*"
+      },
+      {
+        "id": "modmenu",
+        "versions": "*",
+        "optional": true
       }
     ]
   },
