@@ -18,7 +18,8 @@ import pm.n2.tangerine.gui.ImGuiManager;
 @ClientOnly
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin {
-    private final Renderable renderable = new Renderable() {
+    private static boolean inStack = false;
+    private static final Renderable renderable = new Renderable() {
         @Override
         public String getName() {
             return "Tangerine";
@@ -59,13 +60,17 @@ public class TitleScreenMixin {
 
     @Inject(method = "init", at = @At("TAIL"))
     public void tangerine$onInit(CallbackInfo ci) {
-        if (!ImGuiQuilt.renderstack.contains(renderable)) {
+        if (!ImGuiQuilt.renderstack.contains(renderable) && !inStack) {
             ImGuiQuilt.renderstack.add(renderable);
+            inStack = true;
         }
     }
 
     @Inject(method = "removed", at = @At("HEAD"))
     public void tangerine$onRemoved(CallbackInfo ci) {
-        ImGuiQuilt.renderstack.remove(renderable);
+        if (inStack) {
+            ImGuiQuilt.renderstack.remove(renderable);
+            inStack = false;
+        }
     }
 }
