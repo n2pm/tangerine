@@ -1,12 +1,12 @@
 [versions]
 minecraft = "1.20"
 quilt_mappings = "1.20+build.4"
-quilt_loader = "0.19.2-beta.2"
+quilt_loader = "0.19.1"
 
 quilted_fabric_api = "7.0.1+0.83.0-1.20"
 quilt_kotlin_libraries = "2.1.0+kt.1.8.22+flk.1.9.4"
 
-imgui = "1.0.2+1.20"
+imgui = "1.0.4-DEV+1.20"
 cauldron = "0.1.9"
 lib39 = "1.3.1"
 devauth = "1.1.2"
