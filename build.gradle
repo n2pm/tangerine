@@ -8,15 +8,10 @@ version = "${project.version}+${libs.versions.minecraft.get()}"
 group = project.maven_group
 
 repositories {
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "Modrinth"
-                url = "https://api.modrinth.com/maven"
-            }
-        }
-        filter {
-            includeGroup "maven.modrinth"
+    maven {
+        url "https://git.gaycatgirl.sex/api/v4/projects/32/packages/maven"
+        content {
+            includeGroup "gay.eviee"
         }
     }
 
