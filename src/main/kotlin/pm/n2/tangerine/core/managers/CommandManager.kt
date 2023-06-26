@@ -7,9 +7,9 @@ import pm.n2.tangerine.commands.TangerineCommand
 import pm.n2.tangerine.core.Manager
 
 object CommandManager : Manager<TangerineCommand>() {
-    override val items = listOf(ClipCommand(), CarpetTPCommand())
+    override val items = listOf(ClipCommand, CarpetTPCommand)
 
-    init {
+    override fun init() {
         items.forEach { cmd -> cmd.register(ClientCommandManager.DISPATCHER) }
     }
 }

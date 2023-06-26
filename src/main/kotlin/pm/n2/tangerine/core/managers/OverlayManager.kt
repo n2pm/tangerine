@@ -14,7 +14,7 @@ object OverlayManager : Manager<OverlayRendererBase>() {
         OverlayTracers
     )
 
-    fun init() {
+    override fun init() {
         items.forEach { OverlayRenderManager.addRenderer(it) }
     }
 }

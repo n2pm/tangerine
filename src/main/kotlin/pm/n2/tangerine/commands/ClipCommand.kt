@@ -8,7 +8,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType.getInteger
 import com.mojang.brigadier.context.CommandContext
 
-class ClipCommand : TangerineCommand {
+object ClipCommand : TangerineCommand {
     override fun register(dispatcher: CommandDispatcher<CauldronClientCommandSource>) {
         val command = ClientCommandManager
             .literal("clip")

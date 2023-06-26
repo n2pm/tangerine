@@ -9,7 +9,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 
-class CarpetTPCommand : TangerineCommand {
+object CarpetTPCommand : TangerineCommand {
     override fun register(dispatcher: CommandDispatcher<CauldronClientCommandSource>) {
         val command = ClientCommandManager
             .literal("carpettp")

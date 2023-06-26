@@ -14,6 +14,7 @@ import pm.n2.hajlib.event.EventManager
 import pm.n2.hajlib.task.TaskManager
 import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.core.TangerineTaskContext
+import pm.n2.tangerine.core.managers.CommandManager
 import pm.n2.tangerine.core.managers.ModuleManager
 import pm.n2.tangerine.core.managers.OverlayManager
 import pm.n2.tangerine.gui.ImGuiManager
@@ -29,8 +30,6 @@ object Tangerine : ClientModInitializer {
     val taskManager = TaskManager("Tangerine", TangerineTaskContext)
 
     lateinit var mc: MinecraftClient
-    val player get() = mc.player
-    val world get() = mc.world
 
     override fun onInitializeClient(mod: ModContainer) {
         mc = MinecraftClient.getInstance()
@@ -57,6 +56,7 @@ object Tangerine : ClientModInitializer {
             config.addConfigs(module.configOptions)
         }
 
+        CommandManager.init()
         ModuleManager.init()
         OverlayManager.init()
 

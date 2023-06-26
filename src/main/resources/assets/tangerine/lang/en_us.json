@@ -12,5 +12,10 @@
   "tangerine.config.tracers.hostile": "Draw hostile mobs",
   "tangerine.config.tracers.items": "Draw items",
   "tangerine.config.tracers.others": "Draw other entities",
-  "tangerine.config.tracers.stem": "Draw stem"
+  "tangerine.config.tracers.stem": "Draw stem",
+  "tangerine.config.kill_aura.max_reach": "Maximum reach distance",
+  "tangerine.config.kill_aura.attack_players": "Attack players",
+  "tangerine.config.kill_aura.attack_passive": "Attack passive mobs",
+  "tangerine.config.kill_aura.attack_neutral": "Attack neutral mobs",
+  "tangerine.config.kill_aura.attack_hostile": "Attack hostile mobs"
 }

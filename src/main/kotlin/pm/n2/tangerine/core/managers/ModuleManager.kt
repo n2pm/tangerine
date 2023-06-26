@@ -5,6 +5,7 @@ import pm.n2.tangerine.core.Manager
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 import pm.n2.tangerine.modules.combat.CritsModule
+import pm.n2.tangerine.modules.combat.KillAuraModule
 import pm.n2.tangerine.modules.misc.ModuleListModule
 import pm.n2.tangerine.modules.misc.UnifontModule
 import pm.n2.tangerine.modules.movement.*
@@ -17,6 +18,7 @@ import pm.n2.tangerine.modules.visuals.TracersModule
 object ModuleManager : Manager<Module>() {
     override val items = listOf(
         CritsModule,
+        KillAuraModule,
 
         ModuleListModule,
         UnifontModule,
@@ -36,7 +38,7 @@ object ModuleManager : Manager<Module>() {
         TracersModule
     )
 
-    fun init() {
+    override fun init() {
         for (module in items) {
             if (module.enabled.booleanValue) {
                 Tangerine.eventManager.registerClass(module)
