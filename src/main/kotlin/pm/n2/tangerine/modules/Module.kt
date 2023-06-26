@@ -13,7 +13,7 @@ open class Module(val id: String, val name: String, val description: String, val
     public var enabled = ConfigBoolean("$id.enabled", false)
     public var keybind = ConfigInteger("$id.keybind", 0, 0, 255)
 
-    private val configWindow = ConfigWindow(this)
+    open val configWindow = ConfigWindow(this)
 
     fun showConfigWindow() {
         configWindow.enabled = true

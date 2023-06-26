@@ -20,7 +20,8 @@
     "MinecraftClientMixin",
     "MouseMixin",
     "PlayerMoveC2SPacketMixin",
-    "TitleScreenMixin"
+    "TitleScreenMixin",
+    "WorldChunkMixin"
   ],
   "injectors": {
     "defaultRequire": 1

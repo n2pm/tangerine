@@ -11,7 +11,7 @@ import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.gui.TangerineRenderable
 import pm.n2.tangerine.modules.Module
 
-class ConfigWindow(val module: Module) : TangerineRenderable("ConfigWindow##${module.name}", false) {
+open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWindow##${module.name}", false) {
     init {
         Tangerine.imguiManager.addRenderable(this)
     }
@@ -35,21 +35,7 @@ class ConfigWindow(val module: Module) : TangerineRenderable("ConfigWindow##${mo
                 ImGui.openPopup("Assign keybind##" + module.name)
             }
 
-            val configOptions = module.getConfigOptions()
-            for (config in configOptions) {
-                if (config is ConfigBoolean) {
-                    if (ImGui.checkbox(I18n.translate("tangerine.config." + config.getKey()), config.booleanValue)) {
-                        config.toggle()
-                    }
-                }
-                if (config is ConfigDouble) {
-                    val doubleValue: Double = config.doubleValue
-                    val doubleValueArr = floatArrayOf(doubleValue.toFloat())
-                    if (ImGui.dragFloat(I18n.translate("tangerine.config." + config.getKey()), doubleValueArr, 0.1f, config.minValue.toFloat(), config.maxValue.toFloat())) {
-                        config.doubleValue = doubleValueArr[0].toDouble()
-                    }
-                }
-            }
+            drawConfig()
 
             val flags = (ImGuiWindowFlags.NoCollapse
                     or ImGuiWindowFlags.NoResize
@@ -76,5 +62,23 @@ class ConfigWindow(val module: Module) : TangerineRenderable("ConfigWindow##${mo
 
         ImGui.end()
         this.enabled = enabled.get()
+    }
+
+    open fun drawConfig() {
+        val configOptions = module.getConfigOptions()
+        for (config in configOptions) {
+            if (config is ConfigBoolean) {
+                if (ImGui.checkbox(I18n.translate("tangerine.config." + config.getKey()), config.booleanValue)) {
+                    config.toggle()
+                }
+            }
+            if (config is ConfigDouble) {
+                val doubleValue: Double = config.doubleValue
+                val doubleValueArr = floatArrayOf(doubleValue.toFloat())
+                if (ImGui.dragFloat(I18n.translate("tangerine.config." + config.getKey()), doubleValueArr, 0.1f, config.minValue.toFloat(), config.maxValue.toFloat())) {
+                    config.doubleValue = doubleValueArr[0].toDouble()
+                }
+            }
+        }
     }
 }

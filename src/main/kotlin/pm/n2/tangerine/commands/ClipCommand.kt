@@ -11,9 +11,9 @@ import com.mojang.brigadier.context.CommandContext
 class ClipCommand : TangerineCommand {
     override fun register(dispatcher: CommandDispatcher<CauldronClientCommandSource>) {
         val command = ClientCommandManager
-                .literal("clip")
-                .then(argument("delta", IntegerArgumentType.integer())
-                        .executes { ctx -> this.run(ctx, getInteger(ctx, "delta")) })
+            .literal("clip")
+            .then(argument("delta", IntegerArgumentType.integer())
+                .executes { ctx -> this.run(ctx, getInteger(ctx, "delta")) })
 
         dispatcher.register(command)
     }
