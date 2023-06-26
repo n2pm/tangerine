@@ -43,10 +43,11 @@ object Tangerine : ClientModInitializer {
             eventManager.dispatch(TangerineEvent.PostTick)
         })
 
-        eventManager.registerFunc<TangerineEvent.KeyPress> {
+        eventManager.registerFuncClass(TangerineEvent.KeyPress::class) {
+            if (it !is TangerineEvent.KeyPress) return@registerFuncClass
             for (module in ModuleManager.items) {
                 val value = module.keybind.integerValue
-                if (value != 0 && value == it) ModuleManager.toggle(module)
+                if (value != 0 && value == it.key) ModuleManager.toggle(module)
             }
         }
 
