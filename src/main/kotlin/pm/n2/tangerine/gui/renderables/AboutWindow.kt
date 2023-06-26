@@ -2,29 +2,32 @@ package pm.n2.tangerine.gui.renderables
 
 import imgui.ImGui
 import imgui.type.ImBoolean
-import net.minecraft.client.MinecraftClient
-import net.minecraft.registry.Holder
-import net.minecraft.sound.MusicSound
+import net.minecraft.client.sound.EntityTrackingSoundInstance
+import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Util
+import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.gui.TangerineRenderable
 
 object AboutWindow : TangerineRenderable("AboutWindow", false) {
-    private val stal = MusicSound(
-            Holder.createDirect(SoundEvents.MUSIC_DISC_STAL),
-            0,
-            0,
-            true
-    )
+    private var stal: EntityTrackingSoundInstance? = null
     private var lastEnabled = false
 
     private fun onOpen() {
-        MinecraftClient.getInstance().musicTracker.play(stal)
+        stal = EntityTrackingSoundInstance(
+            SoundEvents.MUSIC_DISC_STAL,
+            SoundCategory.RECORDS,
+            1f,
+            1f,
+            Tangerine.mc.player,
+            0
+        )
+
+        Tangerine.mc.soundManager.play(stal)
     }
 
     private fun onClose() {
-        val musicTracker = MinecraftClient.getInstance().musicTracker
-        if (musicTracker.isPlayingMusic(stal)) musicTracker.stopPlaying()
+        Tangerine.mc.soundManager.stop(stal)
     }
 
     override fun draw() {
