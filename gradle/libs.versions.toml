@@ -11,6 +11,7 @@ cauldron = "0.1.9"
 lib39 = "1.3.1"
 devauth = "1.1.2"
 modmenu = "7.0.1"
+hajlib = "1.0.0"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -25,6 +26,7 @@ cauldron = { module = "com.adryd:cauldron", version.ref = "cauldron" }
 lib39core = { module = "com.unascribed:lib39-core", version.ref = "lib39" }
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+hajlib = { module = "pm.n2:hajlib", version.ref = "hajlib" }
 
 [plugins]
 quilt_loom = { id = "org.quiltmc.loom", version = "1.0.+" }

@@ -32,6 +32,11 @@ repositories {
         url "https://maven.terraformersmc.com/releases/"
         content { includeGroup "com.terraformersmc" }
     }
+
+    maven {
+        url "https://notnite.github.io/blockbuild/mvn/"
+        content { includeGroup "pm.n2" }
+    }
 }
 
 dependencies {
@@ -53,6 +58,9 @@ dependencies {
 
     modCompileOnly libs.modmenu
     modRuntimeOnly libs.devauth
+
+    modApi libs.hajlib
+    include libs.hajlib
 }
 
 loom {

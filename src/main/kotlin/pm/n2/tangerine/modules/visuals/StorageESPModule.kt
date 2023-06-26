@@ -1,24 +1,22 @@
 package pm.n2.tangerine.modules.visuals
 
-import com.adryd.cauldron.api.render.helper.OverlayRenderManager
 import net.minecraft.block.entity.*
-import net.minecraft.client.MinecraftClient
 import net.minecraft.util.math.BlockPos
+import pm.n2.hajlib.event.EventHandler
+import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.mixin.ClientChunkManagerAccessor
 import pm.n2.tangerine.mixin.ClientChunkMapAccessor
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
-import pm.n2.tangerine.render.OverlayStorageESP
 
-class StorageESPModule : Module("storage_esp", "Storage ESP", "Highlights storage blocks", ModuleCategory.VISUALS) {
+object StorageESPModule : Module("storage_esp", "Storage ESP", "Highlights storage blocks", ModuleCategory.VISUALS) {
     var blockEntities = HashMap<BlockPos, BlockEntity>()
 
-    init {
-        OverlayRenderManager.addRenderer(OverlayStorageESP())
-    }
-
     @Suppress("CAST_NEVER_SUCCEEDS")
-    override fun onEndTick(mc: MinecraftClient) {
+    @EventHandler
+    fun onPostTick(event: TangerineEvent.PostTick) {
+        val mc = Tangerine.mc
         val world = mc.world
         if (mc.world == null || !enabled.booleanValue) return
 
@@ -28,17 +26,17 @@ class StorageESPModule : Module("storage_esp", "Storage ESP", "Highlights storag
         val chunks = (chunkMap as ClientChunkMapAccessor).chunks
 
         val allowedEntities = arrayOf<Class<*>>(
-                ChestBlockEntity::class.java,
-                TrappedChestBlockEntity::class.java,
-                BarrelBlockEntity::class.java,
-                EnderChestBlockEntity::class.java,
-                ShulkerBoxBlockEntity::class.java,
-                FurnaceBlockEntity::class.java,
-                BlastFurnaceBlockEntity::class.java,
-                SmokerBlockEntity::class.java,
-                DispenserBlockEntity::class.java,
-                DropperBlockEntity::class.java,
-                HopperBlockEntity::class.java
+            ChestBlockEntity::class.java,
+            TrappedChestBlockEntity::class.java,
+            BarrelBlockEntity::class.java,
+            EnderChestBlockEntity::class.java,
+            ShulkerBoxBlockEntity::class.java,
+            FurnaceBlockEntity::class.java,
+            BlastFurnaceBlockEntity::class.java,
+            SmokerBlockEntity::class.java,
+            DispenserBlockEntity::class.java,
+            DropperBlockEntity::class.java,
+            HopperBlockEntity::class.java
         )
 
         val newBlockEntities = HashMap<BlockPos, BlockEntity>()

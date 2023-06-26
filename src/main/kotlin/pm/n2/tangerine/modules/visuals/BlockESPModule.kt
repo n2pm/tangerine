@@ -10,7 +10,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.gui.renderables.ConfigWindow
 import pm.n2.tangerine.mixin.ClientChunkManagerAccessor
 import pm.n2.tangerine.mixin.ClientChunkMapAccessor
@@ -18,7 +17,7 @@ import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 import pm.n2.tangerine.render.OverlayBlockESP
 
-class BlockESPModule : Module(
+object BlockESPModule : Module(
     "block_esp",
     "Block ESP",
     "Set certain blocks to glow or not",
@@ -27,10 +26,10 @@ class BlockESPModule : Module(
     val blocks = mutableListOf<Identifier>()
     val positions = mutableListOf<BlockPos>()
 
-    override val configWindow = BlockESPConfigWindow(this)
+    override val configWindow = BlockESPConfigWindow()
 
     init {
-        OverlayRenderManager.addRenderer(OverlayBlockESP())
+        OverlayRenderManager.addRenderer(OverlayBlockESP)
     }
 
     override fun onEnabled() {
@@ -48,48 +47,43 @@ class BlockESPModule : Module(
         }
     }
 
-    companion object {
-        fun matches(block: Block): Boolean {
-            val module = Tangerine.moduleManager.get(BlockESPModule::class.java)
+    fun matches(block: Block): Boolean {
+        val blockKey = block.asItem().defaultStack.holder.key
+        if (blockKey.isEmpty) return false
+        val path = blockKey.get().value.path
 
-            val blockKey = block.asItem().defaultStack.holder.key
-            if (blockKey.isEmpty) return false
-            val path = blockKey.get().value.path
-
-            for (identifier in module.blocks) {
-                if (identifier.path == path) return true
-            }
-
-            return false
+        for (identifier in blocks) {
+            if (identifier.path == path) return true
         }
 
-        @Suppress("CAST_NEVER_SUCCEEDS")
-        fun search(world: ClientWorld?) {
-            val module = Tangerine.moduleManager.get(BlockESPModule::class.java)
-            if (world == null || !module.enabled.booleanValue) return
+        return false
+    }
 
-            val chunkManager = world.chunkManager
+    @Suppress("CAST_NEVER_SUCCEEDS")
+    fun search(world: ClientWorld?) {
+        if (world == null || !enabled.booleanValue) return
 
-            val chunkMap = (chunkManager as ClientChunkManagerAccessor).chunks
-            val chunks = (chunkMap as ClientChunkMapAccessor).chunks
+        val chunkManager = world.chunkManager
 
-            module.positions.clear()
+        val chunkMap = (chunkManager as ClientChunkManagerAccessor).chunks
+        val chunks = (chunkMap as ClientChunkMapAccessor).chunks
 
-            for (i in 0 until chunks.length()) {
-                val chunk = chunks[i]
-                if (chunk != null) {
-                    val chunkX = chunk.pos.x * 16
-                    val chunkZ = chunk.pos.z * 16
+        positions.clear()
 
-                    for (x in chunkX until (chunkX + 16)) {
-                        for (z in chunkZ until (chunkZ + 16)) {
-                            for (y in -64 until 320) {
-                                val pos = BlockPos(x, y, z)
-                                val block = chunk.getBlockState(pos).block
+        for (i in 0 until chunks.length()) {
+            val chunk = chunks[i]
+            if (chunk != null) {
+                val chunkX = chunk.pos.x * 16
+                val chunkZ = chunk.pos.z * 16
 
-                                if (matches(block)) {
-                                    module.positions.add(pos)
-                                }
+                for (x in chunkX until (chunkX + 16)) {
+                    for (z in chunkZ until (chunkZ + 16)) {
+                        for (y in -64 until 320) {
+                            val pos = BlockPos(x, y, z)
+                            val block = chunk.getBlockState(pos).block
+
+                            if (matches(block)) {
+                                positions.add(pos)
                             }
                         }
                     }
@@ -98,16 +92,16 @@ class BlockESPModule : Module(
         }
     }
 
-    class BlockESPConfigWindow(override val module: BlockESPModule) : ConfigWindow(module) {
+    class BlockESPConfigWindow() : ConfigWindow(BlockESPModule) {
         private var string = ImString()
 
         override fun drawConfig() {
-            val blocks = module.blocks.toMutableList()
+            val blocks = blocks.toMutableList()
             for (identifier in blocks) {
                 ImGui.textUnformatted(identifier.path)
                 ImGui.sameLine()
                 if (ImGui.button("-")) {
-                    module.blocks.remove(identifier)
+                    blocks.remove(identifier)
                     search(MinecraftClient.getInstance().world)
                 }
             }
@@ -117,7 +111,7 @@ class BlockESPModule : Module(
             ImGui.sameLine()
             if (ImGui.button("+")) {
                 try {
-                    module.blocks.add(Identifier("minecraft", string.get()))
+                    blocks.add(Identifier("minecraft", string.get()))
                     search(MinecraftClient.getInstance().world)
                 } catch (_: Exception) {
                 } finally {

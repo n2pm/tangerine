@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 
 @ClientOnly
@@ -22,7 +21,7 @@ public class EntityMixin {
     @Inject(method = "move", at = @At("HEAD"))
     public void tangerine$noSlow(MovementType movementType, Vec3d movement, CallbackInfo ci) {
         var self = (Entity) (Object) this;
-        if (self instanceof PlayerEntity && Tangerine.INSTANCE.getModuleManager().get(NoSlowModule.class).getEnabled().getBooleanValue()) {
+        if (self instanceof PlayerEntity && NoSlowModule.INSTANCE.getEnabled().getBooleanValue()) {
             this.movementMultiplier = Vec3d.ZERO;
         }
     }

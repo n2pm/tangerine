@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 
 @ClientOnly
@@ -15,7 +14,7 @@ public class InputMixin {
     @Inject(method = "hasForwardMovement", at = @At("HEAD"), cancellable = true)
     public void tangerine$omniSprint(CallbackInfoReturnable<Boolean> cir) {
         var self = (Input) (Object) this;
-        if (Tangerine.INSTANCE.getModuleManager().get(OmniSprintModule.class).getEnabled().getBooleanValue()) {
+        if (OmniSprintModule.INSTANCE.getEnabled().getBooleanValue()) {
             cir.setReturnValue(self.forwardMovement > 1.0E-5F
                     || self.forwardMovement < -1.0E-5F
                     || self.sidewaysMovement > 1.0E-5F

@@ -27,7 +27,7 @@ public class TitleScreenMixin {
 
         @Override
         public Theme getTheme() {
-            return ImGuiManager.Companion.getTheme();
+            return ImGuiManager.INSTANCE.getTheme();
         }
 
         @Override

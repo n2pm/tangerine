@@ -5,7 +5,6 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 
 @ClientOnly
@@ -13,7 +12,7 @@ import pm.n2.tangerine.modules.movement.NoSlowModule;
 public class AbstractClientPlayerEntityMixin {
     @ModifyArg(method = "getSpeed", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F"), index = 2)
     public float tangerine$noSlow(float delta) {
-        if (delta < 1.0F && Tangerine.INSTANCE.getModuleManager().get(NoSlowModule.class).getEnabled().getBooleanValue()) {
+        if (delta < 1.0F && NoSlowModule.INSTANCE.getEnabled().getBooleanValue()) {
             delta = 1.0F;
         }
 

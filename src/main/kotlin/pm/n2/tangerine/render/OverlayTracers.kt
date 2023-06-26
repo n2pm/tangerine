@@ -18,12 +18,15 @@ import net.minecraft.entity.mob.HostileEntity
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.Vec3d
-import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.modules.visuals.TracersModule
 
-class OverlayTracers : OverlayRendererBase() {
+object OverlayTracers : OverlayRendererBase() {
     init {
-        renderObjects.add(RenderObject(VertexFormat.DrawMode.LINES, VertexFormats.LINES) { GameRenderer.getRenderTypeLinesShader() })
+        renderObjects.add(
+            RenderObject(
+                VertexFormat.DrawMode.LINES,
+                VertexFormats.LINES
+            ) { GameRenderer.getRenderTypeLinesShader() })
     }
 
     override fun render(tickDelta: Float, camera: Camera?) {
@@ -40,7 +43,7 @@ class OverlayTracers : OverlayRendererBase() {
         val player = mc.player
         val entities = mc.world!!.entities
 
-        val tracersModule = Tangerine.moduleManager.get(TracersModule::class)
+        val tracersModule = TracersModule
 
         for (entity in entities) {
             if (entity === player) continue
@@ -53,11 +56,31 @@ class OverlayTracers : OverlayRendererBase() {
             cameraPos = cameraPos.rotateY(-Math.toRadians(mc.gameRenderer.camera.yaw.toDouble()).toFloat())
             cameraPos = cameraPos.add(mc.cameraEntity!!.eyePos)
 
-            LineDrawing.drawLine(entityPos.x, entityPos.y, entityPos.z, cameraPos.x, cameraPos.y, cameraPos.z, color, camera, linesBuf)
+            LineDrawing.drawLine(
+                entityPos.x,
+                entityPos.y,
+                entityPos.z,
+                cameraPos.x,
+                cameraPos.y,
+                cameraPos.z,
+                color,
+                camera,
+                linesBuf
+            )
 
             if (tracersModule.drawStem.booleanValue) {
                 val entityHeight = entity.height
-                LineDrawing.drawLine(entityPos.x, entityPos.y + entityHeight, entityPos.z, entityPos.x, entityPos.y, entityPos.z, color, camera, linesBuf)
+                LineDrawing.drawLine(
+                    entityPos.x,
+                    entityPos.y + entityHeight,
+                    entityPos.z,
+                    entityPos.x,
+                    entityPos.y,
+                    entityPos.z,
+                    color,
+                    camera,
+                    linesBuf
+                )
             }
         }
 
@@ -65,7 +88,7 @@ class OverlayTracers : OverlayRendererBase() {
     }
 
     private fun getColor(entity: Entity): Color4f? {
-        val tracersModule = Tangerine.moduleManager.get(TracersModule::class)
+        val tracersModule = TracersModule
 
         if (entity is PlayerEntity) return if (tracersModule.drawPlayers.booleanValue) RenderColors.LIGHT_BLUE else null
         if (entity is PassiveEntity) return if (tracersModule.drawFriendly.booleanValue) RenderColors.OUTLINE_GREEN else null
@@ -80,7 +103,5 @@ class OverlayTracers : OverlayRendererBase() {
         return if (tracersModule.drawOthers.booleanValue) RenderColors.OUTLINE_DARK_GRAY else null
     }
 
-    override fun shouldRender(): Boolean {
-        return Tangerine.moduleManager.get(TracersModule::class).enabled.booleanValue
-    }
+    override fun shouldRender(): Boolean = TracersModule.enabled.booleanValue
 }

@@ -1,15 +1,15 @@
 package pm.n2.tangerine.modules.misc
 
-import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.gui.ImGuiManager
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
-class UnifontModule : Module("unifont", "Unifont", "Makes all text use the Unifont font", ModuleCategory.MISC) {
+object UnifontModule : Module("unifont", "Unifont", "Makes all text use the Unifont font", ModuleCategory.MISC) {
     override fun onEnabled() {
-        if (Tangerine.imguiFontUnifont != null) Tangerine.imguiManager.setFont(Tangerine.imguiFontUnifont!!)
+        ImGuiManager.setFont(ImGuiManager.fontUnifont)
     }
 
     override fun onDisabled() {
-        if (Tangerine.imguiFontUnifont != null) Tangerine.imguiManager.setFont(Tangerine.imguiFontDefault)
+        ImGuiManager.setFont(ImGuiManager.fontDefault)
     }
 }

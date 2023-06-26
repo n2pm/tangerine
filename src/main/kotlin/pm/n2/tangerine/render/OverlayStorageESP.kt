@@ -14,16 +14,19 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.DyeColor
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
-import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.modules.visuals.StorageESPModule
 
-class OverlayStorageESP : OverlayRendererBase() {
+object OverlayStorageESP : OverlayRendererBase() {
     private var blockEntities = HashMap<BlockPos, BlockEntity>()
     private val colors = HashMap<Class<*>, Color4f>()
     private val dyeColors = HashMap<String, Color4f>()
 
     init {
-        renderObjects.add(RenderObject(VertexFormat.DrawMode.LINES, VertexFormats.LINES) { GameRenderer.getRenderTypeLinesShader() })
+        renderObjects.add(
+            RenderObject(
+                VertexFormat.DrawMode.LINES,
+                VertexFormats.LINES
+            ) { GameRenderer.getRenderTypeLinesShader() })
 
         colors[ChestBlockEntity::class.java] = RenderColors.OUTLINE_YELLOW
         colors[TrappedChestBlockEntity::class.java] = RenderColors.OUTLINE_RED
@@ -75,13 +78,11 @@ class OverlayStorageESP : OverlayRendererBase() {
     }
 
     override fun shouldRender(): Boolean {
-        val storageESP = Tangerine.moduleManager.get(StorageESPModule::class)
-        return storageESP.enabled.booleanValue && blockEntities.size > 0
+        return StorageESPModule.enabled.booleanValue && blockEntities.size > 0
     }
 
     override fun shouldUpdate(camera: Camera?): Boolean {
-        val storageESP = Tangerine.moduleManager.get(StorageESPModule::class)
-        val be = storageESP.blockEntities
+        val be = StorageESPModule.blockEntities
         if (be != this.blockEntities) {
             this.blockEntities = be
             return true

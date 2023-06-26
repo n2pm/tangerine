@@ -2,74 +2,71 @@ package pm.n2.tangerine
 
 import com.adryd.cauldron.api.config.ConfigFile
 import com.mojang.blaze3d.platform.TextureUtil
-import imgui.ImFont
 import imgui.ImFontConfig
 import imgui.ImGui
+import net.minecraft.client.MinecraftClient
 import org.quiltmc.loader.api.ModContainer
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents
 import org.slf4j.LoggerFactory
-import pm.n2.tangerine.commands.CommandManager
+import pm.n2.hajlib.event.EventManager
+import pm.n2.tangerine.core.TangerineEvent
+import pm.n2.tangerine.core.managers.ModuleManager
+import pm.n2.tangerine.core.managers.OverlayManager
 import pm.n2.tangerine.gui.ImGuiManager
-import pm.n2.tangerine.gui.ImGuiScreen
-import pm.n2.tangerine.gui.renderables.AboutWindow
-import pm.n2.tangerine.gui.renderables.DemoWindow
-import pm.n2.tangerine.gui.renderables.MenuBar
-import pm.n2.tangerine.modules.ModuleManager
 import pm.n2.tangerine.modules.misc.UnifontModule
 
-public object Tangerine : ClientModInitializer {
+object Tangerine : ClientModInitializer {
     const val modId = "tangerine"
     lateinit var version: String
 
     val logger = LoggerFactory.getLogger(modId)
     val config = ConfigFile(modId)
+    val eventManager = EventManager()
 
-    val imguiManager = ImGuiManager()
-    val imguiScreen = ImGuiScreen()
-    lateinit var imguiFontDefault: ImFont
-    var imguiFontUnifont: ImFont? = null
-
-    val moduleManager = ModuleManager()
-    val commandManager = CommandManager()
-    val keyboardManager = KeyboardManager()
+    lateinit var mc: MinecraftClient
+    val player get() = mc.player
+    val world get() = mc.world
 
     override fun onInitializeClient(mod: ModContainer) {
+        mc = MinecraftClient.getInstance()
         version = mod.metadata().version().raw()
 
-        imguiManager.addRenderable(MenuBar())
-        imguiManager.addRenderable(DemoWindow())
-        imguiManager.addRenderable(AboutWindow())
-
-        commandManager.registerCommands()
-
         ClientTickEvents.START.register(ClientTickEvents.Start {
-            for (module in moduleManager.modules) module.onStartTick(it)
+            eventManager.dispatch(TangerineEvent.PreTick)
         })
 
         ClientTickEvents.END.register(ClientTickEvents.End {
-            for (module in moduleManager.modules) module.onEndTick(it)
+            eventManager.dispatch(TangerineEvent.PostTick)
         })
 
-        keyboardManager.keyPress.register(KeyboardManager.KeyPress {
-            for (module in moduleManager.modules) {
+        eventManager.registerFunc<TangerineEvent.KeyPress> {
+            for (module in ModuleManager.items) {
                 val value = module.keybind.integerValue
-                if (value != 0 && value == it) module.enabled.toggle()
+                if (value != 0 && value == it) ModuleManager.toggle(module)
             }
-        })
+        }
 
-        for (module in moduleManager.modules) {
+        for (module in ModuleManager.items) {
             config.addConfig(module.enabled)
             config.addConfig(module.keybind)
-            config.addConfigs(module.getConfigOptions())
+            config.addConfigs(module.configOptions)
         }
+
+        ModuleManager.init()
+        OverlayManager.init()
 
         ClientLifecycleEvents.STOPPING.register(ClientLifecycleEvents.Stopping {
             config.write()
         })
 
-        val useUnifont = moduleManager.get(UnifontModule::class).enabled.booleanValue
+        doFonts()
+    }
+
+    private fun doFonts() {
+
+        val useUnifont = UnifontModule.enabled.booleanValue
         try {
             val ctx = ImGui.createContext()
             ImGui.setCurrentContext(ctx)
@@ -85,13 +82,13 @@ public object Tangerine : ClientModInitializer {
                 buffer.get(arr)
 
                 val fontConfig = ImFontConfig()
-                imguiFontDefault = fonts.addFontDefault(fontConfig)
-                imguiFontUnifont = fonts.addFontFromMemoryTTF(arr, 16f, fontConfig)
+                ImGuiManager.fontDefault = fonts.addFontDefault(fontConfig)
+                ImGuiManager.fontUnifont = fonts.addFontFromMemoryTTF(arr, 16f, fontConfig)
 
                 fonts.build()
                 fontConfig.destroy()
 
-                imguiManager.setFont(if (useUnifont) imguiFontUnifont!! else imguiFontDefault)
+                ImGuiManager.setFont(if (useUnifont) ImGuiManager.fontUnifont else ImGuiManager.fontDefault)
             } else {
                 logger.warn("Unifont font stream is null?")
             }

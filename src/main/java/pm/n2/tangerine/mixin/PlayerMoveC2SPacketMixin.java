@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.FlightModule;
 import pm.n2.tangerine.modules.movement.NoFallModule;
 
@@ -25,8 +24,8 @@ public class PlayerMoveC2SPacketMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     public void tangerine$constructor(double x, double y, double z, float yaw, float pitch, boolean onGround, boolean changePosition, boolean changeLook, CallbackInfo ci) {
         var player = MinecraftClient.getInstance().player;
-        var flightEnabled = Tangerine.INSTANCE.getModuleManager().get(FlightModule.class).getEnabled().getBooleanValue();
-        var noFallEnabled = Tangerine.INSTANCE.getModuleManager().get(NoFallModule.class).getEnabled().getBooleanValue();
+        var flightEnabled = FlightModule.INSTANCE.getEnabled().getBooleanValue();
+        var noFallEnabled = NoFallModule.INSTANCE.getEnabled().getBooleanValue();
         if (player != null && player.getAbilities().flying && flightEnabled && noFallEnabled) {
             this.onGround = true;
         }

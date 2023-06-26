@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 
@@ -22,7 +21,7 @@ public class LivingEntityMixin {
         var self = (LivingEntity) (Object) this;
         if (self instanceof PlayerEntity) {
             var defaultSpeed = ((PlayerEntity) self).getAbilities().getWalkSpeed();
-            if (Tangerine.INSTANCE.getModuleManager().get(NoSlowModule.class).getEnabled().getBooleanValue() && movementSpeed < defaultSpeed) {
+            if (NoSlowModule.INSTANCE.getEnabled().getBooleanValue() && movementSpeed < defaultSpeed) {
                 ci.cancel();
             }
         }
@@ -30,7 +29,7 @@ public class LivingEntityMixin {
 
     @Redirect(method = "jump", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"))
     public void tangerine$omniSprint_fixJump(LivingEntity instance, Vec3d orig) {
-        if (Tangerine.INSTANCE.getModuleManager().get(OmniSprintModule.class).getEnabled().getBooleanValue()) {
+        if (OmniSprintModule.INSTANCE.getEnabled().getBooleanValue()) {
             var f = instance.getYaw() * (float) (Math.PI / 180.0);
             var vel = instance.getVelocity();
 

@@ -5,7 +5,7 @@ import imgui.extension.implot.ImPlot
 import imgui.type.ImBoolean
 import pm.n2.tangerine.gui.TangerineRenderable
 
-class DemoWindow : TangerineRenderable("DemoWindow", false) {
+object DemoWindow : TangerineRenderable("DemoWindow", false) {
     private var drawImGuiDemo = ImBoolean(false)
     private var drawImPlotDemo = ImBoolean(false)
 

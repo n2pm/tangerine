@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.LiquidWalkModule;
 
 @ClientOnly
@@ -21,7 +20,7 @@ import pm.n2.tangerine.modules.movement.LiquidWalkModule;
 public class AbstractBlockMixin {
     @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
     public void tangerine$jesus_waterlogged(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        var liquidWalk = Tangerine.INSTANCE.getModuleManager().get(LiquidWalkModule.class);
+        var liquidWalk = LiquidWalkModule.INSTANCE;
         if (liquidWalk.getEnabled().getBooleanValue()
                 && state.getFluidState() != Fluids.EMPTY.getDefaultState()) {
             cir.setReturnValue(VoxelShapes.fullCube());

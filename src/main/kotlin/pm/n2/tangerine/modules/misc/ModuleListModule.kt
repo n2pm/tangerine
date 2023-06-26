@@ -5,13 +5,16 @@ import gay.eviee.imguiquilt.interfaces.Renderable
 import imgui.ImGui
 import imgui.ImVec2
 import imgui.flag.ImGuiWindowFlags
-import net.minecraft.client.MinecraftClient
+import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.core.TangerineEvent
+import pm.n2.tangerine.core.managers.ModuleManager
 import pm.n2.tangerine.gui.ImGuiManager
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
-class ModuleListModule : Module("module_list", "Module list", "Shows a list of all enabled modules", ModuleCategory.MISC) {
+object ModuleListModule :
+    Module("module_list", "Module list", "Shows a list of all enabled modules", ModuleCategory.MISC) {
     private var shouldDraw = false
 
     private val renderable = object : Renderable {
@@ -19,7 +22,7 @@ class ModuleListModule : Module("module_list", "Module list", "Shows a list of a
         override fun getTheme() = ImGuiManager.theme
         override fun render() {
             if (!shouldDraw) return
-            if (!Tangerine.moduleManager.get(ModuleListModule::class).enabled.booleanValue) return
+            if (!ModuleListModule.enabled.booleanValue) return
 
             val windowFlags = ImGuiWindowFlags.NoDecoration or
                     ImGuiWindowFlags.NoInputs or
@@ -30,7 +33,7 @@ class ModuleListModule : Module("module_list", "Module list", "Shows a list of a
             val moduleListString = StringBuilder()
             var anyModulesEnabled = false
 
-            for (module in Tangerine.moduleManager.modules) {
+            for (module in ModuleManager.items) {
                 if (module.enabled.booleanValue) {
                     anyModulesEnabled = true
                     moduleListString.append(module.name).append("\n")
@@ -57,8 +60,9 @@ class ModuleListModule : Module("module_list", "Module list", "Shows a list of a
         }
     }
 
-    override fun onEndTick(mc: MinecraftClient) {
-        val screen = mc.currentScreen
+    @EventHandler
+    fun onPostTick(event: TangerineEvent.PostTick) {
+        val screen = Tangerine.mc.currentScreen
         val lastShouldDraw = shouldDraw
 
         shouldDraw = screen == null

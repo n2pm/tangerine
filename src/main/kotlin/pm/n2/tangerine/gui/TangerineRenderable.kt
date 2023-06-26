@@ -3,7 +3,6 @@ package pm.n2.tangerine.gui
 import gay.eviee.imguiquilt.interfaces.Renderable
 
 open class TangerineRenderable(var name: String) {
-    lateinit var manager: ImGuiManager
     var enabled = true
 
     constructor(name: String, enabled: Boolean) : this(name) {

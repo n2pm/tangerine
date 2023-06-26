@@ -6,16 +6,14 @@ import com.adryd.cauldron.api.render.util.LineDrawing
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.blaze3d.vertex.VertexFormats
-import net.minecraft.block.entity.*
 import net.minecraft.client.render.Camera
 import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
-import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.modules.visuals.BlockESPModule
 
-class OverlayBlockESP : OverlayRendererBase() {
+object OverlayBlockESP : OverlayRendererBase() {
     var positions = mutableListOf<BlockPos>()
 
     init {
@@ -40,19 +38,16 @@ class OverlayBlockESP : OverlayRendererBase() {
     }
 
     override fun shouldRender(): Boolean {
-        val blockESP = Tangerine.moduleManager.get(BlockESPModule::class)
-        return blockESP.enabled.booleanValue && blockESP.positions.size > 0
+        return BlockESPModule.enabled.booleanValue && BlockESPModule.positions.size > 0
     }
 
     override fun shouldUpdate(camera: Camera?): Boolean {
-        val blockESP = Tangerine.moduleManager.get(BlockESPModule::class)
-        val positions = blockESP.positions
+        val positions = BlockESPModule.positions
         if (positions != this.positions) {
             this.positions = mutableListOf()
             this.positions.addAll(positions)
             return true
         }
-
         return false
     }
 }

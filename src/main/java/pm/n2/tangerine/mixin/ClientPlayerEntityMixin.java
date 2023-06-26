@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pm.n2.tangerine.Tangerine;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 import pm.n2.tangerine.modules.player.AntiHungerModule;
@@ -21,13 +20,13 @@ public class ClientPlayerEntityMixin {
     // lol
     @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 0))
     public void tangerine$sendMovementPackets(ClientPlayNetworkHandler instance, Packet<?> packet) {
-        if (Tangerine.INSTANCE.getModuleManager().get(AntiHungerModule.class).getEnabled().getBooleanValue()) return;
+        if (AntiHungerModule.INSTANCE.getEnabled().getBooleanValue()) return;
         instance.sendPacket(packet);
     }
 
     @Inject(method = "shouldSlowDown", at = @At("HEAD"), cancellable = true)
     public void tangerine$noSlow(CallbackInfoReturnable<Boolean> cir) {
-        var noSlowMod = (NoSlowModule) Tangerine.INSTANCE.getModuleManager().get(NoSlowModule.class);
+        var noSlowMod = NoSlowModule.INSTANCE;
         if (noSlowMod.getEnabled().getBooleanValue() && noSlowMod.getAffectSneaking().getBooleanValue()) {
             cir.setReturnValue(((ClientPlayerEntity) (Object) this).shouldLeaveSwimmingPose());
         }
@@ -35,16 +34,14 @@ public class ClientPlayerEntityMixin {
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
     public boolean tangerine$noSlow_items(ClientPlayerEntity instance) {
-        if (Tangerine.INSTANCE.getModuleManager().get(NoSlowModule.class).getEnabled().getBooleanValue()) {
-            return false;
-        }
+        if (NoSlowModule.INSTANCE.getEnabled().getBooleanValue()) return false;
         return instance.isUsingItem();
     }
 
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void tangerine$omniSprint(CallbackInfoReturnable<Boolean> cir) {
         var self = (ClientPlayerEntity) (Object) this;
-        if (Tangerine.INSTANCE.getModuleManager().get(OmniSprintModule.class).getEnabled().getBooleanValue()) {
+        if (OmniSprintModule.INSTANCE.getEnabled().getBooleanValue()) {
             cir.setReturnValue(self.isSubmergedInWater()
                     ? self.input.hasForwardMovement()
                     : (self.input.forwardMovement >= 0.8

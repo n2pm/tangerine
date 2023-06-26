@@ -10,11 +10,8 @@ import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
 import pm.n2.tangerine.Tangerine
 
-class ImGuiScreen : Screen(Text.of("Tangerine")) {
-    companion object {
-        var initialized: Boolean = false
-    }
-
+object ImGuiScreen : Screen(Text.of("Tangerine")) {
+    var initialized: Boolean = false
     var shouldClose: Boolean = false
 
     override fun tick() {
@@ -32,7 +29,7 @@ class ImGuiScreen : Screen(Text.of("Tangerine")) {
 
     override fun init() {
         if (!initialized) {
-            for (renderable in Tangerine.imguiManager.renderables) ImGuiQuilt.renderstack.add(renderable.renderable)
+            for (renderable in ImGuiManager.renderables) ImGuiQuilt.renderstack.add(renderable.renderable)
             initialized = true
         }
     }
@@ -51,7 +48,7 @@ class ImGuiScreen : Screen(Text.of("Tangerine")) {
 
     override fun closeScreen() {
         if (initialized) {
-            for (renderable in Tangerine.imguiManager.renderables) ImGuiQuilt.renderstack.remove(renderable.renderable)
+            for (renderable in ImGuiManager.renderables) ImGuiQuilt.renderstack.remove(renderable.renderable)
         }
 
         Tangerine.config.write()

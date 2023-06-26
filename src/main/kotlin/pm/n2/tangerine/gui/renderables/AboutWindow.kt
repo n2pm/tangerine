@@ -9,7 +9,7 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Util
 import pm.n2.tangerine.gui.TangerineRenderable
 
-class AboutWindow : TangerineRenderable("AboutWindow", false) {
+object AboutWindow : TangerineRenderable("AboutWindow", false) {
     private val stal = MusicSound(
             Holder.createDirect(SoundEvents.MUSIC_DISC_STAL),
             0,
