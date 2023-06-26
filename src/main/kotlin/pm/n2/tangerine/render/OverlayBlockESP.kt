@@ -14,7 +14,7 @@ import net.minecraft.util.math.Box
 import pm.n2.tangerine.modules.visuals.BlockESPModule
 
 object OverlayBlockESP : OverlayRendererBase() {
-    var positions = mutableListOf<BlockPos>()
+    private val positions = mutableListOf<BlockPos>()
 
     init {
         renderObjects.add(
@@ -33,6 +33,8 @@ object OverlayBlockESP : OverlayRendererBase() {
     override fun update(matrices: MatrixStack?, camera: Camera?, tickDelta: Float) {
         val renderLines = renderObjects[0]
         val linesBuf = renderLines.startBuffer()
+        // Clone them so we don't concurrently modify the list
+        val positions = positions.toMutableList()
         for (pos in positions) LineDrawing.drawBox(Box(pos), RenderColors.OUTLINE_WHITE, camera, linesBuf)
         renderLines.endBuffer(camera)
     }
@@ -42,12 +44,13 @@ object OverlayBlockESP : OverlayRendererBase() {
     }
 
     override fun shouldUpdate(camera: Camera?): Boolean {
-        val positions = BlockESPModule.positions
-        if (positions != this.positions) {
-            this.positions = mutableListOf()
-            this.positions.addAll(positions)
+        val newPositions = BlockESPModule.positions.toMutableList()
+        if (newPositions != positions) {
+            positions.clear()
+            positions.addAll(newPositions)
             return true
         }
+
         return false
     }
 }

@@ -1,8 +1,6 @@
 package pm.n2.tangerine.modules.visuals
 
-import com.adryd.cauldron.api.render.helper.OverlayRenderManager
 import imgui.ImGui
-import imgui.flag.ImGuiInputTextFlags
 import imgui.type.ImString
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -10,12 +8,12 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
+import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.gui.renderables.ConfigWindow
 import pm.n2.tangerine.mixin.ClientChunkManagerAccessor
 import pm.n2.tangerine.mixin.ClientChunkMapAccessor
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
-import pm.n2.tangerine.render.OverlayBlockESP
 
 object BlockESPModule : Module(
     "block_esp",
@@ -28,12 +26,8 @@ object BlockESPModule : Module(
 
     override val configWindow = BlockESPConfigWindow()
 
-    init {
-        OverlayRenderManager.addRenderer(OverlayBlockESP)
-    }
-
     override fun onEnabled() {
-        search(MinecraftClient.getInstance().world)
+        Tangerine.taskManager.run { search(MinecraftClient.getInstance().world) }
     }
 
     fun handleUpdate(pos: BlockPos, state: BlockState) {
@@ -92,28 +86,30 @@ object BlockESPModule : Module(
         }
     }
 
-    class BlockESPConfigWindow() : ConfigWindow(BlockESPModule) {
+    class BlockESPConfigWindow : ConfigWindow(BlockESPModule) {
         private var string = ImString()
 
         override fun drawConfig() {
             val blocks = blocks.toMutableList()
             for (identifier in blocks) {
-                ImGui.textUnformatted(identifier.path)
-                ImGui.sameLine()
-                if (ImGui.button("-")) {
-                    blocks.remove(identifier)
-                    search(MinecraftClient.getInstance().world)
+                if (ImGui.button("-##${identifier.path}")) {
+                    BlockESPModule.blocks.remove(identifier)
+                    Tangerine.taskManager.run { search(MinecraftClient.getInstance().world) }
                 }
+
+                ImGui.sameLine()
+                ImGui.textUnformatted(identifier.path)
             }
 
-            ImGui.inputText("Add block", string, ImGuiInputTextFlags.CallbackResize)
+            ImGui.inputText("Add block", string)
 
             ImGui.sameLine()
             if (ImGui.button("+")) {
                 try {
-                    blocks.add(Identifier("minecraft", string.get()))
-                    search(MinecraftClient.getInstance().world)
-                } catch (_: Exception) {
+                    BlockESPModule.blocks.add(Identifier("minecraft", string.get()))
+                    Tangerine.taskManager.run { search(MinecraftClient.getInstance().world) }
+                } catch (e: Exception) {
+                    Tangerine.logger.error("Failed to add block", e)
                 } finally {
                     string.clear()
                 }

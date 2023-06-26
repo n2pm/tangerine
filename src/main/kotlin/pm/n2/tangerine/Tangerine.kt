@@ -11,7 +11,9 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents
 import org.slf4j.LoggerFactory
 import pm.n2.hajlib.event.EventManager
+import pm.n2.hajlib.task.TaskManager
 import pm.n2.tangerine.core.TangerineEvent
+import pm.n2.tangerine.core.TangerineTaskContext
 import pm.n2.tangerine.core.managers.ModuleManager
 import pm.n2.tangerine.core.managers.OverlayManager
 import pm.n2.tangerine.gui.ImGuiManager
@@ -24,6 +26,7 @@ object Tangerine : ClientModInitializer {
     val logger = LoggerFactory.getLogger(modId)
     val config = ConfigFile(modId)
     val eventManager = EventManager()
+    val taskManager = TaskManager("Tangerine", TangerineTaskContext)
 
     lateinit var mc: MinecraftClient
     val player get() = mc.player
