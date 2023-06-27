@@ -12,7 +12,7 @@ object MenuBar : TangerineRenderable("MenuBar") {
     private fun drawMenuTab(name: String, modules: List<Module>) {
         if (ImGui.beginMenu(name)) {
             for (module in modules) {
-                if (ImGui.menuItem(module.name, "", module.enabled.booleanValue)) {
+                if (ImGui.menuItem(module.name, "", module.enabled.value)) {
                     ModuleManager.toggle(module)
                 }
 
@@ -20,6 +20,7 @@ object MenuBar : TangerineRenderable("MenuBar") {
                     if (ImGui.menuItem("Config")) {
                         module.showConfigWindow()
                     }
+
                     ImGui.endPopup()
                 }
 

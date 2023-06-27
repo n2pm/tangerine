@@ -24,8 +24,8 @@ public class PlayerMoveC2SPacketMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     public void tangerine$constructor(double x, double y, double z, float yaw, float pitch, boolean onGround, boolean changePosition, boolean changeLook, CallbackInfo ci) {
         var player = MinecraftClient.getInstance().player;
-        var flightEnabled = FlightModule.INSTANCE.getEnabled().getBooleanValue();
-        var noFallEnabled = NoFallModule.INSTANCE.getEnabled().getBooleanValue();
+        var flightEnabled = FlightModule.INSTANCE.getEnabled().getValue();
+        var noFallEnabled = NoFallModule.INSTANCE.getEnabled().getValue();
         if (player != null && player.getAbilities().flying && flightEnabled && noFallEnabled) {
             this.onGround = true;
         }

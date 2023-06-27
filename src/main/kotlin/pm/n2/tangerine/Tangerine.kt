@@ -1,6 +1,5 @@
 package pm.n2.tangerine
 
-import com.adryd.cauldron.api.config.ConfigFile
 import com.mojang.blaze3d.platform.TextureUtil
 import imgui.ImFontConfig
 import imgui.ImGui
@@ -12,6 +11,8 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents
 import org.slf4j.LoggerFactory
 import pm.n2.hajlib.event.EventManager
 import pm.n2.hajlib.task.TaskManager
+import pm.n2.tangerine.config.ConfigOption
+import pm.n2.tangerine.config.TangerineConfig
 import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.core.TangerineTaskContext
 import pm.n2.tangerine.core.managers.CommandManager
@@ -25,7 +26,6 @@ object Tangerine : ClientModInitializer {
     lateinit var version: String
 
     val logger = LoggerFactory.getLogger(modId)
-    val config = ConfigFile(modId)
     val eventManager = EventManager()
     val taskManager = TaskManager("Tangerine", TangerineTaskContext)
 
@@ -46,15 +46,15 @@ object Tangerine : ClientModInitializer {
         eventManager.registerFuncClass(TangerineEvent.KeyPress::class) {
             if (it !is TangerineEvent.KeyPress) return@registerFuncClass
             for (module in ModuleManager.items) {
-                val value = module.keybind.integerValue
-                if (value != 0 && value == it.key) ModuleManager.toggle(module)
-            }
-        }
+                val configs = mutableListOf<ConfigOption<*>>(module.enabled)
+                configs.addAll(module.configOptions)
 
-        for (module in ModuleManager.items) {
-            config.addConfig(module.enabled)
-            config.addConfig(module.keybind)
-            config.addConfigs(module.configOptions)
+                for (config in configs) {
+                    if (config.keybind?.isJustPressed(it.key) == true) {
+                        config.onKeybind()
+                    }
+                }
+            }
         }
 
         CommandManager.init()
@@ -62,7 +62,7 @@ object Tangerine : ClientModInitializer {
         OverlayManager.init()
 
         ClientLifecycleEvents.STOPPING.register(ClientLifecycleEvents.Stopping {
-            config.write()
+            TangerineConfig.write()
         })
 
         doFonts()
@@ -70,7 +70,7 @@ object Tangerine : ClientModInitializer {
 
     private fun doFonts() {
 
-        val useUnifont = UnifontModule.enabled.booleanValue
+        val useUnifont = UnifontModule.enabled.value
         try {
             val ctx = ImGui.createContext()
             ImGui.setCurrentContext(ctx)

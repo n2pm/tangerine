@@ -22,19 +22,19 @@ object ModuleListModule :
         override fun getTheme() = ImGuiManager.theme
         override fun render() {
             if (!shouldDraw) return
-            if (!ModuleListModule.enabled.booleanValue) return
+            if (!ModuleListModule.enabled.value) return
 
             val windowFlags = ImGuiWindowFlags.NoDecoration or
                     ImGuiWindowFlags.NoInputs or
                     ImGuiWindowFlags.NoBackground or
                     ImGuiWindowFlags.NoBringToFrontOnFocus or
-                    ImGuiWindowFlags.NoFocusOnAppearing;
+                    ImGuiWindowFlags.NoFocusOnAppearing
 
             val moduleListString = StringBuilder()
             var anyModulesEnabled = false
 
             for (module in ModuleManager.items) {
-                if (module.enabled.booleanValue) {
+                if (module.enabled.value) {
                     anyModulesEnabled = true
                     moduleListString.append(module.name).append("\n")
                 }

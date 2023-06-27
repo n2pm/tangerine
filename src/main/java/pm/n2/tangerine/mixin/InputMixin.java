@@ -14,7 +14,7 @@ public class InputMixin {
     @Inject(method = "hasForwardMovement", at = @At("HEAD"), cancellable = true)
     public void tangerine$omniSprint(CallbackInfoReturnable<Boolean> cir) {
         var self = (Input) (Object) this;
-        if (OmniSprintModule.INSTANCE.getEnabled().getBooleanValue()) {
+        if (OmniSprintModule.INSTANCE.getEnabled().getValue()) {
             cir.setReturnValue(self.forwardMovement > 1.0E-5F
                     || self.forwardMovement < -1.0E-5F
                     || self.sidewaysMovement > 1.0E-5F

@@ -21,7 +21,7 @@ public class LivingEntityMixin {
         var self = (LivingEntity) (Object) this;
         if (self instanceof PlayerEntity) {
             var defaultSpeed = ((PlayerEntity) self).getAbilities().getWalkSpeed();
-            if (NoSlowModule.INSTANCE.getEnabled().getBooleanValue() && movementSpeed < defaultSpeed) {
+            if (NoSlowModule.INSTANCE.getEnabled().getValue() && movementSpeed < defaultSpeed) {
                 ci.cancel();
             }
         }
@@ -29,7 +29,7 @@ public class LivingEntityMixin {
 
     @Redirect(method = "jump", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"))
     public void tangerine$omniSprint_fixJump(LivingEntity instance, Vec3d orig) {
-        if (OmniSprintModule.INSTANCE.getEnabled().getBooleanValue()) {
+        if (OmniSprintModule.INSTANCE.getEnabled().getValue()) {
             var f = instance.getYaw() * (float) (Math.PI / 180.0);
             var vel = instance.getVelocity();
 

@@ -15,6 +15,6 @@ public class MouseMixin {
     private boolean isSpectatorOrFlyScrollSpeed(ClientPlayerEntity instance) {
         // TODO: replace false with a ConfigBoolean(Hotkeyed?) from cauldron
         var flightModule = FlightModule.INSTANCE;
-        return instance.isSpectator() || flightModule.getFlyScrollSpeed().getBooleanValue();
+        return instance.isSpectator() || flightModule.getFlyScrollSpeed().getValue();
     }
 }

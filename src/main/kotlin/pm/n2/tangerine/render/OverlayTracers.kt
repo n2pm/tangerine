@@ -68,7 +68,7 @@ object OverlayTracers : OverlayRendererBase() {
                 linesBuf
             )
 
-            if (tracersModule.drawStem.booleanValue) {
+            if (tracersModule.drawStem.value) {
                 val entityHeight = entity.height
                 LineDrawing.drawLine(
                     entityPos.x,
@@ -90,18 +90,18 @@ object OverlayTracers : OverlayRendererBase() {
     private fun getColor(entity: Entity): Color4f? {
         val tracersModule = TracersModule
 
-        if (entity is PlayerEntity) return if (tracersModule.drawPlayers.booleanValue) RenderColors.LIGHT_BLUE else null
-        if (entity is PassiveEntity) return if (tracersModule.drawFriendly.booleanValue) RenderColors.OUTLINE_GREEN else null
+        if (entity is PlayerEntity) return if (tracersModule.drawPlayers.value) RenderColors.LIGHT_BLUE else null
+        if (entity is PassiveEntity) return if (tracersModule.drawFriendly.value) RenderColors.OUTLINE_GREEN else null
         if (entity is HostileEntity) {
             return if (entity is Angerable) {
-                if (tracersModule.drawPassive.booleanValue) RenderColors.OUTLINE_YELLOW else null
+                if (tracersModule.drawPassive.value) RenderColors.OUTLINE_YELLOW else null
             } else {
-                if (tracersModule.drawHostile.booleanValue) RenderColors.OUTLINE_RED else null
+                if (tracersModule.drawHostile.value) RenderColors.OUTLINE_RED else null
             }
         }
-        if (entity is ItemEntity) return if (tracersModule.drawItems.booleanValue) RenderColors.OUTLINE_LIGHT_GRAY else null
-        return if (tracersModule.drawOthers.booleanValue) RenderColors.OUTLINE_DARK_GRAY else null
+        if (entity is ItemEntity) return if (tracersModule.drawItems.value) RenderColors.OUTLINE_LIGHT_GRAY else null
+        return if (tracersModule.drawOthers.value) RenderColors.OUTLINE_DARK_GRAY else null
     }
 
-    override fun shouldRender(): Boolean = TracersModule.enabled.booleanValue
+    override fun shouldRender(): Boolean = TracersModule.enabled.value
 }

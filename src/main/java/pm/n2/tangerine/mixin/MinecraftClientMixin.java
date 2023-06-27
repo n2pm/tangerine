@@ -13,7 +13,7 @@ import pm.n2.tangerine.modules.visuals.GlowESPModule;
 public class MinecraftClientMixin {
     @Inject(method = "hasOutline", at = @At("HEAD"), cancellable = true)
     public void tangerine$applyOutline(CallbackInfoReturnable<Boolean> cir) {
-        if (GlowESPModule.INSTANCE.getEnabled().getBooleanValue()) {
+        if (GlowESPModule.INSTANCE.getEnabled().getValue()) {
             cir.setReturnValue(true);
         }
     }

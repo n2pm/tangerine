@@ -78,7 +78,7 @@ object OverlayStorageESP : OverlayRendererBase() {
     }
 
     override fun shouldRender(): Boolean {
-        return StorageESPModule.enabled.booleanValue && blockEntities.size > 0
+        return StorageESPModule.enabled.value && blockEntities.size > 0
     }
 
     override fun shouldUpdate(camera: Camera?): Boolean {

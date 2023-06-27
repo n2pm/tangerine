@@ -1,7 +1,5 @@
 package pm.n2.tangerine.modules.combat
 
-import com.adryd.cauldron.api.config.ConfigBoolean
-import com.adryd.cauldron.api.config.ConfigDouble
 import net.minecraft.command.argument.EntityAnchorArgumentType.EntityAnchor
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
@@ -12,6 +10,8 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.util.math.MathHelper
 import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.config.BooleanConfigOption
+import pm.n2.tangerine.config.DoubleConfigOption
 import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
@@ -23,11 +23,11 @@ object KillAuraModule : Module(
     "Attacks enemies in range on your weapon's cooldown",
     ModuleCategory.COMBAT
 ) {
-    val maxReach = ConfigDouble("kill_aura.max_reach", 5.0, 0.1, 10.0)
-    val attackPlayers = ConfigBoolean("kill_aura.attack_players", false)
-    val attackPassive = ConfigBoolean("kill_aura.attack_passive", false)
-    val attackNeutral = ConfigBoolean("kill_aura.attack_neutral", false)
-    val attackHostile = ConfigBoolean("kill_aura.attack_hostile", false)
+    val maxReach = DoubleConfigOption(id, "max_reach", 5.0, 0.1, 10.0)
+    val attackPlayers = BooleanConfigOption(id, "attack_players", false)
+    val attackPassive = BooleanConfigOption(id, "attack_passive", false)
+    val attackNeutral = BooleanConfigOption(id, "attack_neutral", false)
+    val attackHostile = BooleanConfigOption(id, "attack_hostile", false)
 
     override val configOptions = listOf(maxReach, attackPlayers, attackPassive, attackNeutral, attackHostile)
 
@@ -48,10 +48,10 @@ object KillAuraModule : Module(
             if (entity is LivingEntity && entity.isBlocking) continue
 
             val shouldAttack = when (entity) {
-                is PlayerEntity -> attackPlayers.booleanValue
-                is PassiveEntity -> attackPassive.booleanValue
-                is HostileEntity -> attackHostile.booleanValue
-                else -> attackNeutral.booleanValue
+                is PlayerEntity -> attackPlayers.value
+                is PassiveEntity -> attackPassive.value
+                is HostileEntity -> attackHostile.value
+                else -> attackNeutral.value
             }
             if (!shouldAttack) continue
 
@@ -62,7 +62,7 @@ object KillAuraModule : Module(
             }
         }
 
-        if (closest > maxReach.doubleValue) target = null
+        if (closest > maxReach.value) target = null
 
         if (target == null) return
 

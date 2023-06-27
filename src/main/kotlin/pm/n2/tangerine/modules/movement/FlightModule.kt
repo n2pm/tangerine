@@ -1,20 +1,20 @@
 package pm.n2.tangerine.modules.movement
 
-import com.adryd.cauldron.api.config.ConfigBoolean
-import com.adryd.cauldron.api.config.ConfigDouble
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.util.math.Vec3d
 import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.config.BooleanConfigOption
+import pm.n2.tangerine.config.DoubleConfigOption
 import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
 object FlightModule : Module("flight", "Flight", "Allows you to fly", ModuleCategory.MOVEMENT) {
-    val flyKickBypass = ConfigBoolean("flight.fly_kick", true)
-    val flyScrollSpeed = ConfigBoolean("flight.scroll_speed", false)
-    val flyFriction = ConfigBoolean("flight.friction", false)
-    val flySpeed = ConfigDouble("flight.speed", 1.0, 0.1, 20.0)
+    val flyKickBypass = BooleanConfigOption(id, "fly_kick", true)
+    val flyScrollSpeed = BooleanConfigOption(id, "scroll_speed", false)
+    val flyFriction = BooleanConfigOption(id, "friction", false)
+    val flySpeed = DoubleConfigOption(id, "speed", 1.0, 0.1, 20.0)
     override val configOptions = listOf(flyKickBypass, flyScrollSpeed, flyFriction, flySpeed)
 
     private var fallingTicks = 0
@@ -23,7 +23,7 @@ object FlightModule : Module("flight", "Flight", "Allows you to fly", ModuleCate
     @EventHandler
     fun onPreTick(event: TangerineEvent.PreTick) {
         val mc = Tangerine.mc
-        if (mc.player != null && enabled.booleanValue) {
+        if (mc.player != null && enabled.value) {
             val abilities = mc.player!!.abilities
             val canNormallyFly = mc.player!!.isSpectator || mc.player!!.isCreative
             if (abilities.flying && !canNormallyFly) lastPos = mc.player!!.pos
@@ -33,9 +33,9 @@ object FlightModule : Module("flight", "Flight", "Allows you to fly", ModuleCate
     @EventHandler
     fun onPostTick(event: TangerineEvent.PostTick) {
         val mc = Tangerine.mc
-        if (mc.player != null && enabled.booleanValue) {
+        if (mc.player != null && enabled.value) {
             val abilities = mc.player!!.abilities
-            abilities.flySpeed = flySpeed.doubleValue.toFloat() / 20
+            abilities.flySpeed = flySpeed.value.toFloat() / 20
 
             val canNormallyFly = mc.player!!.isSpectator || mc.player!!.isCreative
             if (!canNormallyFly) abilities.allowFlying = true
@@ -44,7 +44,7 @@ object FlightModule : Module("flight", "Flight", "Allows you to fly", ModuleCate
                 fallingTicks++
 
                 if (fallingTicks >= 20) {
-                    var shouldAntiKick = flyKickBypass.booleanValue
+                    var shouldAntiKick = flyKickBypass.value
 
                     // are we descending?
                     if (mc.player!!.isSneaking) {

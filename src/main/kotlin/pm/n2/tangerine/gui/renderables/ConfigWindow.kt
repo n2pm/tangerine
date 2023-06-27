@@ -1,7 +1,5 @@
 package pm.n2.tangerine.gui.renderables
 
-import com.adryd.cauldron.api.config.ConfigBoolean
-import com.adryd.cauldron.api.config.ConfigDouble
 import imgui.ImGui
 import imgui.flag.ImGuiWindowFlags
 import imgui.type.ImBoolean
@@ -9,6 +7,7 @@ import net.minecraft.client.resource.language.I18n
 import org.lwjgl.glfw.GLFW
 import pm.n2.tangerine.KeyboardManager
 import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.config.*
 import pm.n2.tangerine.core.managers.ModuleManager
 import pm.n2.tangerine.gui.ImGuiManager
 import pm.n2.tangerine.gui.TangerineRenderable
@@ -20,44 +19,74 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
         ImGuiManager.addRenderable(this)
     }
 
+    private fun handleContextMenu(module: Module, option: ConfigOption<*>, cb: () -> Unit = {}) {
+        val keybindPopup = "Set keybind##${option.group}.${option.name}"
+        var isOpeningPopup = false
+
+        if (ImGui.beginPopupContextItem()) {
+            if (ImGui.menuItem("Set keybind##item.${option.group}.${option.name}")) {
+                isOpeningPopup = true
+            }
+
+            cb()
+
+            ImGui.endPopup()
+        }
+
+        // https://github.com/ocornut/imgui/issues/331
+        if (isOpeningPopup) ImGui.openPopup(keybindPopup)
+
+        val flags = (ImGuiWindowFlags.NoCollapse
+                or ImGuiWindowFlags.NoResize
+                or ImGuiWindowFlags.NoMove
+                or ImGuiWindowFlags.AlwaysAutoResize)
+        if (ImGui.beginPopupModal(keybindPopup, ImBoolean(true), flags)) {
+            ImGui.text("Press a key to assign it to this module.")
+
+            val blacklistedKeys = listOf(
+                0,
+                GLFW.GLFW_KEY_ESCAPE,
+                GLFW.GLFW_KEY_LEFT_SHIFT,
+                GLFW.GLFW_KEY_RIGHT_SHIFT,
+                GLFW.GLFW_KEY_LEFT_CONTROL,
+                GLFW.GLFW_KEY_RIGHT_CONTROL,
+                GLFW.GLFW_KEY_LEFT_ALT,
+                GLFW.GLFW_KEY_RIGHT_ALT
+            )
+
+            val shiftDown =
+                KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT) || KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_RIGHT_SHIFT)
+            val controlDown =
+                KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_CONTROL) || KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_RIGHT_CONTROL)
+            val altDown =
+                KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_ALT) || KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_RIGHT_ALT)
+
+            for (i in 0..GLFW.GLFW_KEY_LAST) {
+                if (blacklistedKeys.contains(i)) continue
+                if (KeyboardManager.isKeyPressed(i)) {
+                    option.keybind = ConfigKeybind(i, shiftDown, controlDown, altDown)
+                    TangerineConfig.write()
+                    ImGui.closeCurrentPopup()
+                    break
+                }
+            }
+
+            ImGui.endPopup()
+        }
+    }
+
     override fun draw() {
         val enabled = ImBoolean(this.enabled)
 
         if (ImGui.begin(module.name, enabled)) {
-            if (ImGui.checkbox("Enabled", module.enabled.booleanValue)) {
+            if (ImGui.checkbox("Enabled", module.enabled.value)) {
                 ModuleManager.toggle(module)
             }
-
-            ImGui.text("Current keybind: " + GLFW.glfwGetKeyName(module.keybind.integerValue, 0))
-            ImGui.sameLine()
-            if (ImGui.button("Assign keybind")) {
-                ImGui.openPopup("Assign keybind##" + module.name)
-            }
+            handleContextMenu(module, module.enabled)
 
             drawConfig()
 
-            val flags = (ImGuiWindowFlags.NoCollapse
-                    or ImGuiWindowFlags.NoResize
-                    or ImGuiWindowFlags.NoMove
-                    or ImGuiWindowFlags.AlwaysAutoResize)
-            if (ImGui.beginPopupModal("Assign keybind##" + module.name, ImBoolean(true), flags)) {
-                ImGui.text("Press a key to assign it to this module.")
 
-                // 0, escape
-                val blacklistedKeys = listOf(0, GLFW.GLFW_KEY_ESCAPE)
-
-                for (i in 0..GLFW.GLFW_KEY_LAST) {
-                    if (blacklistedKeys.contains(i)) continue
-                    if (KeyboardManager.isKeyPressed(i)) {
-                        Tangerine.logger.info("Keybind for {} set to {}", module.name, i)
-                        module.keybind.integerValue = i
-                        ImGui.closeCurrentPopup()
-                        break
-                    }
-                }
-
-                ImGui.endPopup()
-            }
         }
 
         ImGui.end()
@@ -67,26 +96,28 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
     open fun drawConfig() {
         val configOptions = module.configOptions
         for (config in configOptions) {
-            if (config is ConfigBoolean) {
-                if (ImGui.checkbox(I18n.translate("tangerine.config." + config.getKey()), config.booleanValue)) {
+            if (config is BooleanConfigOption) {
+                if (ImGui.checkbox(I18n.translate("tangerine.config.${config.group}.${config.name}"), config.value)) {
                     config.toggle()
                 }
             }
 
-            if (config is ConfigDouble) {
-                val doubleValue: Double = config.doubleValue
+            if (config is DoubleConfigOption) {
+                val doubleValue: Double = config.value
                 val doubleValueArr = floatArrayOf(doubleValue.toFloat())
                 if (ImGui.dragFloat(
-                        I18n.translate("tangerine.config." + config.getKey()),
+                        I18n.translate("tangerine.config.${config.group}.${config.name}"),
                         doubleValueArr,
                         0.1f,
-                        config.minValue.toFloat(),
-                        config.maxValue.toFloat()
+                        config.value.toFloat(),
+                        config.value.toFloat()
                     )
                 ) {
-                    config.doubleValue = doubleValueArr[0].toDouble()
+                    config.set(doubleValueArr[0].toDouble())
                 }
             }
+
+            handleContextMenu(module, config)
         }
     }
 }

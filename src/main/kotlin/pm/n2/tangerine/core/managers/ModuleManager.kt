@@ -1,6 +1,8 @@
 package pm.n2.tangerine.core.managers
 
 import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.config.ConfigOption
+import pm.n2.tangerine.config.TangerineConfig
 import pm.n2.tangerine.core.Manager
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
@@ -39,8 +41,18 @@ object ModuleManager : Manager<Module>() {
     )
 
     override fun init() {
+        // Setup config
         for (module in items) {
-            if (module.enabled.booleanValue) {
+            val options = mutableListOf<ConfigOption<*>>(module.enabled)
+            options.addAll(module.configOptions)
+            TangerineConfig.addConfigOptions(options)
+        }
+
+        TangerineConfig.read()
+
+        // Actual init code
+        for (module in items) {
+            if (module.enabled.value) {
                 Tangerine.eventManager.registerClass(module)
             }
         }
@@ -48,13 +60,16 @@ object ModuleManager : Manager<Module>() {
 
     fun toggle(module: Module) {
         module.enabled.toggle()
-        if (module.enabled.booleanValue) {
+
+        if (module.enabled.value) {
             Tangerine.eventManager.registerClass(module)
             module.onEnabled()
         } else {
             Tangerine.eventManager.unregisterClass(module)
             module.onDisabled()
         }
+
+        TangerineConfig.write()
     }
 
     fun getModulesByCategory(category: ModuleCategory): List<Module> {

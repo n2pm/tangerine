@@ -55,7 +55,7 @@ object BlockESPModule : Module(
 
     @Suppress("CAST_NEVER_SUCCEEDS")
     fun search(world: ClientWorld?) {
-        if (world == null || !enabled.booleanValue) return
+        if (world == null || !enabled.value) return
 
         val chunkManager = world.chunkManager
 

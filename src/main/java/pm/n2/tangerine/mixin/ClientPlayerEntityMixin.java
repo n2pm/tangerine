@@ -20,28 +20,28 @@ public class ClientPlayerEntityMixin {
     // lol
     @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 0))
     public void tangerine$sendMovementPackets(ClientPlayNetworkHandler instance, Packet<?> packet) {
-        if (AntiHungerModule.INSTANCE.getEnabled().getBooleanValue()) return;
+        if (AntiHungerModule.INSTANCE.getEnabled().getValue()) return;
         instance.sendPacket(packet);
     }
 
     @Inject(method = "shouldSlowDown", at = @At("HEAD"), cancellable = true)
     public void tangerine$noSlow(CallbackInfoReturnable<Boolean> cir) {
         var noSlowMod = NoSlowModule.INSTANCE;
-        if (noSlowMod.getEnabled().getBooleanValue() && noSlowMod.getAffectSneaking().getBooleanValue()) {
+        if (noSlowMod.getEnabled().getValue() && noSlowMod.getAffectSneaking().getValue()) {
             cir.setReturnValue(((ClientPlayerEntity) (Object) this).shouldLeaveSwimmingPose());
         }
     }
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
     public boolean tangerine$noSlow_items(ClientPlayerEntity instance) {
-        if (NoSlowModule.INSTANCE.getEnabled().getBooleanValue()) return false;
+        if (NoSlowModule.INSTANCE.getEnabled().getValue()) return false;
         return instance.isUsingItem();
     }
 
     @Inject(method = "isWalking", at = @At("HEAD"), cancellable = true)
     public void tangerine$omniSprint(CallbackInfoReturnable<Boolean> cir) {
         var self = (ClientPlayerEntity) (Object) this;
-        if (OmniSprintModule.INSTANCE.getEnabled().getBooleanValue()) {
+        if (OmniSprintModule.INSTANCE.getEnabled().getValue()) {
             cir.setReturnValue(self.isSubmergedInWater()
                     ? self.input.hasForwardMovement()
                     : (self.input.forwardMovement >= 0.8

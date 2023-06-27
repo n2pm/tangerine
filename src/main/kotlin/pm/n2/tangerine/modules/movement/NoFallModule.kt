@@ -19,7 +19,7 @@ object NoFallModule :
     @EventHandler
     fun onPreTick(event: TangerineEvent.PreTick) {
         val mc = Tangerine.mc
-        if (mc.player != null && mc.world != null && enabled.booleanValue) {
+        if (mc.player != null && mc.world != null && enabled.value) {
             isFlying = mc.player!!.abilities.flying
         }
     }
@@ -27,7 +27,7 @@ object NoFallModule :
     @EventHandler
     fun onPostTick(event: TangerineEvent.PostTick) {
         val mc = Tangerine.mc
-        if (mc.player != null && mc.world != null && enabled.booleanValue) {
+        if (mc.player != null && mc.world != null && enabled.value) {
             if (mc.player!!.fallDistance > 3f) {
                 val pos = mc.player!!.pos
 
@@ -36,7 +36,7 @@ object NoFallModule :
                 blockPos = blockPos.add(0, (mc.player!!.velocity.getY() * 0.1).toInt(), 0)
 
                 val blockState = mc.world!!.getBlockState(blockPos)
-                val negateWater = LiquidWalkModule.enabled.booleanValue
+                val negateWater = LiquidWalkModule.enabled.value
                         && (blockState.block is FluidBlock || blockState.fluidState != Fluids.EMPTY.defaultState)
 
                 if (blockState.getCollisionShape(

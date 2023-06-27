@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
 import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.config.TangerineConfig
 
 object ImGuiScreen : Screen(Text.of("Tangerine")) {
     var initialized: Boolean = false
@@ -97,7 +98,7 @@ object ImGuiScreen : Screen(Text.of("Tangerine")) {
             for (renderable in ImGuiManager.renderables) ImGuiQuilt.renderstack.remove(renderable.renderable)
         }
 
-        Tangerine.config.write()
+        TangerineConfig.write()
         super.closeScreen()
         initialized = false
     }

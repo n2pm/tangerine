@@ -24,7 +24,7 @@ public class ClientPlayerInteractionManagerMixin {
 
     @Inject(method = "attackEntity", at = @At("HEAD"))
     public void tangerine$crits(PlayerEntity player, Entity target, CallbackInfo ci) {
-        if (CritsModule.INSTANCE.getEnabled().getBooleanValue()) {
+        if (CritsModule.INSTANCE.getEnabled().getValue()) {
             var sprinting = player.isSprinting();
 
             if (sprinting) {

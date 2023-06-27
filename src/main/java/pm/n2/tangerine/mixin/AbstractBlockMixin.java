@@ -21,7 +21,7 @@ public class AbstractBlockMixin {
     @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
     public void tangerine$jesus_waterlogged(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         var liquidWalk = LiquidWalkModule.INSTANCE;
-        if (liquidWalk.getEnabled().getBooleanValue()
+        if (liquidWalk.getEnabled().getValue()
                 && state.getFluidState() != Fluids.EMPTY.getDefaultState()) {
             cir.setReturnValue(VoxelShapes.fullCube());
         }

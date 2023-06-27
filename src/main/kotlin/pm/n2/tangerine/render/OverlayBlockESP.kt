@@ -40,7 +40,7 @@ object OverlayBlockESP : OverlayRendererBase() {
     }
 
     override fun shouldRender(): Boolean {
-        return BlockESPModule.enabled.booleanValue && BlockESPModule.positions.size > 0
+        return BlockESPModule.enabled.value && BlockESPModule.positions.size > 0
     }
 
     override fun shouldUpdate(camera: Camera?): Boolean {

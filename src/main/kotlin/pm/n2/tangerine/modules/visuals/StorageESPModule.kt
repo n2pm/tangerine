@@ -18,7 +18,7 @@ object StorageESPModule : Module("storage_esp", "Storage ESP", "Highlights stora
     fun onPostTick(event: TangerineEvent.PostTick) {
         val mc = Tangerine.mc
         val world = mc.world
-        if (mc.world == null || !enabled.booleanValue) return
+        if (mc.world == null || !enabled.value) return
 
         val chunkManager = world!!.chunkManager
 
