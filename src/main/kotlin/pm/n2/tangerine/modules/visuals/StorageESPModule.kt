@@ -4,6 +4,7 @@ import net.minecraft.block.entity.*
 import net.minecraft.util.math.BlockPos
 import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.config.BooleanConfigOption
 import pm.n2.tangerine.config.ColorConfigOption
 import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.mixin.ClientChunkManagerAccessor
@@ -14,6 +15,18 @@ import pm.n2.tangerine.render.RenderUtils
 
 object StorageESPModule : Module("storage_esp", ModuleCategory.VISUALS) {
     var blockEntities = HashMap<BlockPos, BlockEntity>()
+
+    val drawChests = BooleanConfigOption(id, "draw_chests", true)
+    val drawTrappedChests = BooleanConfigOption(id, "draw_trapped_chests", true)
+    val drawBarrels = BooleanConfigOption(id, "draw_barrels", true)
+    val drawEnderChests = BooleanConfigOption(id, "draw_ender_chests", true)
+    val drawFurnaces = BooleanConfigOption(id, "draw_furnaces", true)
+    val drawBlastFurnaces = BooleanConfigOption(id, "draw_blast_furnaces", true)
+    val drawSmokers = BooleanConfigOption(id, "draw_smokers", true)
+    val drawDispensers = BooleanConfigOption(id, "draw_dispensers", true)
+    val drawDroppers = BooleanConfigOption(id, "draw_droppers", true)
+    val drawHoppers = BooleanConfigOption(id, "draw_hoppers", true)
+    val drawShulkers = BooleanConfigOption(id, "draw_shulkers", true)
 
     val chestColor = ColorConfigOption(id, "chest_color", RenderUtils.yellow)
     val trappedChestColor = ColorConfigOption(id, "trapped_chest_color", RenderUtils.red)
@@ -27,6 +40,18 @@ object StorageESPModule : Module("storage_esp", ModuleCategory.VISUALS) {
     val hopperColor = ColorConfigOption(id, "hopper_color", RenderUtils.grey)
 
     override val configOptions = listOf(
+        drawChests,
+        drawTrappedChests,
+        drawBarrels,
+        drawEnderChests,
+        drawFurnaces,
+        drawBlastFurnaces,
+        drawSmokers,
+        drawDispensers,
+        drawDroppers,
+        drawHoppers,
+        drawShulkers,
+
         chestColor,
         trappedChestColor,
         barrelColor,

@@ -80,11 +80,37 @@ object OverlayStorageESP : OverlayRendererBase() {
     override fun update(matrices: MatrixStack?, camera: Camera?, tickDelta: Float) {
         val renderLines = renderObjects[0]
         val linesBuf = renderLines.startBuffer()
-        for (be in blockEntities.values) LineDrawing.drawBox(
-            Box(be.pos),
-            RenderUtils.colorToCauldron(getColor(be)),
-            camera, linesBuf
-        )
+        for (be in blockEntities.values) {
+            var canDraw = false
+
+            var mapping = mapOf(
+                ChestBlockEntity::class to StorageESPModule.drawChests,
+                TrappedChestBlockEntity::class to StorageESPModule.drawTrappedChests,
+                BarrelBlockEntity::class to StorageESPModule.drawBarrels,
+                EnderChestBlockEntity::class to StorageESPModule.drawEnderChests,
+                FurnaceBlockEntity::class to StorageESPModule.drawFurnaces,
+                BlastFurnaceBlockEntity::class to StorageESPModule.drawBlastFurnaces,
+                SmokerBlockEntity::class to StorageESPModule.drawSmokers,
+                DispenserBlockEntity::class to StorageESPModule.drawDispensers,
+                DropperBlockEntity::class to StorageESPModule.drawDroppers,
+                HopperBlockEntity::class to StorageESPModule.drawHoppers,
+                ShulkerBoxBlockEntity::class to StorageESPModule.drawShulkers
+            )
+
+            for ((block, option) in mapping) {
+                if (block.java.isAssignableFrom(be.javaClass)) {
+                    canDraw = option.value
+                }
+            }
+
+            if (!canDraw) continue
+
+            LineDrawing.drawBox(
+                Box(be.pos),
+                RenderUtils.colorToCauldron(getColor(be)),
+                camera, linesBuf
+            )
+        }
         renderLines.endBuffer(camera)
     }
 

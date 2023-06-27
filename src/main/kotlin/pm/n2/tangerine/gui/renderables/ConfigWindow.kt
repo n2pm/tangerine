@@ -3,10 +3,7 @@ package pm.n2.tangerine.gui.renderables
 import imgui.ImGui
 import imgui.type.ImBoolean
 import net.minecraft.client.resource.language.I18n
-import pm.n2.tangerine.config.BooleanConfigOption
-import pm.n2.tangerine.config.ColorConfigOption
-import pm.n2.tangerine.config.ConfigOption
-import pm.n2.tangerine.config.DoubleConfigOption
+import pm.n2.tangerine.config.*
 import pm.n2.tangerine.core.managers.ModuleManager
 import pm.n2.tangerine.gui.GuiUtils
 import pm.n2.tangerine.gui.ImGuiManager

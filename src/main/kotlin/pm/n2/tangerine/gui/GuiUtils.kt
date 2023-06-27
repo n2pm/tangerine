@@ -1,6 +1,9 @@
 package pm.n2.tangerine.gui
 
 import imgui.ImGui
+import imgui.type.ImInt
+import net.minecraft.client.resource.language.I18n
+import org.quiltmc.qkl.library.brigadier.argument.text
 import java.awt.Color
 
 object GuiUtils {
@@ -17,5 +20,20 @@ object GuiUtils {
         }
 
         return null
+    }
+
+    fun <T : Enum<*>> enumPicker(text: String, currentOption: T): T {
+        val enum = currentOption.javaClass
+
+        val options = enum.enumConstants.map { it.toString() }
+        val selected = ImInt(options.indexOf(currentOption.toString()))
+
+        ImGui.combo(
+            text,
+            selected,
+            options.toTypedArray()
+        )
+
+        return enum.enumConstants[selected.get()]
     }
 }

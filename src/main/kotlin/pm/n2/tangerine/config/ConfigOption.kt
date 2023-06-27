@@ -15,7 +15,7 @@ abstract class ConfigOption<T>(open val group: String, open val name: String, op
         value = TangerineConfig.GSON.fromJson(json, value!!::class.java)
     }
 
-    open fun write() = TangerineConfig.GSON.toJsonTree(value)
+    open fun write() = TangerineConfig.GSON.toJsonTree(value, value!!::class.java)
 
     open fun onKeybind() {}
 
