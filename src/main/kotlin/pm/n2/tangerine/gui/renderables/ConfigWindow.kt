@@ -36,53 +36,8 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
         }
 
         // https://github.com/ocornut/imgui/issues/331
-        if (isOpeningPopup) {
-            ImGui.openPopup(keybindPopup)
-        }
-
-        val flags = (ImGuiWindowFlags.NoCollapse
-                or ImGuiWindowFlags.NoResize
-                or ImGuiWindowFlags.NoMove
-                or ImGuiWindowFlags.AlwaysAutoResize)
-        if (ImGui.beginPopupModal(keybindPopup, ImBoolean(true), flags)) {
-            ImGui.text("Press a key to assign it to this option.")
-
-            if (ImGui.button("Clear keybind")) {
-                option.keybind = null
-                TangerineConfig.write()
-                ImGui.closeCurrentPopup()
-            }
-
-            val blacklistedKeys = listOf(
-                0,
-                GLFW.GLFW_KEY_ESCAPE,
-                GLFW.GLFW_KEY_LEFT_SHIFT,
-                GLFW.GLFW_KEY_RIGHT_SHIFT,
-                GLFW.GLFW_KEY_LEFT_CONTROL,
-                GLFW.GLFW_KEY_RIGHT_CONTROL,
-                GLFW.GLFW_KEY_LEFT_ALT,
-                GLFW.GLFW_KEY_RIGHT_ALT
-            )
-
-            val shiftDown =
-                KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT) || KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_RIGHT_SHIFT)
-            val controlDown =
-                KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_CONTROL) || KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_RIGHT_CONTROL)
-            val altDown =
-                KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_ALT) || KeyboardManager.isKeyPressed(GLFW.GLFW_KEY_RIGHT_ALT)
-
-            for (i in 0..GLFW.GLFW_KEY_LAST) {
-                if (blacklistedKeys.contains(i)) continue
-                if (KeyboardManager.isKeyPressed(i)) {
-                    option.keybind = ConfigKeybind(i, shiftDown, controlDown, altDown)
-                    TangerineConfig.write()
-                    ImGui.closeCurrentPopup()
-                    break
-                }
-            }
-
-            ImGui.endPopup()
-        }
+        if (isOpeningPopup) option.openHotkeyMenu()
+        option.drawHotkeyMenu()
     }
 
     override fun draw() {

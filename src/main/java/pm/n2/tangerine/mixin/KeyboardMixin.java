@@ -25,7 +25,11 @@ public class KeyboardMixin {
             KeyboardManager.INSTANCE.registerKeyRelease(key);
         }
 
-        if (key == GLFW.GLFW_KEY_RIGHT_SHIFT) {
+        var menuKey = GLFW.GLFW_KEY_RIGHT_SHIFT;
+        var keybind = ImGuiManager.INSTANCE.getOpened().getKeybind();
+        if (keybind != null) menuKey = keybind.getKey();
+
+        if (key == menuKey) {
             var mc = MinecraftClient.getInstance();
             var screen = ImGuiScreen.INSTANCE;
             if (mc.currentScreen == null) mc.setScreen(screen);

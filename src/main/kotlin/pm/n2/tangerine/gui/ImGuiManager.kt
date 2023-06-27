@@ -3,6 +3,8 @@ package pm.n2.tangerine.gui
 import gay.eviee.imguiquilt.interfaces.Theme
 import imgui.ImFont
 import imgui.ImGui
+import pm.n2.tangerine.config.BooleanConfigOption
+import pm.n2.tangerine.config.TangerineConfig
 import pm.n2.tangerine.gui.renderables.AboutWindow
 import pm.n2.tangerine.gui.renderables.DemoWindow
 import pm.n2.tangerine.gui.renderables.MenuBar
@@ -13,6 +15,11 @@ object ImGuiManager {
     lateinit var fontUnifont: ImFont
 
     val renderables = mutableListOf<TangerineRenderable>()
+    val opened = BooleanConfigOption("tangerine", "open", false)
+
+    init {
+        TangerineConfig.addConfigOptions(listOf(opened))
+    }
 
     init {
         addRenderable(MenuBar)

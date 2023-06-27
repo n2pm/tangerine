@@ -35,6 +35,7 @@ object MenuBar : TangerineRenderable("MenuBar") {
     }
 
     override fun draw() {
+        var openKeybindMenu = false
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Tangerine")) {
                 val demoWindow = ImGuiManager.get("DemoWindow")!!
@@ -47,6 +48,11 @@ object MenuBar : TangerineRenderable("MenuBar") {
                 if (ImGui.menuItem("Open ImGui demo", "", demoWindow.enabled)) {
                     demoWindow.enabled = !demoWindow.enabled
                 }
+
+                if (ImGui.menuItem("Set open keybind", "")) {
+                    openKeybindMenu = true
+                }
+                if (ImGui.isItemHovered()) ImGui.setTooltip("Current keybind: ${ImGuiManager.opened.keybind?.toString() ?: "none"}")
 
                 if (ImGui.menuItem("Close menu bar")) {
                     ImGuiScreen.shouldClose = true
@@ -63,5 +69,8 @@ object MenuBar : TangerineRenderable("MenuBar") {
 
             ImGui.endMainMenuBar()
         }
+
+        if (openKeybindMenu) ImGuiManager.opened.openHotkeyMenu()
+        ImGuiManager.opened.drawHotkeyMenu()
     }
 }
