@@ -4,8 +4,10 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import net.minecraft.util.Identifier
 import org.quiltmc.loader.api.QuiltLoader
+import pm.n2.tangerine.config.serialize.ColorSerializer
 import pm.n2.tangerine.config.serialize.ConfigKeybindSerializer
 import pm.n2.tangerine.config.serialize.IdentifierSerializer
+import java.awt.Color
 
 object TangerineConfig {
     private val trackedOptions = mutableListOf<ConfigOption<*>>()
@@ -15,6 +17,7 @@ object TangerineConfig {
         .setPrettyPrinting()
         .registerTypeAdapter(ConfigKeybind::class.java, ConfigKeybindSerializer())
         .registerTypeAdapter(Identifier::class.java, IdentifierSerializer())
+        .registerTypeAdapter(Color::class.java, ColorSerializer())
         .create()
 
     lateinit var root: JsonObject

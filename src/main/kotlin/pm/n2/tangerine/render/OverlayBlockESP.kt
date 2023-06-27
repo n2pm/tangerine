@@ -15,6 +15,7 @@ import pm.n2.tangerine.modules.visuals.BlockESPModule
 
 object OverlayBlockESP : OverlayRendererBase() {
     private val positions = mutableListOf<BlockPos>()
+    private var configHash = 0
 
     init {
         renderObjects.add(
@@ -35,7 +36,11 @@ object OverlayBlockESP : OverlayRendererBase() {
         val linesBuf = renderLines.startBuffer()
         // Clone them so we don't concurrently modify the list
         val positions = positions.toMutableList()
-        for (pos in positions) LineDrawing.drawBox(Box(pos), RenderColors.OUTLINE_WHITE, camera, linesBuf)
+        for (pos in positions) LineDrawing.drawBox(
+            Box(pos),
+            RenderUtils.colorToCauldron(BlockESPModule.resolveColor(pos)),
+            camera, linesBuf
+        )
         renderLines.endBuffer(camera)
     }
 
@@ -48,6 +53,13 @@ object OverlayBlockESP : OverlayRendererBase() {
         if (newPositions != positions) {
             positions.clear()
             positions.addAll(newPositions)
+            return true
+        }
+
+        // I'm not actually sold this works, but I don't care
+        val hash = BlockESPModule.configOptions.map { it.value }.hashCode()
+        if (this.configHash != hash) {
+            this.configHash = hash
             return true
         }
 

@@ -11,7 +11,7 @@ import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
 object NoFallModule :
-    Module("no_fall", "No fall damage", "Prevents you from taking fall damage", ModuleCategory.MOVEMENT) {
+    Module("no_fall", ModuleCategory.MOVEMENT) {
     private var wasFlying = false
     private var isFlying = true
     private var ticks = 0

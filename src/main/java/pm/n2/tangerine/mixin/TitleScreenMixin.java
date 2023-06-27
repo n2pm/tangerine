@@ -37,7 +37,7 @@ public class TitleScreenMixin {
                     ImGuiWindowFlags.NoBackground |
                     ImGuiWindowFlags.NoBringToFrontOnFocus |
                     ImGuiWindowFlags.NoFocusOnAppearing;
-            var text = String.format("tangerine %s\nmade with love by notnet", Tangerine.INSTANCE.getVersion());
+            var text = String.format("tangerine %s", Tangerine.INSTANCE.getVersion());
 
             // ???
             var size = new ImVec2();

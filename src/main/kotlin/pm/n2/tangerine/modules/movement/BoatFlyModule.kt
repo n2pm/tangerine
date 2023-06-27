@@ -12,7 +12,7 @@ import pm.n2.tangerine.mixin.BoatEntityAccessor
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
-object BoatFlyModule : Module("boatfly", "Boat fly", "magic carpet lookin ass", ModuleCategory.MOVEMENT) {
+object BoatFlyModule : Module("boatfly", ModuleCategory.MOVEMENT) {
     val flySpeed = DoubleConfigOption(id, "speed", 1.0, 0.1, 5.0)
     val landSpeed = BooleanConfigOption(id, "landspeed", false)
     override val configOptions = listOf(flySpeed, landSpeed)

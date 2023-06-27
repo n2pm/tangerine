@@ -5,6 +5,7 @@ import gay.eviee.imguiquilt.interfaces.Renderable
 import imgui.ImGui
 import imgui.ImVec2
 import imgui.flag.ImGuiWindowFlags
+import net.minecraft.client.resource.language.I18n
 import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.core.TangerineEvent
@@ -14,7 +15,7 @@ import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
 object ModuleListModule :
-    Module("module_list", "Module list", "Shows a list of all enabled modules", ModuleCategory.MISC) {
+    Module("module_list", ModuleCategory.MISC) {
     private var shouldDraw = false
 
     private val renderable = object : Renderable {
@@ -35,7 +36,7 @@ object ModuleListModule :
             for (module in ModuleManager.items) {
                 if (module.enabled.value) {
                     anyModulesEnabled = true
-                    moduleListString.append(module.name).append("\n")
+                    moduleListString.append(I18n.translate("tangerine.module.${module.id}.name")).append("\n")
                 }
             }
 

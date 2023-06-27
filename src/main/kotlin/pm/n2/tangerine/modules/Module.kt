@@ -7,8 +7,6 @@ import pm.n2.tangerine.gui.renderables.ConfigWindow
 @Suppress("LeakingThis")
 abstract class Module(
     val id: String,
-    val name: String,
-    val description: String,
     val category: ModuleCategory
 ) {
     val enabled = BooleanConfigOption(id, "enabled",false)

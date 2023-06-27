@@ -3,7 +3,6 @@ package pm.n2.tangerine.render
 import com.adryd.cauldron.api.render.helper.OverlayRendererBase
 import com.adryd.cauldron.api.render.helper.RenderObject
 import com.adryd.cauldron.api.render.util.LineDrawing
-import com.adryd.cauldron.api.util.Color4f
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.blaze3d.vertex.VertexFormats
@@ -19,6 +18,7 @@ import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.Vec3d
 import pm.n2.tangerine.modules.visuals.TracersModule
+import java.awt.Color
 
 object OverlayTracers : OverlayRendererBase() {
     init {
@@ -63,7 +63,7 @@ object OverlayTracers : OverlayRendererBase() {
                 cameraPos.x,
                 cameraPos.y,
                 cameraPos.z,
-                color,
+                RenderUtils.colorToCauldron(color),
                 camera,
                 linesBuf
             )
@@ -77,7 +77,7 @@ object OverlayTracers : OverlayRendererBase() {
                     entityPos.x,
                     entityPos.y,
                     entityPos.z,
-                    color,
+                    RenderUtils.colorToCauldron(color),
                     camera,
                     linesBuf
                 )
@@ -87,20 +87,23 @@ object OverlayTracers : OverlayRendererBase() {
         renderLines.endBuffer(camera)
     }
 
-    private fun getColor(entity: Entity): Color4f? {
+    private fun getColor(entity: Entity): Color? {
         val tracersModule = TracersModule
 
-        if (entity is PlayerEntity) return if (tracersModule.drawPlayers.value) RenderColors.LIGHT_BLUE else null
-        if (entity is PassiveEntity) return if (tracersModule.drawFriendly.value) RenderColors.OUTLINE_GREEN else null
-        if (entity is HostileEntity) {
-            return if (entity is Angerable) {
-                if (tracersModule.drawPassive.value) RenderColors.OUTLINE_YELLOW else null
-            } else {
-                if (tracersModule.drawHostile.value) RenderColors.OUTLINE_RED else null
+        return when (entity) {
+            is PlayerEntity -> if (tracersModule.drawPlayers.value) TracersModule.playersColor.value else null
+            is PassiveEntity -> if (tracersModule.drawFriendly.value) TracersModule.passiveColor.value else null
+            is HostileEntity -> {
+                if (entity is Angerable) {
+                    if (tracersModule.drawPassive.value) tracersModule.angerableColor.value else null
+                } else {
+                    if (tracersModule.drawHostile.value) tracersModule.hostileColor.value else null
+                }
             }
+
+            is ItemEntity -> if (tracersModule.drawItems.value) tracersModule.itemColor.value else null
+            else -> if (tracersModule.drawOthers.value) tracersModule.othersColor.value else null
         }
-        if (entity is ItemEntity) return if (tracersModule.drawItems.value) RenderColors.OUTLINE_LIGHT_GRAY else null
-        return if (tracersModule.drawOthers.value) RenderColors.OUTLINE_DARK_GRAY else null
     }
 
     override fun shouldRender(): Boolean = TracersModule.enabled.value

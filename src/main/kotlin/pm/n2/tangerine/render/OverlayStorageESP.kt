@@ -3,7 +3,6 @@ package pm.n2.tangerine.render
 import com.adryd.cauldron.api.render.helper.OverlayRendererBase
 import com.adryd.cauldron.api.render.helper.RenderObject
 import com.adryd.cauldron.api.render.util.LineDrawing
-import com.adryd.cauldron.api.util.Color4f
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.blaze3d.vertex.VertexFormats
@@ -15,11 +14,12 @@ import net.minecraft.util.DyeColor
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import pm.n2.tangerine.modules.visuals.StorageESPModule
+import java.awt.Color
 
 object OverlayStorageESP : OverlayRendererBase() {
     private var blockEntities = HashMap<BlockPos, BlockEntity>()
-    private val colors = HashMap<Class<*>, Color4f>()
-    private val dyeColors = HashMap<String, Color4f>()
+    private var configHash = 0
+    private val dyeColors = HashMap<String, Color>()
 
     init {
         renderObjects.add(
@@ -28,21 +28,10 @@ object OverlayStorageESP : OverlayRendererBase() {
                 VertexFormats.LINES
             ) { GameRenderer.getRenderTypeLinesShader() })
 
-        colors[ChestBlockEntity::class.java] = RenderColors.OUTLINE_YELLOW
-        colors[TrappedChestBlockEntity::class.java] = RenderColors.OUTLINE_RED
-        colors[BarrelBlockEntity::class.java] = RenderColors.OUTLINE_BROWN
-        colors[EnderChestBlockEntity::class.java] = RenderColors.OUTLINE_PURPLE
-        colors[FurnaceBlockEntity::class.java] = RenderColors.OUTLINE_LIGHT_GRAY
-        colors[BlastFurnaceBlockEntity::class.java] = RenderColors.OUTLINE_LIGHT_GRAY
-        colors[SmokerBlockEntity::class.java] = RenderColors.OUTLINE_LIGHT_GRAY
-        colors[DispenserBlockEntity::class.java] = RenderColors.OUTLINE_LIGHT_GRAY
-        colors[DropperBlockEntity::class.java] = RenderColors.OUTLINE_LIGHT_GRAY
-        colors[HopperBlockEntity::class.java] = RenderColors.OUTLINE_DARK_GRAY
-
         for (color in DyeColor.values()) {
             val components = color.colorComponents
-            val color4f = Color4f(components[0], components[1], components[2], 1f)
-            dyeColors[color.getName()] = color4f
+            val dyeColor = Color(components[0], components[1], components[2], 1f)
+            dyeColors[color.getName()] = dyeColor
         }
     }
 
@@ -52,19 +41,37 @@ object OverlayStorageESP : OverlayRendererBase() {
         super.render(tickDelta, camera)
     }
 
-    private fun getColor(be: BlockEntity): Color4f? {
-        var out: Color4f? = RenderColors.OUTLINE_WHITE
+    private fun getColor(be: BlockEntity): Color {
+        var out = RenderUtils.white
+
+        val colors = mapOf(
+            ChestBlockEntity::class to StorageESPModule.chestColor,
+            TrappedChestBlockEntity::class to StorageESPModule.trappedChestColor,
+            BarrelBlockEntity::class to StorageESPModule.barrelColor,
+            EnderChestBlockEntity::class to StorageESPModule.enderChestColor,
+            FurnaceBlockEntity::class to StorageESPModule.furnaceColor,
+            BlastFurnaceBlockEntity::class to StorageESPModule.blastFurnaceColor,
+            SmokerBlockEntity::class to StorageESPModule.smokerColor,
+            DispenserBlockEntity::class to StorageESPModule.dispenserColor,
+            DropperBlockEntity::class to StorageESPModule.dropperColor,
+            HopperBlockEntity::class to StorageESPModule.hopperColor,
+        )
 
         for (targetClass in colors.keys) {
-            if (be.javaClass.isAssignableFrom(targetClass)) {
-                out = colors[targetClass]
-                break
+            if (targetClass.java.isAssignableFrom(be.javaClass)) {
+                val newColor = colors[targetClass]?.value
+                if (newColor != null) out = newColor
             }
         }
 
         if (be is ShulkerBoxBlockEntity) {
             val color = be.color
-            return if (color != null) dyeColors[color.getName()] else RenderColors.OUTLINE_OTHER_PURPLE
+            if (color != null) {
+                val dyeColor = dyeColors[color.getName()]
+                if (dyeColor != null) out = dyeColor
+            } else {
+                out = RenderUtils.purple
+            }
         }
 
         return out
@@ -73,7 +80,11 @@ object OverlayStorageESP : OverlayRendererBase() {
     override fun update(matrices: MatrixStack?, camera: Camera?, tickDelta: Float) {
         val renderLines = renderObjects[0]
         val linesBuf = renderLines.startBuffer()
-        for (be in blockEntities.values) LineDrawing.drawBox(Box(be.pos), getColor(be), camera, linesBuf)
+        for (be in blockEntities.values) LineDrawing.drawBox(
+            Box(be.pos),
+            RenderUtils.colorToCauldron(getColor(be)),
+            camera, linesBuf
+        )
         renderLines.endBuffer(camera)
     }
 
@@ -85,6 +96,13 @@ object OverlayStorageESP : OverlayRendererBase() {
         val be = StorageESPModule.blockEntities
         if (be != this.blockEntities) {
             this.blockEntities = be
+            return true
+        }
+
+        // I'm not actually sold this works, but I don't care
+        val hash = StorageESPModule.configOptions.map { it.value }.hashCode()
+        if (this.configHash != hash) {
+            this.configHash = hash
             return true
         }
 

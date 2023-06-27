@@ -17,12 +17,7 @@ import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 import kotlin.math.sqrt
 
-object KillAuraModule : Module(
-    "kill_aura",
-    "Kill aura",
-    "Attacks enemies in range on your weapon's cooldown",
-    ModuleCategory.COMBAT
-) {
+object KillAuraModule : Module("kill_aura", ModuleCategory.COMBAT) {
     val maxReach = DoubleConfigOption(id, "max_reach", 5.0, 0.1, 10.0)
     val attackPlayers = BooleanConfigOption(id, "attack_players", false)
     val attackPassive = BooleanConfigOption(id, "attack_passive", false)

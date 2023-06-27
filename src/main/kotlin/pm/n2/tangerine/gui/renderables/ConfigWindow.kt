@@ -1,34 +1,36 @@
 package pm.n2.tangerine.gui.renderables
 
 import imgui.ImGui
-import imgui.flag.ImGuiWindowFlags
 import imgui.type.ImBoolean
 import net.minecraft.client.resource.language.I18n
-import org.lwjgl.glfw.GLFW
-import pm.n2.tangerine.KeyboardManager
-import pm.n2.tangerine.Tangerine
-import pm.n2.tangerine.config.*
+import pm.n2.tangerine.config.BooleanConfigOption
+import pm.n2.tangerine.config.ColorConfigOption
+import pm.n2.tangerine.config.ConfigOption
+import pm.n2.tangerine.config.DoubleConfigOption
 import pm.n2.tangerine.core.managers.ModuleManager
+import pm.n2.tangerine.gui.GuiUtils
 import pm.n2.tangerine.gui.ImGuiManager
 import pm.n2.tangerine.gui.TangerineRenderable
 import pm.n2.tangerine.modules.Module
 
 @Suppress("LeakingThis")
-open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWindow##${module.name}", false) {
+open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWindow##${module.id}", false) {
     init {
         ImGuiManager.addRenderable(this)
     }
 
     private fun handleContextMenu(module: Module, option: ConfigOption<*>, cb: () -> Unit = {}) {
-        val keybindPopup = "Set keybind##${option.group}.${option.name}"
         var isOpeningPopup = false
 
         if (ImGui.beginPopupContextItem()) {
-            if (ImGui.menuItem("Set keybind##item.${option.group}.${option.name}")) {
+            if (ImGui.menuItem(I18n.translate("tangerine.ui.config.set_keybind") + "##item.${option.group}.${option.name}")) {
                 isOpeningPopup = true
             }
 
-            if (ImGui.isItemHovered()) ImGui.setTooltip("Current keybind: ${option.keybind?.toString() ?: "none"}")
+            if (ImGui.isItemHovered()) {
+                val keybindStr = option.keybind?.toString() ?: I18n.translate("tangerine.ui.config.no_keybind")
+                ImGui.setTooltip(I18n.translate("tangerine.ui.config.current_keybind", keybindStr))
+            }
 
             cb()
 
@@ -43,8 +45,8 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
     override fun draw() {
         val enabled = ImBoolean(this.enabled)
 
-        if (ImGui.begin(module.name, enabled)) {
-            if (ImGui.checkbox("Enabled", module.enabled.value)) {
+        if (ImGui.begin(I18n.translate("tangerine.module.${module.id}.name"), enabled)) {
+            if (ImGui.checkbox(I18n.translate("tangerine.ui.config.enabled"), module.enabled.value)) {
                 ModuleManager.toggle(module)
             }
 
@@ -79,6 +81,20 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
                 ) {
                     config.set(doubleValueArr[0].toDouble())
                 }
+            }
+
+            if (config is ColorConfigOption) {
+                val ret = GuiUtils.colorPicker(
+                    I18n.translate("tangerine.config.${config.group}.${config.name}"),
+                    config.value
+                )
+
+                if (ret != null) {
+                    config.value = ret
+                }
+
+                // Don't context menu this or shit crashes
+                continue
             }
 
             handleContextMenu(module, config)

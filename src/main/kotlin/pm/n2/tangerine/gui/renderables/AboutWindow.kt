@@ -2,6 +2,7 @@ package pm.n2.tangerine.gui.renderables
 
 import imgui.ImGui
 import imgui.type.ImBoolean
+import net.minecraft.client.resource.language.I18n
 import net.minecraft.client.sound.EntityTrackingSoundInstance
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
@@ -33,14 +34,14 @@ object AboutWindow : TangerineRenderable("AboutWindow", false) {
     override fun draw() {
         val enabled = ImBoolean(this.enabled)
 
-        if (ImGui.begin("About Tangerine", enabled)) {
-            ImGui.textUnformatted("Tangerine, a NotNet project")
-            ImGui.textUnformatted("Powered by Cauldron and imgui-quilt")
-            ImGui.textUnformatted("(c) NotNite, adryd, Cynosphere, and Murmiration, 2023")
-            if (ImGui.button("Open source code")) {
+        if (ImGui.begin(I18n.translate("tangerine.ui.about.name"), enabled)) {
+            ImGui.textUnformatted(I18n.translate("tangerine.ui.about.text"))
+
+            if (ImGui.button(I18n.translate("tangerine.ui.about.button.source"))) {
                 Util.getOperatingSystem().open("https://github.com/n2pm/tangerine")
             }
-            if (ImGui.button("Crash game")) {
+
+            if (ImGui.button(I18n.translate("tangerine.ui.about.button.crash"))) {
                 throw RuntimeException("She strogan my beef til im off")
             }
         }

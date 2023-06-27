@@ -10,7 +10,7 @@ import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
-object FlightModule : Module("flight", "Flight", "Allows you to fly", ModuleCategory.MOVEMENT) {
+object FlightModule : Module("flight", ModuleCategory.MOVEMENT) {
     val flyKickBypass = BooleanConfigOption(id, "fly_kick", true)
     val flyScrollSpeed = BooleanConfigOption(id, "scroll_speed", false)
     val flyFriction = BooleanConfigOption(id, "friction", false)

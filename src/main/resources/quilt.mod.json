@@ -15,8 +15,7 @@
         "homepage": "https://github.com/n2pm/tangerine",
         "issues": "https://github.com/n2pm/tangerine/issues",
         "sources": "https://github.com/n2pm/tangerine"
-      },
-      "icon": "assets/tangerine/icon.png"
+      }
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {

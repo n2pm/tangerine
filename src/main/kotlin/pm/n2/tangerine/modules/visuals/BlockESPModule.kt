@@ -1,6 +1,7 @@
 package pm.n2.tangerine.modules.visuals
 
 import imgui.ImGui
+import imgui.flag.ImGuiInputTextFlags
 import imgui.type.ImString
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -11,22 +12,22 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.chunk.WorldChunk
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.ListConfigOption
+import pm.n2.tangerine.config.MapConfigOption
+import pm.n2.tangerine.gui.GuiUtils
 import pm.n2.tangerine.gui.renderables.ConfigWindow
 import pm.n2.tangerine.mixin.ClientChunkManagerAccessor
 import pm.n2.tangerine.mixin.ClientChunkMapAccessor
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
+import pm.n2.tangerine.render.RenderUtils
+import java.awt.Color
 
-object BlockESPModule : Module(
-    "block_esp",
-    "Block ESP",
-    "Set certain blocks to glow or not",
-    ModuleCategory.VISUALS
-) {
-    val blocks = ListConfigOption("block_esp", "blocks", Identifier::class.java, mutableListOf())
+object BlockESPModule : Module("block_esp", ModuleCategory.VISUALS) {
+    val blocks = ListConfigOption(id, "blocks", Identifier::class.java, mutableListOf())
+    val blockColors = MapConfigOption(id, "block_colors", mutableMapOf(), Identifier::class.java, Color::class.java)
     val positions = mutableListOf<BlockPos>()
 
-    override val configOptions = listOf(blocks)
+    override val configOptions = listOf(blocks, blockColors)
     override val configWindow = BlockESPConfigWindow()
 
     override fun onEnabled() {
@@ -43,6 +44,23 @@ object BlockESPModule : Module(
         }
 
         return false
+    }
+
+    fun resolveColor(pos: BlockPos): Color {
+        val world = MinecraftClient.getInstance().world ?: return RenderUtils.white
+        val block = world.getBlockState(pos).block
+
+        val blockKey = block.asItem().defaultStack.holder.key
+        if (blockKey.isEmpty) return RenderUtils.white
+        val identifier = blockKey.get().value
+
+        for ((id, color) in blockColors.value) {
+            if (id.path == identifier.path && id.namespace == identifier.namespace) {
+                return color
+            }
+        }
+
+        return RenderUtils.white
     }
 
     fun searchChunk(chunk: WorldChunk?) {
@@ -119,6 +137,13 @@ object BlockESPModule : Module(
                 if (ImGui.button("-##${identifier.path}")) {
                     BlockESPModule.blocks.value.remove(identifier)
                     Tangerine.taskManager.run { search(MinecraftClient.getInstance().world) }
+                }
+
+                ImGui.sameLine()
+                val color = blockColors.value[identifier] ?: RenderUtils.white
+                val ret = GuiUtils.colorPicker("##BlockESPColor${identifier.path}", color)
+                if (ret != null) {
+                    blockColors.value[identifier] = ret
                 }
 
                 ImGui.sameLine()

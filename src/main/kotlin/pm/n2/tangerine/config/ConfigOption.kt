@@ -4,26 +4,37 @@ import com.google.gson.JsonElement
 import imgui.ImGui
 import imgui.flag.ImGuiWindowFlags
 import imgui.type.ImBoolean
+import net.minecraft.client.resource.language.I18n
 import org.lwjgl.glfw.GLFW
 import pm.n2.tangerine.KeyboardManager
 
 abstract class ConfigOption<T>(open val group: String, open val name: String, open var value: T) {
     var keybind: ConfigKeybind? = null
 
-    open fun onKeybind() {}
-    abstract fun parse(json: JsonElement)
+    open fun parse(json: JsonElement) {
+        value = TangerineConfig.GSON.fromJson(json, value!!::class.java)
+    }
+
     open fun write() = TangerineConfig.GSON.toJsonTree(value)
 
-    fun openHotkeyMenu() = ImGui.openPopup("Set keybind##${group}.${name}")
+    open fun onKeybind() {}
+
+    fun openHotkeyMenu() = ImGui.openPopup(I18n.translate("tangerine.ui.config.set_keybind") + "##${group}.${name}")
     fun drawHotkeyMenu() {
         val flags = (ImGuiWindowFlags.NoCollapse
                 or ImGuiWindowFlags.NoResize
                 or ImGuiWindowFlags.NoMove
                 or ImGuiWindowFlags.AlwaysAutoResize)
-        if (ImGui.beginPopupModal("Set keybind##${group}.${name}", ImBoolean(true), flags)) {
-            ImGui.text("Press a key to assign it to this option.")
 
-            if (ImGui.button("Clear keybind")) {
+        if (ImGui.beginPopupModal(
+                I18n.translate("tangerine.ui.config.set_keybind") + "##${group}.${name}",
+                ImBoolean(true),
+                flags
+            )
+        ) {
+            ImGui.text(I18n.translate("tangerine.ui.config.setting_keybind"))
+
+            if (ImGui.button(I18n.translate("tangerine.ui.config.clear_keybind"))) {
                 keybind = null
                 TangerineConfig.write()
                 ImGui.closeCurrentPopup()
