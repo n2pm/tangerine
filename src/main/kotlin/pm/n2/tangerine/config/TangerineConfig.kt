@@ -3,7 +3,6 @@ package pm.n2.tangerine.config
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import org.quiltmc.loader.api.QuiltLoader
-import pm.n2.tangerine.Tangerine
 
 object TangerineConfig {
     private val trackedOptions = mutableListOf<ConfigOption<*>>()
@@ -52,7 +51,11 @@ object TangerineConfig {
 
                 val valueObject = JsonObject()
                 valueObject.add("value", option.write())
-                valueObject.add("keybind", GSON.toJsonTree(option.keybind))
+                valueObject.add(
+                    "keybind", if (option.keybind != null)
+                        GSON.toJsonTree(option.keybind, ConfigKeybind::class.java)
+                    else null
+                )
 
                 groupObject.add(name, valueObject)
             }
