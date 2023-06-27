@@ -44,17 +44,21 @@ object Tangerine : ClientModInitializer {
         })
 
         eventManager.registerFuncClass(TangerineEvent.KeyPress::class) {
-            if (it !is TangerineEvent.KeyPress) return@registerFuncClass
+            val event = it as TangerineEvent.KeyPress // shut up
+            var ret = false
             for (module in ModuleManager.items) {
                 val configs = mutableListOf<ConfigOption<*>>(module.enabled)
                 configs.addAll(module.configOptions)
 
                 for (config in configs) {
-                    if (config.keybind?.isJustPressed(it.key) == true) {
+                    if (config.keybind?.isJustPressed(event.key) == true) {
                         config.onKeybind()
+                        ret = true
                     }
                 }
             }
+
+            return@registerFuncClass ret
         }
 
         CommandManager.init()

@@ -15,10 +15,12 @@ import pm.n2.tangerine.gui.ImGuiScreen;
 @ClientOnly
 @Mixin(Keyboard.class)
 public class KeyboardMixin {
-    @Inject(method = "onKey(JIIII)V", at = @At("HEAD"))
+    @Inject(method = "onKey(JIIII)V", at = @At("HEAD"), cancellable = true)
     public void tangerine$onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
         if (action == GLFW.GLFW_PRESS) {
-            KeyboardManager.INSTANCE.registerKeyPress(key);
+            if (KeyboardManager.INSTANCE.registerKeyPress(key)) {
+                ci.cancel();
+            }
         } else if (action == GLFW.GLFW_RELEASE) {
             KeyboardManager.INSTANCE.registerKeyRelease(key);
         }

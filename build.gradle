@@ -61,8 +61,8 @@ dependencies {
 
     modApi libs.hajlib
     include libs.hajlib
-    //modApi files("../hajlib/build/libs/hajlib-1.0.0.jar")
-    //include files("../hajlib/build/libs/hajlib-1.0.0.jar")
+    //modApi files("../hajlib/build/libs/hajlib-1.0.3.jar")
+    //include files("../hajlib/build/libs/hajlib-1.0.3.jar")
 }
 
 loom {

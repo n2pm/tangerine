@@ -28,20 +28,30 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
                 isOpeningPopup = true
             }
 
+            if (ImGui.isItemHovered()) ImGui.setTooltip("Current keybind: ${option.keybind?.toString() ?: "none"}")
+
             cb()
 
             ImGui.endPopup()
         }
 
         // https://github.com/ocornut/imgui/issues/331
-        if (isOpeningPopup) ImGui.openPopup(keybindPopup)
+        if (isOpeningPopup) {
+            ImGui.openPopup(keybindPopup)
+        }
 
         val flags = (ImGuiWindowFlags.NoCollapse
                 or ImGuiWindowFlags.NoResize
                 or ImGuiWindowFlags.NoMove
                 or ImGuiWindowFlags.AlwaysAutoResize)
         if (ImGui.beginPopupModal(keybindPopup, ImBoolean(true), flags)) {
-            ImGui.text("Press a key to assign it to this module.")
+            ImGui.text("Press a key to assign it to this option.")
+
+            if (ImGui.button("Clear keybind")) {
+                option.keybind = null
+                TangerineConfig.write()
+                ImGui.closeCurrentPopup()
+            }
 
             val blacklistedKeys = listOf(
                 0,
@@ -82,11 +92,10 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
             if (ImGui.checkbox("Enabled", module.enabled.value)) {
                 ModuleManager.toggle(module)
             }
+
             handleContextMenu(module, module.enabled)
 
             drawConfig()
-
-
         }
 
         ImGui.end()

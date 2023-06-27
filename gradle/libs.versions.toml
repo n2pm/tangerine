@@ -11,7 +11,7 @@ cauldron = "0.1.9"
 lib39 = "1.3.1"
 devauth = "1.1.2"
 modmenu = "7.0.1"
-hajlib = "1.0.0"
+hajlib = "1.0.3"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }

@@ -9,11 +9,13 @@ object KeyboardManager {
         return pressedKeys.contains(key)
     }
 
-    fun registerKeyPress(key: Int) {
+    fun registerKeyPress(key: Int): Boolean {
         if (!pressedKeys.contains(key)) {
             pressedKeys.add(key)
-            Tangerine.eventManager.dispatch(TangerineEvent.KeyPress(key))
+            return Tangerine.eventManager.dispatchWithReturn<Boolean>(TangerineEvent.KeyPress(key)).any { it }
         }
+
+        return false
     }
 
     fun registerKeyRelease(key: Int) {

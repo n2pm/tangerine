@@ -25,6 +25,14 @@ class ConfigKeybind(var key: Int, var shift: Boolean = false, var ctrl: Boolean 
 
     fun isJustPressed(key: Int): Boolean = isPressed() && this.key == key
 
+    override fun toString(): String {
+        val ctrl = if (ctrl) "Ctrl+" else ""
+        val shift = if (shift) "Shift+" else ""
+        val alt = if (alt) "Alt+" else ""
+
+        return "$ctrl$shift$alt${GLFW.glfwGetKeyName(key, 0)}"
+    }
+
     class ConfigKeybindSerializer : JsonSerializer<ConfigKeybind>, JsonDeserializer<ConfigKeybind> {
         override fun serialize(
             src: ConfigKeybind?,
