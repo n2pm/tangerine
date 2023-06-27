@@ -26,7 +26,6 @@ object ModuleListModule :
 
             val windowFlags = ImGuiWindowFlags.NoDecoration or
                     ImGuiWindowFlags.NoInputs or
-                    ImGuiWindowFlags.NoBackground or
                     ImGuiWindowFlags.NoBringToFrontOnFocus or
                     ImGuiWindowFlags.NoFocusOnAppearing
 
@@ -52,6 +51,7 @@ object ModuleListModule :
             ImGui.setNextWindowSize(size.x, size.y)
             ImGui.setNextWindowPos(screenPos.x + (screenSize.x - size.x), screenPos.y)
             if (ImGui.begin("##Tangerine Module List", windowFlags)) {
+                ImGui.setCursorPos(12.5f, 12.5f)
                 ImGui.textUnformatted(moduleListString.toString())
             }
 
