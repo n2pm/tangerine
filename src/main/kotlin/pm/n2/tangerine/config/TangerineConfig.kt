@@ -2,14 +2,19 @@ package pm.n2.tangerine.config
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import net.minecraft.util.Identifier
 import org.quiltmc.loader.api.QuiltLoader
+import pm.n2.tangerine.config.serialize.ConfigKeybindSerializer
+import pm.n2.tangerine.config.serialize.IdentifierSerializer
 
 object TangerineConfig {
     private val trackedOptions = mutableListOf<ConfigOption<*>>()
     private val configFile = QuiltLoader.getConfigDir().resolve("tangerine.json").toFile()
-    private val GSON = GsonBuilder()
+
+    val GSON = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(ConfigKeybind::class.java, ConfigKeybind.ConfigKeybindSerializer())
+        .registerTypeAdapter(ConfigKeybind::class.java, ConfigKeybindSerializer())
+        .registerTypeAdapter(Identifier::class.java, IdentifierSerializer())
         .create()
 
     lateinit var root: JsonObject

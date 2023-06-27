@@ -11,8 +11,9 @@ import pm.n2.tangerine.modules.visuals.BlockESPModule;
 
 @Mixin(WorldChunk.class)
 public class WorldChunkMixin {
+    // stolen from meteor dont tell anyone
     @Inject(at = @At("TAIL"), method = "setBlockState")
-    private void onBlockUpdate(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
+    private void setBlockState(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
         BlockESPModule.INSTANCE.handleUpdate(pos, state);
     }
 }

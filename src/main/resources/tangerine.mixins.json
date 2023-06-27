@@ -12,6 +12,7 @@
     "ClientChunkMapAccessor",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
+    "ClientPlayNetworkHandlerMixin",
     "EntityMixin",
     "FluidBlockMixin",
     "InputMixin",

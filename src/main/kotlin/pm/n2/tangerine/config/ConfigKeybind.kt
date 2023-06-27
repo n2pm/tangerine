@@ -1,9 +1,7 @@
 package pm.n2.tangerine.config
 
-import com.google.gson.*
 import org.lwjgl.glfw.GLFW
 import pm.n2.tangerine.KeyboardManager
-import java.lang.reflect.Type
 
 class ConfigKeybind(var key: Int, var shift: Boolean = false, var ctrl: Boolean = false, var alt: Boolean = false) {
     fun isPressed(): Boolean {
@@ -31,37 +29,5 @@ class ConfigKeybind(var key: Int, var shift: Boolean = false, var ctrl: Boolean 
         val alt = if (alt) "Alt+" else ""
 
         return "$ctrl$shift$alt${GLFW.glfwGetKeyName(key, 0)}"
-    }
-
-    class ConfigKeybindSerializer : JsonSerializer<ConfigKeybind>, JsonDeserializer<ConfigKeybind> {
-        override fun serialize(
-            src: ConfigKeybind?,
-            typeOfSrc: Type?,
-            context: JsonSerializationContext?
-        ): JsonElement {
-            val obj = JsonObject()
-
-            obj.addProperty("key", src?.key ?: -1)
-            obj.addProperty("shift", src?.shift ?: false)
-            obj.addProperty("ctrl", src?.ctrl ?: false)
-            obj.addProperty("alt", src?.alt ?: false)
-
-            return obj
-        }
-
-        override fun deserialize(
-            json: JsonElement?,
-            typeOfT: Type?,
-            context: JsonDeserializationContext?
-        ): ConfigKeybind {
-            if (json !is JsonObject) throw JsonParseException("Expected ConfigKeybind to be an object")
-
-            val key = json.get("key")?.asInt ?: -1
-            val shift = json.get("shift")?.asBoolean ?: false
-            val ctrl = json.get("ctrl")?.asBoolean ?: false
-            val alt = json.get("alt")?.asBoolean ?: false
-
-            return ConfigKeybind(key, shift, ctrl, alt)
-        }
     }
 }

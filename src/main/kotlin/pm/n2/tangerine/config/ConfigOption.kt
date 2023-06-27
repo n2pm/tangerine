@@ -12,7 +12,7 @@ abstract class ConfigOption<T>(open val group: String, open val name: String, op
 
     open fun onKeybind() {}
     abstract fun parse(json: JsonElement)
-    abstract fun write(): JsonElement
+    open fun write() = TangerineConfig.GSON.toJsonTree(value)
 
     fun openHotkeyMenu() = ImGui.openPopup("Set keybind##${group}.${name}")
     fun drawHotkeyMenu() {
