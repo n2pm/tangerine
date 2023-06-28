@@ -41,6 +41,7 @@ object KillAuraModule : Module("kill_aura", ModuleCategory.COMBAT) {
             if (entity == player) continue
             if (!entity.isAlive) continue
             if (entity is LivingEntity && entity.isBlocking) continue
+            if (!entity.isAttackable) continue
 
             val shouldAttack = when (entity) {
                 is PlayerEntity -> attackPlayers.value
