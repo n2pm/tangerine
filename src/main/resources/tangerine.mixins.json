@@ -4,7 +4,6 @@
   "package": "pm.n2.tangerine.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "AbstractBlockMixin",
     "AbstractClientPlayerEntityMixin",
     "BlockMixin",
     "BoatEntityAccessor",
