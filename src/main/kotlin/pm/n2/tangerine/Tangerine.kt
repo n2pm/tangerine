@@ -54,6 +54,10 @@ object Tangerine : ClientModInitializer {
                     if (config.keybind?.isJustPressed(event.key) == true) {
                         config.onKeybind()
                         ret = true
+
+                        if (config == module.enabled) {
+                            ModuleManager.toggle(module, true)
+                        }
                     }
                 }
             }

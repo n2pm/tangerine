@@ -58,8 +58,8 @@ object ModuleManager : Manager<Module>() {
         }
     }
 
-    fun toggle(module: Module) {
-        module.enabled.toggle()
+    fun toggle(module: Module, skip: Boolean = false) {
+        if (!skip) module.enabled.toggle()
 
         if (module.enabled.value) {
             Tangerine.eventManager.registerClass(module)
