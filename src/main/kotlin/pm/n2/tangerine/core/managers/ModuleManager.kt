@@ -8,6 +8,7 @@ import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 import pm.n2.tangerine.modules.combat.CritsModule
 import pm.n2.tangerine.modules.combat.KillAuraModule
+import pm.n2.tangerine.modules.misc.FastBreakModule
 import pm.n2.tangerine.modules.misc.ModuleListModule
 import pm.n2.tangerine.modules.misc.UnifontModule
 import pm.n2.tangerine.modules.movement.*
@@ -24,6 +25,7 @@ object ModuleManager : Manager<Module>() {
 
         ModuleListModule,
         UnifontModule,
+        FastBreakModule,
 
         BoatFlyModule,
         FlightModule,

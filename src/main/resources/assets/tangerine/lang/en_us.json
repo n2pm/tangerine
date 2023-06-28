@@ -97,5 +97,7 @@
   "tangerine.config.tracers.angerable_color": "Angerable mobs color",
   "tangerine.config.tracers.hostile_color": "Hostile mobs color",
   "tangerine.config.tracers.item_color": "Items color",
-  "tangerine.config.tracers.others_color": "Other entities color"
+  "tangerine.config.tracers.others_color": "Other entities color",
+  "tangerine.module.fastbreak.name": "Fast break",
+  "tangerine.module.fastbreak.description": "Speeds up block breaking"
 }
