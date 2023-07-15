@@ -4,11 +4,11 @@ import com.adryd.cauldron.api.render.helper.OverlayRendererBase
 import com.adryd.cauldron.api.render.helper.RenderObject
 import com.adryd.cauldron.api.render.util.LineDrawing
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.VertexFormat
-import com.mojang.blaze3d.vertex.VertexFormats
 import net.minecraft.block.entity.*
 import net.minecraft.client.render.Camera
 import net.minecraft.client.render.GameRenderer
+import net.minecraft.client.render.VertexFormat
+import net.minecraft.client.render.VertexFormats
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.DyeColor
 import net.minecraft.util.math.BlockPos
@@ -26,7 +26,7 @@ object OverlayStorageESP : OverlayRendererBase() {
             RenderObject(
                 VertexFormat.DrawMode.LINES,
                 VertexFormats.LINES
-            ) { GameRenderer.getRenderTypeLinesShader() })
+            ) { GameRenderer.getRenderTypeLinesProgram() })
 
         for (color in DyeColor.values()) {
             val components = color.colorComponents

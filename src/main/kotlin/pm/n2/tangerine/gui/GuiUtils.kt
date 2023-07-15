@@ -2,8 +2,6 @@ package pm.n2.tangerine.gui
 
 import imgui.ImGui
 import imgui.type.ImInt
-import net.minecraft.client.resource.language.I18n
-import org.quiltmc.qkl.library.brigadier.argument.text
 import java.awt.Color
 
 object GuiUtils {

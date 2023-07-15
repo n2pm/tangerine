@@ -2,7 +2,6 @@ package pm.n2.tangerine.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -13,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pm.n2.tangerine.modules.movement.FlightModule;
 import pm.n2.tangerine.modules.movement.NoFallModule;
 
-@ClientOnly
 @Mixin(PlayerMoveC2SPacket.class)
 public class PlayerMoveC2SPacketMixin {
     @Shadow

@@ -10,9 +10,10 @@ class DoubleConfigOption(
     val min: Double,
     val max: Double
 ) : ConfigOption<Double>(group, name, value) {
-    fun set(value: Double) {
+    override fun set(value: Double) {
         this.value = value
         cap()
+        this.valueCallback?.invoke(value)
     }
 
     private fun cap() {

@@ -3,7 +3,6 @@ package pm.n2.tangerine.mixin;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.network.packet.Packet;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,11 +12,9 @@ import pm.n2.tangerine.modules.movement.NoSlowModule;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 import pm.n2.tangerine.modules.player.AntiHungerModule;
 
-@ClientOnly
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
-    // i tried @Inject() into this and ci.cancel() but it caused some weird rubberbanding
-    // lol
+    // i tried @Inject() into this and ci.cancel() but it caused some weird rubberbanding (lol)
     @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 0))
     public void tangerine$sendMovementPackets(ClientPlayNetworkHandler instance, Packet<?> packet) {
         if (AntiHungerModule.INSTANCE.getEnabled().getValue()) return;
@@ -28,7 +25,7 @@ public class ClientPlayerEntityMixin {
     public void tangerine$noSlow(CallbackInfoReturnable<Boolean> cir) {
         var noSlowMod = NoSlowModule.INSTANCE;
         if (noSlowMod.getEnabled().getValue() && noSlowMod.getAffectSneaking().getValue()) {
-            cir.setReturnValue(((ClientPlayerEntity) (Object) this).shouldLeaveSwimmingPose());
+            cir.setReturnValue(((ClientPlayerEntity) (Object) this).isCrawling());
         }
     }
 
@@ -44,10 +41,10 @@ public class ClientPlayerEntityMixin {
         if (OmniSprintModule.INSTANCE.getEnabled().getValue()) {
             cir.setReturnValue(self.isSubmergedInWater()
                     ? self.input.hasForwardMovement()
-                    : (self.input.forwardMovement >= 0.8
-                    || self.input.forwardMovement <= -0.8
-                    || self.input.sidewaysMovement >= 0.8
-                    || self.input.sidewaysMovement <= -0.8));
+                    : (self.input.movementForward >= 0.8
+                    || self.input.movementForward <= -0.8
+                    || self.input.movementSideways >= 0.8
+                    || self.input.movementSideways <= -0.8));
         }
     }
 }

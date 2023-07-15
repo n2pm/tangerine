@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "tangerine",
+  "version": "${version}",
+  "name": "Tangerine",
+  "description": "unethical minecraft modding",
+  "authors": [
+    "NotNite"
+  ],
+  "environment": "*",
+  "contact": {
+    "homepage": "https://github.com/n2pm/tangerine",
+    "issues": "https://github.com/n2pm/tangerine/issues",
+    "sources": "https://github.com/n2pm/tangerine"
+  },
+  "entrypoints": {
+    "client": [
+      {
+        "value": "pm.n2.tangerine.Tangerine",
+        "adapter": "kotlin"
+      }
+    ],
+    "modmenu": [
+      {
+        "value": "pm.n2.tangerine.compat.TangerineModMenu",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  },
+  "mixins": ["tangerine.mixins.json"],
+  "accessWidener": "tangerine.accesswidener"
+}

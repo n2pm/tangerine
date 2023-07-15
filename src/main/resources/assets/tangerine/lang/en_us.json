@@ -1,6 +1,6 @@
 {
   "tangerine.ui.about.name": "About Tangerine",
-  "tangerine.ui.about.text": "Tangerine, a NotNet project\nPowered by Cauldron, HÅJLib, and imgui-quilt\nCreated by NotNite and friends",
+  "tangerine.ui.about.text": "Tangerine, a NotNet project\nPowered by HajLib and Cauldron\nCreated by NotNite and friends",
   "tangerine.ui.about.button.source": "Open source code",
   "tangerine.ui.about.button.crash": "Crash game",
   "tangerine.ui.config": "Config",
@@ -99,5 +99,9 @@
   "tangerine.config.tracers.item_color": "Items color",
   "tangerine.config.tracers.others_color": "Other entities color",
   "tangerine.module.fastbreak.name": "Fast break",
-  "tangerine.module.fastbreak.description": "Speeds up block breaking"
+  "tangerine.module.fastbreak.description": "Speeds up block breaking",
+  "tangerine.module.gui.name": "GUI settings",
+  "tangerine.module.gui.description": "Configure the Tangerine GUI",
+  "tangerine.config.gui.unifont": "Use Unifont",
+  "tangerine.config.gui.font_scale": "Font scale"
 }

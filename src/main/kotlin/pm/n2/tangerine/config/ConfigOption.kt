@@ -10,6 +10,14 @@ import pm.n2.tangerine.KeyboardManager
 
 abstract class ConfigOption<T>(open val group: String, open val name: String, open var value: T) {
     var keybind: ConfigKeybind? = null
+    var valueCallback: ((T) -> Unit)? = null
+
+    open fun set(value: T) {
+        this.value = value
+        this.valueCallback?.invoke(value)
+    }
+
+    open fun onKeybind() {}
 
     open fun parse(json: JsonElement) {
         value = TangerineConfig.GSON.fromJson(json, value!!::class.java)
@@ -17,14 +25,13 @@ abstract class ConfigOption<T>(open val group: String, open val name: String, op
 
     open fun write() = TangerineConfig.GSON.toJsonTree(value, value!!::class.java)
 
-    open fun onKeybind() {}
 
     fun openHotkeyMenu() = ImGui.openPopup(I18n.translate("tangerine.ui.config.set_keybind") + "##${group}.${name}")
     fun drawHotkeyMenu() {
         val flags = (ImGuiWindowFlags.NoCollapse
-                or ImGuiWindowFlags.NoResize
-                or ImGuiWindowFlags.NoMove
-                or ImGuiWindowFlags.AlwaysAutoResize)
+            or ImGuiWindowFlags.NoResize
+            or ImGuiWindowFlags.NoMove
+            or ImGuiWindowFlags.AlwaysAutoResize)
 
         if (ImGui.beginPopupModal(
                 I18n.translate("tangerine.ui.config.set_keybind") + "##${group}.${name}",

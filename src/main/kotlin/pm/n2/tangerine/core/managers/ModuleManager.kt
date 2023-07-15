@@ -9,8 +9,8 @@ import pm.n2.tangerine.modules.ModuleCategory
 import pm.n2.tangerine.modules.combat.CritsModule
 import pm.n2.tangerine.modules.combat.KillAuraModule
 import pm.n2.tangerine.modules.misc.FastBreakModule
+import pm.n2.tangerine.modules.misc.GUIModule
 import pm.n2.tangerine.modules.misc.ModuleListModule
-import pm.n2.tangerine.modules.misc.UnifontModule
 import pm.n2.tangerine.modules.movement.*
 import pm.n2.tangerine.modules.player.AntiHungerModule
 import pm.n2.tangerine.modules.visuals.BlockESPModule
@@ -24,8 +24,8 @@ object ModuleManager : Manager<Module>() {
         KillAuraModule,
 
         ModuleListModule,
-        UnifontModule,
         FastBreakModule,
+        GUIModule,
 
         BoatFlyModule,
         FlightModule,
@@ -54,9 +54,8 @@ object ModuleManager : Manager<Module>() {
 
         // Actual init code
         for (module in items) {
-            if (module.enabled.value) {
-                Tangerine.eventManager.registerClass(module)
-            }
+            module.init()
+            if (module.enabled.value) Tangerine.eventManager.registerClass(module)
         }
     }
 

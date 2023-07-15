@@ -1,7 +1,6 @@
 package pm.n2.tangerine.modules.visuals
 
 import imgui.ImGui
-import imgui.flag.ImGuiInputTextFlags
 import imgui.type.ImString
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -21,6 +20,7 @@ import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 import pm.n2.tangerine.render.RenderUtils
 import java.awt.Color
+import kotlin.jvm.optionals.getOrNull
 
 object BlockESPModule : Module("block_esp", ModuleCategory.VISUALS) {
     val blocks = ListConfigOption(id, "blocks", Identifier::class.java, mutableListOf())
@@ -35,12 +35,12 @@ object BlockESPModule : Module("block_esp", ModuleCategory.VISUALS) {
     }
 
     private fun matches(block: Block): Boolean {
-        val blockKey = block.asItem().defaultStack.holder.key
-        if (blockKey.isEmpty) return false
-        val path = blockKey.get().value.path
+        val blockIdentifier = block.defaultState.registryEntry.key.getOrNull()?.value ?: return false
 
         for (identifier in blocks.value) {
-            if (identifier.path == path) return true
+            if (identifier.namespace == blockIdentifier.namespace && identifier.path == blockIdentifier.path) {
+                return true
+            }
         }
 
         return false
@@ -50,12 +50,9 @@ object BlockESPModule : Module("block_esp", ModuleCategory.VISUALS) {
         val world = MinecraftClient.getInstance().world ?: return RenderUtils.white
         val block = world.getBlockState(pos).block
 
-        val blockKey = block.asItem().defaultStack.holder.key
-        if (blockKey.isEmpty) return RenderUtils.white
-        val identifier = blockKey.get().value
-
+        val identifier = block.defaultState.registryEntry.key.getOrNull()?.value ?: return RenderUtils.white
         for ((id, color) in blockColors.value) {
-            if (id.path == identifier.path && id.namespace == identifier.namespace) {
+            if (id.namespace == identifier.namespace && id.path == identifier.path) {
                 return color
             }
         }
@@ -63,7 +60,7 @@ object BlockESPModule : Module("block_esp", ModuleCategory.VISUALS) {
         return RenderUtils.white
     }
 
-    fun searchChunk(chunk: WorldChunk?) {
+    private fun searchChunk(chunk: WorldChunk?) {
         if (chunk == null) return
         val chunkX = chunk.pos.x * 16
         val chunkZ = chunk.pos.z * 16

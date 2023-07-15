@@ -1,10 +1,11 @@
 package pm.n2.tangerine.core
 
 sealed class TangerineEvent {
-    object PreTick : TangerineEvent()
-    object PostTick : TangerineEvent()
-    object ModuleEnabled : TangerineEvent()
-    object ModuleDisabled : TangerineEvent()
+    data object PreTick : TangerineEvent()
+    data object PostTick : TangerineEvent()
+    data object ModuleEnabled : TangerineEvent()
+    data object ModuleDisabled : TangerineEvent()
+    data object ImGuiDraw : TangerineEvent()
 
-    class KeyPress(val key: Int) : TangerineEvent()
+    data class KeyPress(val key: Int) : TangerineEvent()
 }

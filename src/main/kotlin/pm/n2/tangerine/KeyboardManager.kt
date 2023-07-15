@@ -12,7 +12,7 @@ object KeyboardManager {
     fun registerKeyPress(key: Int): Boolean {
         if (!pressedKeys.contains(key)) {
             pressedKeys.add(key)
-            return Tangerine.eventManager.dispatchWithReturn<Boolean>(TangerineEvent.KeyPress(key)).any { it }
+            return Tangerine.eventManager.dispatch(TangerineEvent.KeyPress(key)).filterIsInstance<Boolean>().any { it }
         }
 
         return false

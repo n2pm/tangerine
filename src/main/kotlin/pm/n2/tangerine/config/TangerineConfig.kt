@@ -2,8 +2,8 @@ package pm.n2.tangerine.config
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.Identifier
-import org.quiltmc.loader.api.QuiltLoader
 import pm.n2.tangerine.config.serialize.ColorSerializer
 import pm.n2.tangerine.config.serialize.ConfigKeybindSerializer
 import pm.n2.tangerine.config.serialize.IdentifierSerializer
@@ -11,7 +11,7 @@ import java.awt.Color
 
 object TangerineConfig {
     private val trackedOptions = mutableListOf<ConfigOption<*>>()
-    private val configFile = QuiltLoader.getConfigDir().resolve("tangerine.json").toFile()
+    private val configFile = FabricLoader.getInstance().configDir.resolve("tangerine.json").toFile()
 
     val GSON = GsonBuilder()
         .setPrettyPrinting()

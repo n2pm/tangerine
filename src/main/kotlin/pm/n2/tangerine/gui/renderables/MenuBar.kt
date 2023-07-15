@@ -13,8 +13,14 @@ object MenuBar : TangerineRenderable("MenuBar") {
     private fun drawMenuTab(name: String, modules: List<Module>) {
         if (ImGui.beginMenu(name)) {
             for (module in modules) {
-                if (ImGui.menuItem(I18n.translate("tangerine.module.${module.id}.name"), "", module.enabled.value)) {
-                    ModuleManager.toggle(module)
+                val moduleName = I18n.translate("tangerine.module.${module.id}.name")
+                val moduleDescription = I18n.translate("tangerine.module.${module.id}.description")
+                if (module.shouldHideEnabled) {
+                    if (ImGui.menuItem(moduleName)) module.showConfigWindow()
+                } else {
+                    if (ImGui.menuItem(moduleName, "", module.enabled.value)) {
+                        ModuleManager.toggle(module)
+                    }
                 }
 
                 if (ImGui.beginPopupContextItem()) {
@@ -27,7 +33,7 @@ object MenuBar : TangerineRenderable("MenuBar") {
 
                 if (ImGui.isItemHovered()) {
                     ImGui.beginTooltip()
-                    ImGui.text(I18n.translate("tangerine.module.${module.id}.description"))
+                    ImGui.text(moduleDescription)
                     ImGui.endTooltip()
                 }
             }
@@ -61,7 +67,7 @@ object MenuBar : TangerineRenderable("MenuBar") {
                 }
 
                 if (ImGui.menuItem("Close menu bar")) {
-                    ImGuiScreen.shouldClose = true
+                    ImGuiScreen.close()
                 }
 
                 ImGui.endMenu()

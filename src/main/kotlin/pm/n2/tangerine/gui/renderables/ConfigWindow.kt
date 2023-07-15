@@ -43,11 +43,13 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
         val enabled = ImBoolean(this.enabled)
 
         if (ImGui.begin(I18n.translate("tangerine.module.${module.id}.name"), enabled)) {
-            if (ImGui.checkbox(I18n.translate("tangerine.ui.config.enabled"), module.enabled.value)) {
-                ModuleManager.toggle(module)
-            }
+            if (!module.shouldHideEnabled) {
+                if (ImGui.checkbox(I18n.translate("tangerine.ui.config.enabled"), module.enabled.value)) {
+                    ModuleManager.toggle(module)
+                }
 
-            handleContextMenu(module, module.enabled)
+                handleContextMenu(module, module.enabled)
+            }
 
             drawConfig()
         }
@@ -87,7 +89,7 @@ open class ConfigWindow(open val module: Module) : TangerineRenderable("ConfigWi
                 )
 
                 if (ret != null) {
-                    config.value = ret
+                    config.set(ret)
                 }
 
                 // Don't context menu this or shit crashes

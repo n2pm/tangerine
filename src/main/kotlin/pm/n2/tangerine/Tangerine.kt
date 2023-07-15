@@ -1,15 +1,13 @@
 package pm.n2.tangerine
 
-import com.mojang.blaze3d.platform.TextureUtil
-import imgui.ImFontConfig
-import imgui.ImGui
+import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
-import org.quiltmc.loader.api.ModContainer
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents
 import org.slf4j.LoggerFactory
 import pm.n2.hajlib.event.EventManager
+import pm.n2.hajlib.imgui.ImGuiEvent
 import pm.n2.hajlib.task.TaskManager
 import pm.n2.tangerine.config.ConfigOption
 import pm.n2.tangerine.config.TangerineConfig
@@ -18,8 +16,6 @@ import pm.n2.tangerine.core.TangerineTaskContext
 import pm.n2.tangerine.core.managers.CommandManager
 import pm.n2.tangerine.core.managers.ModuleManager
 import pm.n2.tangerine.core.managers.OverlayManager
-import pm.n2.tangerine.gui.ImGuiManager
-import pm.n2.tangerine.modules.misc.UnifontModule
 
 object Tangerine : ClientModInitializer {
     const val modId = "tangerine"
@@ -31,21 +27,21 @@ object Tangerine : ClientModInitializer {
 
     lateinit var mc: MinecraftClient
 
-    override fun onInitializeClient(mod: ModContainer) {
+    override fun onInitializeClient() {
         mc = MinecraftClient.getInstance()
-        version = mod.metadata().version().raw()
+        version = FabricLoader.getInstance().getModContainer(modId).get().metadata.version.toString()
 
-        ClientTickEvents.START.register(ClientTickEvents.Start {
+        ClientTickEvents.START_CLIENT_TICK.register {
             eventManager.dispatch(TangerineEvent.PreTick)
-        })
+        }
 
-        ClientTickEvents.END.register(ClientTickEvents.End {
+        ClientTickEvents.END_CLIENT_TICK.register {
             eventManager.dispatch(TangerineEvent.PostTick)
-        })
+        }
 
-        eventManager.registerFuncClass(TangerineEvent.KeyPress::class) {
-            val event = it as TangerineEvent.KeyPress // shut up
+        eventManager.registerFunc(TangerineEvent.KeyPress::class) { event, _ ->
             var ret = false
+
             for (module in ModuleManager.items) {
                 val configs = mutableListOf<ConfigOption<*>>(module.enabled)
                 configs.addAll(module.configOptions)
@@ -62,50 +58,19 @@ object Tangerine : ClientModInitializer {
                 }
             }
 
-            return@registerFuncClass ret
+            return@registerFunc ret
         }
 
         CommandManager.init()
         ModuleManager.init()
         OverlayManager.init()
 
-        ClientLifecycleEvents.STOPPING.register(ClientLifecycleEvents.Stopping {
+        ClientLifecycleEvents.CLIENT_STOPPING.register {
             TangerineConfig.write()
-        })
+        }
 
-        doFonts()
-    }
-
-    private fun doFonts() {
-
-        val useUnifont = UnifontModule.enabled.value
-        try {
-            val ctx = ImGui.createContext()
-            ImGui.setCurrentContext(ctx)
-
-            val io = ImGui.getIO()
-            val fonts = io.fonts
-
-            val fontStream = Tangerine::class.java.getResourceAsStream("/assets/tangerine/unifont.otf")
-            if (fontStream != null) {
-                val buffer = TextureUtil.readResource(fontStream)
-                buffer.flip()
-                val arr = ByteArray(buffer.remaining())
-                buffer.get(arr)
-
-                val fontConfig = ImFontConfig()
-                ImGuiManager.fontDefault = fonts.addFontDefault(fontConfig)
-                ImGuiManager.fontUnifont = fonts.addFontFromMemoryTTF(arr, 16f, fontConfig)
-
-                fonts.build()
-                fontConfig.destroy()
-
-                ImGuiManager.setFont(if (useUnifont) ImGuiManager.fontUnifont else ImGuiManager.fontDefault)
-            } else {
-                logger.warn("Unifont font stream is null?")
-            }
-        } catch (e: Exception) {
-            logger.error("Failed to load font", e)
+        pm.n2.hajlib.imgui.ImGuiManager.eventManager.registerFunc(ImGuiEvent.Draw::class) { _, _ ->
+            eventManager.dispatch(TangerineEvent.ImGuiDraw)
         }
     }
 }
