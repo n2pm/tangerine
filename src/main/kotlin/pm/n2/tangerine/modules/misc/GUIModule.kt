@@ -7,7 +7,7 @@ import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.BooleanConfigOption
 import pm.n2.tangerine.config.DoubleConfigOption
 import pm.n2.tangerine.core.TangerineEvent
-import pm.n2.tangerine.gui.ImGuiManager
+import pm.n2.tangerine.managers.ImGuiManager
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 

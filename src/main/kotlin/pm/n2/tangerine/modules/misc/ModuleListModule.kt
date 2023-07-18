@@ -8,7 +8,7 @@ import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.EnumConfigOption
 import pm.n2.tangerine.core.TangerineEvent
-import pm.n2.tangerine.core.managers.ModuleManager
+import pm.n2.tangerine.managers.ModuleManager
 import pm.n2.tangerine.gui.GuiUtils
 import pm.n2.tangerine.gui.renderables.ConfigWindow
 import pm.n2.tangerine.modules.Module
@@ -34,7 +34,7 @@ object ModuleListModule : Module("module_list", ModuleCategory.MISC) {
         val moduleListString = StringBuilder()
         var anyModulesEnabled = false
 
-        for (module in ModuleManager.items) {
+        for (module in ModuleManager.modules) {
             if (module.enabled.value) {
                 anyModulesEnabled = true
                 moduleListString.append(I18n.translate("tangerine.module.${module.id}.name")).append("\n")

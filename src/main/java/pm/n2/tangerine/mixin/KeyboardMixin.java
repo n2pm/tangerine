@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pm.n2.tangerine.KeyboardManager;
-import pm.n2.tangerine.gui.ImGuiManager;
+import pm.n2.tangerine.managers.ImGuiManager;
+import pm.n2.tangerine.managers.KeyboardManager;
 import pm.n2.tangerine.gui.ImGuiScreen;
 
 @Mixin(Keyboard.class)

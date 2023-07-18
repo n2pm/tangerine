@@ -6,7 +6,7 @@ import imgui.flag.ImGuiWindowFlags
 import imgui.type.ImBoolean
 import net.minecraft.client.resource.language.I18n
 import org.lwjgl.glfw.GLFW
-import pm.n2.tangerine.KeyboardManager
+import pm.n2.tangerine.managers.KeyboardManager
 
 abstract class ConfigOption<T>(open val group: String, open val name: String, open var value: T) {
     var keybind: ConfigKeybind? = null

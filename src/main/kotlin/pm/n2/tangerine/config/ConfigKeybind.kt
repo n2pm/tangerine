@@ -1,7 +1,7 @@
 package pm.n2.tangerine.config
 
 import org.lwjgl.glfw.GLFW
-import pm.n2.tangerine.KeyboardManager
+import pm.n2.tangerine.managers.KeyboardManager
 
 class ConfigKeybind(var key: Int, var shift: Boolean = false, var ctrl: Boolean = false, var alt: Boolean = false) {
     fun isPressed(): Boolean {

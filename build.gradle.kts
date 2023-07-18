@@ -40,7 +40,7 @@ dependencies {
     // TODO: fix blockbuild hajlib
     // https://notnite.github.io/blockbuild/hajlib/hajlib-1.1.0-all.jar
 	//modApi(include("pm.n2:hajlib:${property("hajlib_version")}:all")!!)
-    modApi(files("libs/hajlib-1.2.0.jar"))
+    modApi(files("../hajlib/build/libs/hajlib-1.2.0.jar"))
 
     modCompileOnly("com.terraformersmc:modmenu:${property("modmenu_version")}")
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")

@@ -7,16 +7,23 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import pm.n2.tangerine.managers.ClipManager;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 import pm.n2.tangerine.modules.player.AntiHungerModule;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
+    @Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
+    public void tangerine$sendMovementPackets$clip(CallbackInfo ci) {
+        if (ClipManager.INSTANCE.isRunning()) ci.cancel();
+    }
+
     // i tried @Inject() into this and ci.cancel() but it caused some weird rubberbanding (lol)
     @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 0))
-    public void tangerine$sendMovementPackets(ClientPlayNetworkHandler instance, Packet<?> packet) {
+    public void tangerine$sendMovementPackets$antiHunger(ClientPlayNetworkHandler instance, Packet<?> packet) {
         if (AntiHungerModule.INSTANCE.getEnabled().getValue()) return;
         instance.sendPacket(packet);
     }

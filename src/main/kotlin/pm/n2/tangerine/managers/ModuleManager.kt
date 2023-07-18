@@ -1,4 +1,4 @@
-package pm.n2.tangerine.core.managers
+package pm.n2.tangerine.managers
 
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.ConfigOption
@@ -18,8 +18,8 @@ import pm.n2.tangerine.modules.visuals.GlowESPModule
 import pm.n2.tangerine.modules.visuals.StorageESPModule
 import pm.n2.tangerine.modules.visuals.TracersModule
 
-object ModuleManager : Manager<Module>() {
-    override val items = listOf(
+object ModuleManager : Manager {
+    val modules = listOf(
         CritsModule,
         KillAuraModule,
 
@@ -44,7 +44,7 @@ object ModuleManager : Manager<Module>() {
 
     override fun init() {
         // Setup config
-        for (module in items) {
+        for (module in modules) {
             val options = mutableListOf<ConfigOption<*>>(module.enabled)
             options.addAll(module.configOptions)
             TangerineConfig.addConfigOptions(options)
@@ -53,7 +53,7 @@ object ModuleManager : Manager<Module>() {
         TangerineConfig.read()
 
         // Actual init code
-        for (module in items) {
+        for (module in modules) {
             module.init()
             if (module.enabled.value) Tangerine.eventManager.registerClass(module)
         }
@@ -74,6 +74,6 @@ object ModuleManager : Manager<Module>() {
     }
 
     fun getModulesByCategory(category: ModuleCategory): List<Module> {
-        return items.filter { it.category == category }
+        return modules.filter { it.category == category }
     }
 }

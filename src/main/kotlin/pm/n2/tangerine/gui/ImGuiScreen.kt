@@ -4,6 +4,7 @@ import imgui.ImGui
 import net.minecraft.text.Text
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.TangerineConfig
+import pm.n2.tangerine.managers.ImGuiManager
 
 object ImGuiScreen : pm.n2.hajlib.imgui.ImGuiScreen(Text.of("Tangerine")) {
     override fun shouldPause() = false

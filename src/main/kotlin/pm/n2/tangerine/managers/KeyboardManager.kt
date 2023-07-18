@@ -1,8 +1,10 @@
-package pm.n2.tangerine
+package pm.n2.tangerine.managers
 
+import pm.n2.tangerine.Tangerine
+import pm.n2.tangerine.core.Manager
 import pm.n2.tangerine.core.TangerineEvent
 
-object KeyboardManager {
+object KeyboardManager : Manager {
     private val pressedKeys = ArrayList<Int>()
 
     fun isKeyPressed(key: Int): Boolean {

@@ -1,4 +1,4 @@
-package pm.n2.tangerine.gui
+package pm.n2.tangerine.managers
 
 import imgui.ImFont
 import imgui.ImGui
@@ -6,12 +6,14 @@ import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.BooleanConfigOption
 import pm.n2.tangerine.config.TangerineConfig
+import pm.n2.tangerine.core.Manager
 import pm.n2.tangerine.core.TangerineEvent
+import pm.n2.tangerine.gui.TangerineRenderable
 import pm.n2.tangerine.gui.renderables.AboutWindow
 import pm.n2.tangerine.gui.renderables.DemoWindow
 import pm.n2.tangerine.gui.renderables.MenuBar
 
-object ImGuiManager {
+object ImGuiManager : Manager {
     var font: ImFont? = null
     lateinit var fontDefault: ImFont
     lateinit var fontUnifont: ImFont
@@ -21,12 +23,9 @@ object ImGuiManager {
     val instantRenderables = mutableListOf<TangerineRenderable>()
     val opened = BooleanConfigOption("tangerine", "open", false)
 
-    init {
+    override fun init() {
         TangerineConfig.addConfigOptions(listOf(opened))
-        Tangerine.eventManager.registerClass(this)
-    }
 
-    init {
         addRenderable(MenuBar)
         addRenderable(DemoWindow)
         addRenderable(AboutWindow)
