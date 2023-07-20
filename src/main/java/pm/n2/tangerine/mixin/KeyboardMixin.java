@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pm.n2.tangerine.managers.ImGuiManager;
 import pm.n2.tangerine.managers.KeyboardManager;
-import pm.n2.tangerine.gui.ImGuiScreen;
+import pm.n2.tangerine.gui.TangerineScreen;
 
 @Mixin(Keyboard.class)
 public class KeyboardMixin {
@@ -29,7 +29,7 @@ public class KeyboardMixin {
 
         if (key == menuKey) {
             var mc = MinecraftClient.getInstance();
-            var screen = ImGuiScreen.INSTANCE;
+            var screen = TangerineScreen.INSTANCE;
             if (mc.currentScreen == null) mc.setScreen(screen);
         }
     }

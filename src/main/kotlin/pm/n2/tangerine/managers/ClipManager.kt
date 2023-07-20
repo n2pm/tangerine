@@ -2,10 +2,10 @@ package pm.n2.tangerine.managers
 
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.ChunkPos
 import net.minecraft.util.math.Vec3d
 import org.slf4j.LoggerFactory
 import pm.n2.tangerine.Tangerine
@@ -24,12 +24,15 @@ import kotlin.math.floor
 object ClipManager : Manager {
     val logger = LoggerFactory.getLogger("Tangerine ClipManager")
     var isRunning = false
+    var lagbackAttempts = 0
 
     const val MAX_MOVE_PER_PACKET = 10
     const val MAX_PACKETS_PER_TICK = 20
     const val MAX_DISTANCE_PER_TICK = 200.0
-    const val ARRIVAL_TOLERANCE = 1
-    const val LAGBACK_TOLERANCE = 20
+    const val MAX_LAGBACK_ATTEMPTS = 10
+    const val MAX_CHUNKLOAD_ATTEMPTS = 10
+    const val ARRIVAL_TOLERANCE = 0.1
+    const val LAGBACK_TOLERANCE = 1
     const val SKY_INTERMEDIATE = 320.0 // our feet will be on 320, which is guaranteed to be air
     const val VOID_INTERMEDIATE = -64.0 - 2.0 // 2 for the player to not suffocate in bedrock
 
@@ -62,7 +65,11 @@ object ClipManager : Manager {
         logger.debug("[build] hclip failed - building bothclip")
 
         val skyClip = bothclip(from, to, SKY_INTERMEDIATE)
-        val voidClip = bothclip(from, to, VOID_INTERMEDIATE)
+        if (skyClip != null) {
+            logger.debug("[build] bothclip succeeded (skyclip)")
+            return skyClip
+        }
+        /*val voidClip = bothclip(from, to, VOID_INTERMEDIATE)
         logger.debug(
             "[build] skyclip - null: {}, {} packets in {} ticks",
             skyClip == null,
@@ -98,7 +105,7 @@ object ClipManager : Manager {
         } else if (skyClip != null && voidClip == null) {
             logger.debug("[build] bothclip succeeded (only skyclip resolved)")
             return skyClip
-        }
+        }*/
 
         // vclip wasn't possible, hclip wasn't possible, and bothclip wasn't possible. We can't do anything.
         logger.debug("[build] bothclip failed - build failure!")
@@ -107,15 +114,9 @@ object ClipManager : Manager {
 
     suspend fun execute(from: Vec3d, to: Vec3d, ctx: TangerineTaskContext) {
         val player = Tangerine.mc.player!!
+        val world = Tangerine.mc.world!!
         val network = Tangerine.mc.networkHandler!!
         var currentPos = player.pos
-
-        if (isRunning) {
-            player.sendMessage(Text.literal("Clip is already running.").styled {
-                it.withColor(Formatting.RED)
-            })
-            return
-        }
 
         isRunning = true
 
@@ -125,16 +126,46 @@ object ClipManager : Manager {
                 it.withColor(Formatting.RED)
             })
             isRunning = false
+            lagbackAttempts = 0
             return
         }
 
         for (chunk in chunks) {
             for (packet in chunk) {
-                if (packet is PlayerMoveC2SPacket.PositionAndOnGround) {
-                    currentPos = Vec3d(packet.getX(currentPos.x), packet.getY(currentPos.y), packet.getZ(currentPos.z))
+                if (!isRunning) return
+                val isPos = packet is PlayerMoveC2SPacket.PositionAndOnGround
+
+                if (isPos) {
+                    packet as PlayerMoveC2SPacket.PositionAndOnGround
+                    val packetPos =
+                        Vec3d(packet.getX(currentPos.x), packet.getY(currentPos.y), packet.getZ(currentPos.z))
+                    val packetChunk = ChunkPos(
+                        BlockPos(
+                            floor(packetPos.x).toInt(),
+                            floor(packetPos.y).toInt(),
+                            floor(packetPos.z).toInt()
+                        )
+                    )
+
+                    var waitedTicks = 0
+                    while (!world.chunkManager.isChunkLoaded(
+                            packetChunk.x,
+                            packetChunk.z
+                        ) && waitedTicks < MAX_CHUNKLOAD_ATTEMPTS
+                    ) {
+                        if (!isRunning) return
+                        ctx.waitTicks(2)
+                        waitedTicks++
+                    }
+
+                    currentPos = packetPos
                 }
 
                 network.sendPacket(packet)
+
+                if (isPos) {
+                    player.setPos(currentPos.x, currentPos.y, currentPos.z)
+                }
             }
 
             val chunkIdx = chunks.indexOf(chunk)
@@ -148,19 +179,29 @@ object ClipManager : Manager {
             val msg = "$packetsDone/$totalPackets - $packetsAfter left - $percentStr%"
             player.sendMessage(Text.literal(msg), true)
 
-            ctx.waitTicks(1)
+            ctx.waitTicks(5)
+            if (player.pos.distanceTo(currentPos) > LAGBACK_TOLERANCE) {
+                ctx.waitTicks(2)
+                lagbackAttempts++
+
+                if (lagbackAttempts > MAX_LAGBACK_ATTEMPTS) {
+                    if (!isRunning) return
+                    player.sendMessage(Text.literal("Lagged back too many times, aborting.").styled {
+                        it.withColor(Formatting.RED)
+                    })
+                    isRunning = false
+                    lagbackAttempts = 0
+                    return
+                }
+
+                player.sendMessage(Text.literal("Lagged back, retrying..."))
+                return execute(player.pos, to, ctx)
+            }
         }
 
-        player.setPos(currentPos.x, currentPos.y, currentPos.z)
         isRunning = false
-        ctx.waitTicks(20)
-
-        if (player.pos.distanceTo(currentPos) > LAGBACK_TOLERANCE) {
-            player.sendMessage(Text.literal("Lagged back, retrying..."))
-            return execute(player.pos, to, ctx)
-        } else {
-            player.sendMessage(Text.literal("Done!"), true)
-        }
+        lagbackAttempts = 0
+        player.sendMessage(Text.literal("Done!"), true)
     }
 
     fun vclip(from: Vec3d, to: Vec3d): List<List<Packet<*>>>? {
@@ -217,7 +258,6 @@ object ClipManager : Manager {
             return null
         }
 
-
         // We can technically do some tick optimizations here, but /shrug
         packets.addAll(vclipToIntermediate)
         packets.addAll(hclipToTarget)
@@ -232,6 +272,7 @@ object ClipManager : Manager {
     // Ari has her own collision check but it's a little weird to use, I don't really want to port it rn
     private fun playerFits(pos: Vec3d): Boolean {
         val world = Tangerine.mc.world ?: return false
+        val player = Tangerine.mc.player ?: return false
 
         val blockPos = BlockPos(floor(pos.x).toInt(), floor(pos.y).toInt(), floor(pos.z).toInt())
         val blockPosAbove = blockPos.up()

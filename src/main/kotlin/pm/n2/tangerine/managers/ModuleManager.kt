@@ -11,6 +11,7 @@ import pm.n2.tangerine.modules.combat.KillAuraModule
 import pm.n2.tangerine.modules.misc.FastBreakModule
 import pm.n2.tangerine.modules.misc.GUIModule
 import pm.n2.tangerine.modules.misc.ModuleListModule
+import pm.n2.tangerine.modules.misc.PacketLoggerModule
 import pm.n2.tangerine.modules.movement.*
 import pm.n2.tangerine.modules.player.AntiHungerModule
 import pm.n2.tangerine.modules.visuals.BlockESPModule
@@ -24,8 +25,9 @@ object ModuleManager : Manager {
         KillAuraModule,
 
         ModuleListModule,
-        FastBreakModule,
         GUIModule,
+        FastBreakModule,
+        PacketLoggerModule,
 
         BoatFlyModule,
         FlightModule,

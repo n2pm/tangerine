@@ -10,9 +10,9 @@ base.archivesName.set(archives_base_name)
 val javaVersion = 17
 
 repositories {
-	/*maven("https://notnite.github.io/blockbuild/mvn/") {
+	maven("https://notnite.github.io/blockbuild/mvn/") {
         content { includeGroup("pm.n2") }
-    }*/
+    }
 
     maven("https://maven.svc.adryd.com/releases/") {
         content { includeGroup("com.adryd") }
@@ -36,11 +36,7 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
     modApi(include("com.adryd:cauldron:${property("cauldron_version")}")!!)
-
-    // TODO: fix blockbuild hajlib
-    // https://notnite.github.io/blockbuild/hajlib/hajlib-1.1.0-all.jar
-	//modApi(include("pm.n2:hajlib:${property("hajlib_version")}:all")!!)
-    modApi(files("../hajlib/build/libs/hajlib-1.2.0.jar"))
+    modApi("pm.n2:hajlib:${property("hajlib_version")}")
 
     modCompileOnly("com.terraformersmc:modmenu:${property("modmenu_version")}")
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")

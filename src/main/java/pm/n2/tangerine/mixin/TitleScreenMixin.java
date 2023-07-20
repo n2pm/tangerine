@@ -48,7 +48,7 @@ public abstract class TitleScreenMixin {
         }
     };
 
-    @Inject(method = "<init>*", at = @At("TAIL"))
+    @Inject(method = "init", at = @At("TAIL"))
     public void tangerine$onDisplayed(CallbackInfo ci) {
         ImGuiManager.INSTANCE.addInstantRenderable(renderable);
     }

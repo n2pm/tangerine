@@ -13,7 +13,6 @@ object EventManager : Manager {
     override fun init() {
         ticks()
         input()
-        gui()
         config()
     }
 
@@ -49,12 +48,6 @@ object EventManager : Manager {
             }
 
             return@registerFunc ret
-        }
-    }
-
-    private fun gui() {
-        pm.n2.hajlib.imgui.ImGuiManager.eventManager.registerFunc(ImGuiEvent.Draw::class) { _, _ ->
-            Tangerine.eventManager.dispatch(TangerineEvent.ImGuiDraw)
         }
     }
 

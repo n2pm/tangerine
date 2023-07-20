@@ -3,7 +3,7 @@ package pm.n2.tangerine.gui.renderables
 import imgui.ImGui
 import net.minecraft.client.resource.language.I18n
 import pm.n2.tangerine.managers.ModuleManager
-import pm.n2.tangerine.gui.ImGuiScreen
+import pm.n2.tangerine.gui.TangerineScreen
 import pm.n2.tangerine.gui.TangerineRenderable
 import pm.n2.tangerine.managers.ImGuiManager
 import pm.n2.tangerine.modules.Module
@@ -67,7 +67,7 @@ object MenuBar : TangerineRenderable("MenuBar") {
                 }
 
                 if (ImGui.menuItem("Close menu bar")) {
-                    ImGuiScreen.close()
+                    TangerineScreen.close()
                 }
 
                 ImGui.endMenu()

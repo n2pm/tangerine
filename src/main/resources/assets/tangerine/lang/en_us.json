@@ -3,6 +3,9 @@
   "tangerine.ui.about.text": "Tangerine, a NotNet project\nPowered by HajLib and Cauldron\nCreated by NotNite and friends",
   "tangerine.ui.about.button.source": "Open source code",
   "tangerine.ui.about.button.crash": "Crash game",
+  "tangerine.ui.enable": "Enable",
+  "tangerine.ui.disable": "Disable",
+  "tangerine.ui.clear": "Clear",
   "tangerine.ui.config": "Config",
   "tangerine.ui.config.set_keybind": "Set keybind",
   "tangerine.ui.config.enabled": "Enabled",
@@ -15,6 +18,10 @@
   "tangerine.ui.demo.name": "Demo windows",
   "tangerine.ui.demo.imgui": "Draw ImGui demo",
   "tangerine.ui.demo.implot": "Draw ImPlot demo",
+  "tangerine.ui.packet_logger.name": "Packet logger",
+  "tangerine.ui.packet_logger.table.direction": "Direction",
+  "tangerine.ui.packet_logger.table.name": "Name",
+  "tangerine.ui.packet_logger.table.time": "Time",
   "tangerine.category.movement": "Movement",
   "tangerine.category.combat": "Combat",
   "tangerine.category.visuals": "Visuals",
@@ -103,5 +110,7 @@
   "tangerine.module.gui.name": "GUI settings",
   "tangerine.module.gui.description": "Configure the Tangerine GUI",
   "tangerine.config.gui.unifont": "Use Unifont",
-  "tangerine.config.gui.font_scale": "Font scale"
+  "tangerine.config.gui.font_scale": "Font scale",
+  "tangerine.module.packet_logger.name": "Packet logger",
+  "tangerine.module.packet_logger.description": "Use .packets to view logged packets"
 }

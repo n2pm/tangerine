@@ -2,7 +2,9 @@ package pm.n2.tangerine.managers
 
 import imgui.ImFont
 import imgui.ImGui
+import imgui.flag.ImGuiWindowFlags
 import pm.n2.hajlib.event.EventHandler
+import pm.n2.hajlib.imgui.ImGuiEvent
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.BooleanConfigOption
 import pm.n2.tangerine.config.TangerineConfig
@@ -12,6 +14,7 @@ import pm.n2.tangerine.gui.TangerineRenderable
 import pm.n2.tangerine.gui.renderables.AboutWindow
 import pm.n2.tangerine.gui.renderables.DemoWindow
 import pm.n2.tangerine.gui.renderables.MenuBar
+import pm.n2.tangerine.gui.renderables.PacketLoggerWindow
 
 object ImGuiManager : Manager {
     var font: ImFont? = null
@@ -29,6 +32,11 @@ object ImGuiManager : Manager {
         addRenderable(MenuBar)
         addRenderable(DemoWindow)
         addRenderable(AboutWindow)
+        addRenderable(PacketLoggerWindow)
+
+        pm.n2.hajlib.imgui.ImGuiManager.eventManager.registerFunc(ImGuiEvent.Draw::class) { _, _ ->
+            Tangerine.eventManager.dispatch(TangerineEvent.ImGuiDraw)
+        }
     }
 
     fun addRenderable(renderable: TangerineRenderable) {
