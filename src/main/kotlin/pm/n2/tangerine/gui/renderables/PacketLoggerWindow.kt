@@ -5,13 +5,15 @@ import imgui.flag.ImGuiSelectableFlags
 import imgui.flag.ImGuiTableFlags
 import imgui.type.ImBoolean
 import net.minecraft.client.resource.language.I18n
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import pm.n2.tangerine.gui.TangerineRenderable
 import pm.n2.tangerine.managers.ModuleManager
 import pm.n2.tangerine.modules.misc.PacketLoggerModule
 import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 import java.text.SimpleDateFormat
-
+import java.util.*
 
 object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
     var selectedPacket: PacketLoggerModule.TangerinePacket? = null
@@ -111,8 +113,25 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
             return
         }
 
+        // if it's a java list
+        if (obj is List<*>) {
+            for (i in obj.indices) {
+                if (ImGui.treeNode("[$i]")) {
+                    drawClass(obj[i])
+                    ImGui.treePop()
+                }
+            }
+            return
+        }
+
         // Declared fields + superclass fields
-        for (field in recursiveFields(obj::class.java)) drawField(field, obj)
+        for (field in recursiveFields(obj::class.java)) {
+            try {
+                drawField(field, obj)
+            } catch (e: Exception) {
+                // ignored
+            }
+        }
     }
 
     private fun recursiveFields(clazz: Class<*>): List<Field> {
@@ -122,13 +141,16 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
     }
 
     private fun drawField(field: Field, obj: Any?) {
+        if (Modifier.isStatic(field.modifiers)) return
+
         field.isAccessible = true
         val type = field.type.simpleName
         val name = field.name
         val value = field.get(obj)
 
         if (canBeToStringed(field.type)) {
-            ImGui.textUnformatted("$name ($type): $value")
+            val valueStr = stringify(value)
+            ImGui.textUnformatted("$name ($type): $valueStr")
         } else {
             if (ImGui.treeNode("$name ($type)")) {
                 drawClass(value)
@@ -137,8 +159,15 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
         }
     }
 
+    private fun stringify(value: Any): String {
+        if (value is Text) return value.string
+
+        return value.toString()
+    }
+
     private fun canBeToStringed(type: Class<*>) = type.isPrimitive
             || type == String::class.java
             || type == Identifier::class.java
+            || type == UUID::class.java
 }
 
