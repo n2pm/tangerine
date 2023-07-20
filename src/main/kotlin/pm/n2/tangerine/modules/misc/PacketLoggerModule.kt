@@ -9,7 +9,7 @@ import pm.n2.tangerine.modules.ModuleCategory
 
 object PacketLoggerModule : Module("packet_logger", ModuleCategory.MISC) {
     val packets = mutableListOf<TangerinePacket>()
-    val names = mutableMapOf<Packet<*>, String>()
+    val names = mutableMapOf<Class<*>, String>()
     var captureStart = System.currentTimeMillis()
 
     override fun onEnabled() {
@@ -30,7 +30,7 @@ object PacketLoggerModule : Module("packet_logger", ModuleCategory.MISC) {
     fun clearPackets() = packets.clear()
 
     private fun getName(packet: Packet<*>): String {
-        if (names.containsKey(packet)) return names[packet]!!
+        if (names.containsKey(packet.javaClass)) return names[packet.javaClass]!!
         val className = packet.javaClass.name
         val fullName = FabricLoader.getInstance().mappingResolver.mapClassName("intermediary", className)
 
@@ -40,7 +40,10 @@ object PacketLoggerModule : Module("packet_logger", ModuleCategory.MISC) {
         println(fullName)
         println(regex.find(fullName))
         val match = regex.find(fullName) ?: return className
-        return match.groupValues[1]
+        val name = match.groupValues[1]
+
+        names[packet.javaClass] = name
+        return name
     }
 
     data class TangerinePacket(
