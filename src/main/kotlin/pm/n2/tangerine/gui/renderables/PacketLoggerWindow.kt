@@ -166,9 +166,10 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
     }
 
     private fun canBeToStringed(type: Class<*>) = type.isPrimitive
+            || type.isEnum
             || type == String::class.java
             || type == Identifier::class.java
-            || type.isEnum
+            || type == UUID::class.java
             || type.isAssignableFrom(Text::class.java)
 }
 
