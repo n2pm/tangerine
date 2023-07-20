@@ -48,7 +48,10 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
                 or ImGuiTableFlags.ScrollX
                 or ImGuiTableFlags.ScrollY)
 
-        ImGui.beginTable("##PacketLoggerTable", 3, flags)
+        if (!ImGui.beginTable("##PacketLoggerTable", 3, flags)) {
+            ImGui.endChild()
+            return
+        }
 
         ImGui.tableHeadersRow()
 
@@ -61,7 +64,7 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
         ImGui.tableSetColumnIndex(2)
         ImGui.tableHeader(I18n.translate("tangerine.ui.packet_logger.table.time"))
 
-        val packets = PacketLoggerModule.packets.toList()
+        val packets = PacketLoggerModule.packets.toList().reversed()
         for (packet in packets) {
             ImGui.tableNextRow()
             ImGui.tableNextColumn()
@@ -129,6 +132,7 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
         } else {
             if (ImGui.treeNode("$name ($type)")) {
                 drawClass(value)
+                ImGui.treePop()
             }
         }
     }
