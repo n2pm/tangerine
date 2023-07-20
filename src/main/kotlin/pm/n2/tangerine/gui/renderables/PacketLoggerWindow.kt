@@ -169,5 +169,6 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
             || type == String::class.java
             || type == Identifier::class.java
             || type == UUID::class.java
+            || tpe == Text::class.java
 }
 
