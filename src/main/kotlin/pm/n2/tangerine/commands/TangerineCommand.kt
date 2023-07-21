@@ -6,4 +6,3 @@ import com.mojang.brigadier.CommandDispatcher
 interface TangerineCommand {
     fun register(dispatcher: CommandDispatcher<CauldronClientCommandSource>)
 }
-

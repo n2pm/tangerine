@@ -25,12 +25,6 @@
         "value": "pm.n2.tangerine.compat.TangerineModMenu",
         "adapter": "kotlin"
       }
-    ],
-    "tangerine": [
-      {
-        "value": "pm.n2.tangerine.extension.impl.TangerineTestExtension",
-        "adapter": "kotlin"
-      }
     ]
   },
   "depends": {
@@ -38,7 +32,7 @@
     "minecraft": "~1.20.1",
     "java": ">=17",
     "fabric-api": "*",
-    "hajlib": ">=1.1.0"
+    "hajlib": ">=1.2.2"
   },
   "suggests": {
     "modmenu": "*"

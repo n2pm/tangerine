@@ -35,7 +35,7 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
-    modApi(include("com.adryd:cauldron:${property("cauldron_version")}")!!)
+    modApi("com.adryd:cauldron:${property("cauldron_version")}")
     modApi("pm.n2:hajlib:${property("hajlib_version")}")
 
     modCompileOnly("com.terraformersmc:modmenu:${property("modmenu_version")}")
