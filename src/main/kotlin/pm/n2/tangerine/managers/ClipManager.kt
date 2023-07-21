@@ -8,8 +8,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.ChunkPos
 import net.minecraft.util.math.Vec3d
 import org.slf4j.LoggerFactory
+import pm.n2.hajlib.event.EventHandler
 import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.core.Manager
+import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.core.TangerineTaskContext
 import pm.n2.tangerine.managers.ClipManager.build
 import kotlin.math.abs
@@ -35,6 +37,11 @@ object ClipManager : Manager {
     const val LAGBACK_TOLERANCE = 1
     const val SKY_INTERMEDIATE = 320.0 // our feet will be on 320, which is guaranteed to be air
     const val VOID_INTERMEDIATE = -64.0 - 2.0 // 2 for the player to not suffocate in bedrock
+
+    @EventHandler
+    fun onDisconnected(event: TangerineEvent.Disconnected) {
+        isRunning = false
+    }
 
     // List of lists - each entry in the first list should have all its packets sent on a single tick
     fun build(from: Vec3d, to: Vec3d): List<List<Packet<*>>>? {
