@@ -77,3 +77,11 @@ java {
 loom {
 	accessWidenerPath = file("src/main/resources/tangerine.accesswidener")
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
+}
