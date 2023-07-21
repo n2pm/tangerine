@@ -25,6 +25,12 @@
         "value": "pm.n2.tangerine.compat.TangerineModMenu",
         "adapter": "kotlin"
       }
+    ],
+    "tangerine": [
+      {
+        "value": "pm.n2.tangerine.extension.impl.TangerineTestExtension",
+        "adapter": "kotlin"
+      }
     ]
   },
   "depends": {

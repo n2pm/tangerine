@@ -11,7 +11,8 @@ object ManagerManager : Manager {
         ImGuiManager,
         KeyboardManager,
         ModuleManager,
-        OverlayManager
+        OverlayManager,
+        ExtensionManager
     )
 
     override fun init() {

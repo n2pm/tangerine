@@ -73,30 +73,12 @@ object MenuBar : TangerineRenderable("MenuBar") {
                 ImGui.endMenu()
             }
 
-            drawMenuTab(
-                I18n.translate("tangerine.category.movement"),
-                ModuleManager.getModulesByCategory(ModuleCategory.MOVEMENT)
-            )
-
-            drawMenuTab(
-                I18n.translate("tangerine.category.combat"),
-                ModuleManager.getModulesByCategory(ModuleCategory.COMBAT)
-            )
-
-            drawMenuTab(
-                I18n.translate("tangerine.category.visuals"),
-                ModuleManager.getModulesByCategory(ModuleCategory.VISUALS)
-            )
-
-            drawMenuTab(
-                I18n.translate("tangerine.category.player"),
-                ModuleManager.getModulesByCategory(ModuleCategory.PLAYER)
-            )
-
-            drawMenuTab(
-                I18n.translate("tangerine.category.misc"),
-                ModuleManager.getModulesByCategory(ModuleCategory.MISC)
-            )
+            for (category in ModuleManager.categories) {
+                drawMenuTab(
+                    I18n.translate("tangerine.category.${category.id}"),
+                    ModuleManager.getModulesByCategory(category)
+                )
+            }
 
             ImGui.endMainMenuBar()
         }

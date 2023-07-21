@@ -20,7 +20,15 @@ import pm.n2.tangerine.modules.visuals.StorageESPModule
 import pm.n2.tangerine.modules.visuals.TracersModule
 
 object ModuleManager : Manager {
-    val modules = listOf(
+    val categories = mutableListOf(
+        ModuleCategory.MOVEMENT,
+        ModuleCategory.PLAYER,
+        ModuleCategory.COMBAT,
+        ModuleCategory.MISC,
+        ModuleCategory.VISUALS
+    )
+
+    val modules = mutableListOf(
         CritsModule,
         KillAuraModule,
 
@@ -45,6 +53,10 @@ object ModuleManager : Manager {
     )
 
     override fun init() {
+        // Let extensions add their modules before doing our magic
+        ExtensionManager.extensions.forEach { categories.addAll(it.entrypoint.getCategories()) }
+        ExtensionManager.extensions.forEach { modules.addAll(it.entrypoint.getModules()) }
+
         // Setup config
         for (module in modules) {
             val options = mutableListOf<ConfigOption<*>>(module.enabled)

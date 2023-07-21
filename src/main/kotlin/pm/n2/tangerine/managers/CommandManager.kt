@@ -8,9 +8,12 @@ import pm.n2.tangerine.commands.PaperTPCommand
 import pm.n2.tangerine.core.Manager
 
 object CommandManager : Manager {
-    private val commands = listOf(PaperTPCommand, CarpetTPCommand, ClipCommand, PacketsCommand)
+    private val commands = mutableListOf(PaperTPCommand, CarpetTPCommand, ClipCommand, PacketsCommand)
 
     override fun init() {
+        // lets add extensions commands
+        ExtensionManager.extensions.forEach { commands.addAll(it.entrypoint.getCommands()) }
+
         commands.forEach { cmd -> cmd.register(ClientCommandManager.DISPATCHER) }
     }
 }
