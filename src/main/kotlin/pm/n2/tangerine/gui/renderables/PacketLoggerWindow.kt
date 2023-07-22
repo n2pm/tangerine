@@ -1,13 +1,17 @@
 package pm.n2.tangerine.gui.renderables
 
 import imgui.ImGui
+import imgui.flag.ImGuiCond
 import imgui.flag.ImGuiSelectableFlags
 import imgui.flag.ImGuiTableFlags
 import imgui.type.ImBoolean
+import net.fabricmc.loader.api.MappingResolver
 import net.minecraft.client.resource.language.I18n
+import net.minecraft.network.NetworkSide
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import pm.n2.tangerine.gui.TangerineRenderable
+import pm.n2.tangerine.managers.MappingManager
 import pm.n2.tangerine.managers.ModuleManager
 import pm.n2.tangerine.modules.misc.PacketLoggerModule
 import java.lang.reflect.Field
@@ -21,6 +25,7 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
     override fun draw() {
         val enabled = ImBoolean(this.enabled)
 
+        ImGui.setNextWindowSize(500f, 250f, ImGuiCond.FirstUseEver)
         if (ImGui.begin(I18n.translate("tangerine.ui.packet_logger.name"), enabled)) {
             drawMain()
             drawPacket()
@@ -44,11 +49,11 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
         if (ImGui.button(I18n.translate("tangerine.ui.clear"))) PacketLoggerModule.clearPackets()
 
         val flags = (ImGuiTableFlags.Borders
-                or ImGuiTableFlags.NoSavedSettings
-                or ImGuiTableFlags.RowBg
-                or ImGuiTableFlags.Resizable
-                or ImGuiTableFlags.ScrollX
-                or ImGuiTableFlags.ScrollY)
+            or ImGuiTableFlags.NoSavedSettings
+            or ImGuiTableFlags.RowBg
+            or ImGuiTableFlags.Resizable
+            or ImGuiTableFlags.ScrollX
+            or ImGuiTableFlags.ScrollY)
 
         if (!ImGui.beginTable("##PacketLoggerTable", 3, flags)) {
             ImGui.endChild()
@@ -71,9 +76,10 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
             ImGui.tableNextRow()
             ImGui.tableNextColumn()
 
-            val direction = if (packet.clientbound) "S2C" else "C2S"
+            val direction = if (packet.side == NetworkSide.CLIENTBOUND) "S2C" else "C2S"
+            val packetID = packet.packet.hashCode().toString() + "-" + packet.side + "-" + packet.sentAt
             if (ImGui.selectable(
-                    "$direction##${packet.packet}",
+                    "$direction##$packetID",
                     selectedPacket == packet,
                     ImGuiSelectableFlags.SpanAllColumns
                 )
@@ -127,7 +133,7 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
         // Declared fields + superclass fields
         for (field in recursiveFields(obj::class.java)) {
             try {
-                drawField(field, obj)
+                drawField(obj::class.java, field, obj)
             } catch (e: Exception) {
                 // ignored
             }
@@ -140,12 +146,12 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
         return fields
     }
 
-    private fun drawField(field: Field, obj: Any?) {
+    private fun drawField(clazz: Class<*>, field: Field, obj: Any?) {
         if (Modifier.isStatic(field.modifiers)) return
 
         field.isAccessible = true
-        val type = field.type.simpleName
-        val name = field.name
+        val type = MappingManager.mapClassSimple(field.type)
+        val name = MappingManager.mapField(clazz, field)
         val value = field.get(obj)
 
         if (canBeToStringed(field.type)) {
@@ -166,10 +172,10 @@ object PacketLoggerWindow : TangerineRenderable("PacketLoggerWindow", false) {
     }
 
     private fun canBeToStringed(type: Class<*>) = type.isPrimitive
-            || type.isEnum
-            || type == String::class.java
-            || type == Identifier::class.java
-            || type == UUID::class.java
-            || type.isAssignableFrom(Text::class.java)
+        || type.isEnum
+        || type == String::class.java
+        || type == Identifier::class.java
+        || type == UUID::class.java
+        || type.isAssignableFrom(Text::class.java)
 }
 
