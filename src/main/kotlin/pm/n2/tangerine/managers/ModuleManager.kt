@@ -39,6 +39,7 @@ object ModuleManager : Manager {
 
         BoatFlyModule,
         FlightModule,
+        IgnoreRotationModule,
         LiquidWalkModule,
         NoFallModule,
         NoSlowModule,
