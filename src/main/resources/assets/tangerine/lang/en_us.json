@@ -62,6 +62,7 @@
   "tangerine.module.omnisprint.description": "Allows you to sprint in any direction",
   "tangerine.module.anti_hunger.name": "Anti hunger",
   "tangerine.module.anti_hunger.description": "Prevents you from losing hunger",
+  "tangerine.config.anti_hunger.turned_on": "Crimsongale mode",
   "tangerine.module.block_esp.name": "Block ESP",
   "tangerine.module.block_esp.description": "Outlines certain blocks",
   "tangerine.config.block_esp.blocks": "Blocks",
