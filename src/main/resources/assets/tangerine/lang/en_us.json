@@ -51,6 +51,8 @@
   "tangerine.config.flight.scroll_speed": "Fly scroll speed",
   "tangerine.config.flight.friction": "Fly friction",
   "tangerine.config.flight.speed": "Fly speed",
+  "tangerine.module.ignore_rotation.name": "Ignore rotation",
+  "tangerine.module.ignore_rotation.description": "Ignores rotation sent by the server",
   "tangerine.module.jesus.name": "Walk on liquids",
   "tangerine.module.jesus.description": "Treats water and lava like solid blocks",
   "tangerine.module.no_fall.name": "No fall damage",
