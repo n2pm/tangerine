@@ -1,7 +1,10 @@
 package pm.n2.tangerine.managers
 
+import io.netty.buffer.Unpooled
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
+import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
@@ -13,7 +16,7 @@ import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.core.Manager
 import pm.n2.tangerine.core.TangerineEvent
 import pm.n2.tangerine.core.TangerineTaskContext
-import pm.n2.tangerine.managers.ClipManager.build
+import pm.n2.tangerine.managers.PaperClipManager.build
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -23,8 +26,8 @@ import kotlin.math.floor
  *
  * Implementations my own (NotNite), but she inspired the algorithm in [build] for determining what to do.
  */
-object ClipManager : Manager {
-    val logger = LoggerFactory.getLogger("Tangerine ClipManager")
+object PaperClipManager : Manager {
+    val logger = LoggerFactory.getLogger("Tangerine PaperClipManager")
     var isRunning = false
     var lagbackAttempts = 0
 
@@ -126,6 +129,8 @@ object ClipManager : Manager {
         var currentPos = player.pos
 
         isRunning = true
+        player.setNoGravity(true)
+        player.vehicle?.setNoGravity(true)
 
         player.sendMessage(Text.literal("Building packets..."))
         val chunks = build(from, to) ?: run {
@@ -133,19 +138,40 @@ object ClipManager : Manager {
                 it.withColor(Formatting.RED)
             })
             isRunning = false
+            player.setNoGravity(false)
+            player.vehicle?.setNoGravity(false)
             lagbackAttempts = 0
             return
         }
 
         for (chunk in chunks) {
-            for (packet in chunk) {
+            for (immutablePacket in chunk) {
                 if (!isRunning) return
-                val isPos = packet is PlayerMoveC2SPacket.PositionAndOnGround
+                var packet = immutablePacket
+                var isPos = packet is PlayerMoveC2SPacket.PositionAndOnGround || packet is VehicleMoveC2SPacket
+
+                if (packet is VehicleMoveC2SPacket) {
+                    // jank way to fill it in with current vehicle pos
+                    if (packet.x == 0.0 && packet.y == 0.0 && packet.z == 0.0 && packet.yaw == 0f && packet.pitch == 0f) {
+                        isPos = false
+                        packet = buildVehicleMove(
+                            currentPos.x,
+                            currentPos.y,
+                            currentPos.z,
+                            packet.yaw,
+                            packet.pitch
+                        )
+                    }
+                }
 
                 if (isPos) {
-                    packet as PlayerMoveC2SPacket.PositionAndOnGround
-                    val packetPos =
+                    val packetPos = if (packet is PlayerMoveC2SPacket.PositionAndOnGround) {
                         Vec3d(packet.getX(currentPos.x), packet.getY(currentPos.y), packet.getZ(currentPos.z))
+                    } else {
+                        packet as VehicleMoveC2SPacket
+                        Vec3d(packet.x, packet.y, packet.z)
+                    }
+
                     val packetChunk = ChunkPos(
                         BlockPos(
                             floor(packetPos.x).toInt(),
@@ -168,9 +194,29 @@ object ClipManager : Manager {
                     currentPos = packetPos
                 }
 
+                val str = when (packet) {
+                    is PlayerMoveC2SPacket.PositionAndOnGround -> {
+                        val x = packet.getX(currentPos.x)
+                        val y = packet.getY(currentPos.y)
+                        val z = packet.getZ(currentPos.z)
+                        "PositionAndOnGround{x=$x,y=$y,z=$z}"
+                    }
+
+                    is VehicleMoveC2SPacket -> "VehicleMoveC2SPacket{x=${packet.x},y=${packet.y},z=${packet.z}}"
+                    is PlayerMoveC2SPacket.OnGroundOnly -> "OnGroundOnly{onGround=${packet.isOnGround}"
+
+                    else -> "???"
+                }
+
+                logger.debug("[execute] Sending packet: {}", str)
+
                 network.sendPacket(packet)
 
                 if (isPos) {
+                    if (player.hasVehicle()) {
+                        player.vehicle!!.setPos(currentPos.x, currentPos.y, currentPos.z)
+                    }
+
                     player.setPos(currentPos.x, currentPos.y, currentPos.z)
                 }
             }
@@ -197,6 +243,8 @@ object ClipManager : Manager {
                         it.withColor(Formatting.RED)
                     })
                     isRunning = false
+                    player.setNoGravity(false)
+                    player.vehicle?.setNoGravity(false)
                     lagbackAttempts = 0
                     return
                 }
@@ -207,6 +255,8 @@ object ClipManager : Manager {
         }
 
         isRunning = false
+        player.setNoGravity(false)
+        player.vehicle?.setNoGravity(false)
         lagbackAttempts = 0
         player.sendMessage(Text.literal("Done!"), true)
     }
@@ -349,12 +399,20 @@ object ClipManager : Manager {
         }
 
         val packets = mutableListOf<Packet<*>>()
-        for (i in 0 until stepCount) {
-            val packet = PlayerMoveC2SPacket.OnGroundOnly(player.isOnGround)
-            packets.add(packet)
+        for (i in 0 until floor(diff / MAX_MOVE_PER_PACKET).toInt()) {
+            if (player.hasVehicle()) {
+                // Jank way to represent a VehicleMove packet we shouldn't change pos
+                packets.add(buildVehicleMove(0.0, 0.0, 0.0, 0f, 0f))
+            } else {
+                packets.add(PlayerMoveC2SPacket.OnGroundOnly(player.isOnGround))
+            }
         }
 
-        packets.add(PlayerMoveC2SPacket.PositionAndOnGround(to.x, to.y, to.z, player.isOnGround))
+        if (player.hasVehicle()) {
+            packets.add(buildVehicleMove(to.x, to.y, to.z, player.yaw, player.pitch))
+        } else {
+            packets.add(PlayerMoveC2SPacket.PositionAndOnGround(to.x, to.y, to.z, player.isOnGround))
+        }
 
         logger.debug("[vclipInternal] Crafted {} packets to {}", packets.size, to.y)
         return Pair(packets, to.y)
@@ -404,11 +462,30 @@ object ClipManager : Manager {
                 return null
             }
 
-            val packet = PlayerMoveC2SPacket.PositionAndOnGround(pos.x, pos.y, pos.z, player.isOnGround)
-            packets.add(packet)
+            if (player.hasVehicle()) {
+                packets.add(buildVehicleMove(to.x, to.y, to.z, player.yaw, player.pitch))
+            } else {
+                packets.add(PlayerMoveC2SPacket.PositionAndOnGround(to.x, to.y, to.z, player.isOnGround))
+            }
         }
 
         logger.debug("[hclipInternal] Crafted {} packets to {}", packets.size, to)
         return Pair(packets, to)
+    }
+
+    fun buildVehicleMove(
+        x: Double,
+        y: Double,
+        z: Double,
+        yaw: Float,
+        pitch: Float
+    ): VehicleMoveC2SPacket {
+        val buf = PacketByteBuf(Unpooled.buffer())
+        buf.writeDouble(x)
+        buf.writeDouble(y)
+        buf.writeDouble(z)
+        buf.writeFloat(yaw)
+        buf.writeFloat(pitch)
+        return VehicleMoveC2SPacket(buf)
     }
 }

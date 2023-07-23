@@ -9,16 +9,22 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pm.n2.tangerine.managers.ClipManager;
+import pm.n2.tangerine.managers.PaperClipManager;
 import pm.n2.tangerine.modules.movement.NoSlowModule;
 import pm.n2.tangerine.modules.movement.OmniSprintModule;
 import pm.n2.tangerine.modules.player.AntiHungerModule;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasVehicle()Z"))
+    public boolean tangerine$clipVehicle(ClientPlayerEntity instance) {
+        if (PaperClipManager.INSTANCE.isRunning()) return false;
+        return instance.hasVehicle();
+    }
+
     @Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
     public void tangerine$sendMovementPackets$clip(CallbackInfo ci) {
-        if (ClipManager.INSTANCE.isRunning()) ci.cancel();
+        if (PaperClipManager.INSTANCE.isRunning()) ci.cancel();
     }
 
     // i tried @Inject() into this and ci.cancel() but it caused some weird rubberbanding (lol)

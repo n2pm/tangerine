@@ -7,6 +7,7 @@ import pm.n2.tangerine.Tangerine
 import pm.n2.tangerine.config.BooleanConfigOption
 import pm.n2.tangerine.config.DoubleConfigOption
 import pm.n2.tangerine.core.TangerineEvent
+import pm.n2.tangerine.managers.PaperClipManager
 import pm.n2.tangerine.modules.Module
 import pm.n2.tangerine.modules.ModuleCategory
 
@@ -40,7 +41,7 @@ object FlightModule : Module("flight", ModuleCategory.MOVEMENT) {
             val canNormallyFly = mc.player!!.isSpectator || mc.player!!.isCreative
             if (!canNormallyFly) abilities.allowFlying = true
 
-            if (abilities.flying && !canNormallyFly) {
+            if ((abilities.flying && !canNormallyFly) || PaperClipManager.isRunning) {
                 fallingTicks++
 
                 if (fallingTicks >= 20) {
@@ -52,7 +53,17 @@ object FlightModule : Module("flight", ModuleCategory.MOVEMENT) {
                     }
 
                     if (shouldAntiKick) {
-                        val packet = PositionAndOnGround(mc.player!!.x, mc.player!!.y - 0.03126, mc.player!!.z, true)
+                        val packet = if (mc.player!!.hasVehicle()) {
+                            PaperClipManager.buildVehicleMove(
+                                mc.player!!.vehicle!!.x,
+                                mc.player!!.vehicle!!.y - 0.03126,
+                                mc.player!!.vehicle!!.z,
+                                mc.player!!.vehicle!!.yaw,
+                                mc.player!!.vehicle!!.pitch
+                            )
+                        } else {
+                            PositionAndOnGround(mc.player!!.x, mc.player!!.y - 0.03126, mc.player!!.z, true)
+                        }
                         mc.player!!.networkHandler.sendPacket(packet)
                     }
 

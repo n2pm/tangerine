@@ -5,7 +5,7 @@ import pm.n2.tangerine.core.Manager
 
 object ManagerManager : Manager {
     private val managers = listOf(
-        ClipManager,
+        PaperClipManager,
         CommandManager,
         EventManager,
         ImGuiManager,
