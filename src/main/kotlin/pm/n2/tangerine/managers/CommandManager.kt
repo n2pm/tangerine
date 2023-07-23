@@ -8,7 +8,7 @@ object CommandManager : Manager {
     private val commands = mutableListOf(PaperTPCommand, CarpetTPCommand, ClipCommand, PacketsCommand)
 
     override fun init() {
-        commands.forEach { cmd -> cmd.register(ClientCommandManager.DISPATCHER) }
         ExtensionManager.extensions.forEach { commands.addAll(it.entrypoint.getCommands()) }
+        commands.forEach { cmd -> cmd.register(ClientCommandManager.DISPATCHER) }
     }
 }
