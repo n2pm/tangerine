@@ -27,6 +27,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "ClientConnectionMixin"
+    "ClientConnectionMixin",
+    "PlayerPositionLookS2CPacketAccessor"
   ]
 }
