@@ -399,7 +399,13 @@ object PaperClipManager : Manager {
         }
 
         val packets = mutableListOf<Packet<*>>()
-        for (i in 0 until floor(diff / MAX_MOVE_PER_PACKET).toInt()) {
+        val moveCount = if (player.hasVehicle()) {
+            floor(diff / MAX_MOVE_PER_PACKET).toInt()
+        } else {
+            stepCount
+        }
+
+        for (i in 0 until moveCount) {
             if (player.hasVehicle()) {
                 // Jank way to represent a VehicleMove packet we shouldn't change pos
                 packets.add(buildVehicleMove(0.0, 0.0, 0.0, 0f, 0f))
@@ -463,9 +469,9 @@ object PaperClipManager : Manager {
             }
 
             if (player.hasVehicle()) {
-                packets.add(buildVehicleMove(to.x, to.y, to.z, player.yaw, player.pitch))
+                packets.add(buildVehicleMove(pos.x, pos.y, pos.z, player.yaw, player.pitch))
             } else {
-                packets.add(PlayerMoveC2SPacket.PositionAndOnGround(to.x, to.y, to.z, player.isOnGround))
+                packets.add(PlayerMoveC2SPacket.PositionAndOnGround(pos.x, pos.y, pos.z, player.isOnGround))
             }
         }
 
