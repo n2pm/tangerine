@@ -1,6 +1,6 @@
 plugins {
 	id("org.jetbrains.kotlin.jvm") version "1.9.0"
-	id("fabric-loom") version "1.3-SNAPSHOT"
+	id("fabric-loom") version "1.5.7"
     id("maven-publish")
 	java
 }
@@ -36,12 +36,14 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
 
-    modApi("com.adryd:cauldron:${property("cauldron_version")}")
-    modApi("pm.n2:hajlib:${property("hajlib_version")}")
+    modApi(files("./libs/cauldron-mc1.20.4-0.1.9+5e30141a.jar"))
+    modApi(files("./libs/hajlib-1.2.5.jar"))
 
     modCompileOnly("com.terraformersmc:modmenu:${property("modmenu_version")}")
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
 }
+
+
 
 tasks {
 	compileKotlin {
@@ -67,6 +69,11 @@ tasks {
         from("LICENSE") {
             rename { "${it}_${base.archivesName}" }
         }
+    }
+    
+    remapJar {
+        nestedJars.from(file("./libs/cauldron-mc1.20.4-0.1.9+5e30141a.jar"))
+        nestedJars.from(file("./libs/hajlib-1.2.5.jar"))
     }
 }
 

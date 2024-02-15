@@ -19,14 +19,15 @@ public class ClientPlayNetworkHandlerMixin {
     private void onChunkData(ChunkDataS2CPacket packet, CallbackInfo ci) {
         var world = MinecraftClient.getInstance().world;
         if (world == null) return;
-        var chunk = world.getChunk(packet.getX(), packet.getZ());
+        var chunk = world.getChunk(packet.getChunkX(), packet.getChunkZ());
         if (chunk == null) return;
         BlockESPModule.INSTANCE.searchChunkSync(chunk);
     }
 
     @Inject(at = @At("HEAD"), method = "onUnloadChunk")
     private void onChunkUnload(UnloadChunkS2CPacket packet, CallbackInfo ci) {
-        BlockESPModule.INSTANCE.unloadChunk(packet.getX() * 16, packet.getZ() * 16);
+        var pos = packet.pos();
+        BlockESPModule.INSTANCE.unloadChunk(pos.x * 16, pos.z * 16);
     }
 
     @Inject(method = "onPlayerPositionLook", at = @At("HEAD"))
