@@ -12,6 +12,7 @@
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
+    "ClientWorldAccessor",
     "EntityMixin",
     "FluidBlockMixin",
     "InputMixin",
