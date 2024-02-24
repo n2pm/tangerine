@@ -110,6 +110,8 @@
   "tangerine.config.tracers.others_color": "Other entities color",
   "tangerine.module.fastbreak.name": "Fast break",
   "tangerine.module.fastbreak.description": "Speeds up block breaking",
+  "tangerine.module.civbreak.name": "Civbreak",
+  "tangerine.module.civbreak.description": "Instant mine the block in the exact position you last mined",
   "tangerine.module.gui.name": "GUI settings",
   "tangerine.module.gui.description": "Configure the Tangerine GUI",
   "tangerine.config.gui.unifont": "Use Unifont",
