@@ -115,5 +115,8 @@
   "tangerine.config.gui.unifont": "Use Unifont",
   "tangerine.config.gui.font_scale": "Font scale",
   "tangerine.module.packet_logger.name": "Packet logger",
-  "tangerine.module.packet_logger.description": "Use .packets to view logged packets"
+  "tangerine.module.packet_logger.description": "Use .packets to view logged packets",
+  "tangerine.module.elytra_rocket.name": "Elytra rockets",
+  "tangerine.module.elytra_rocket.description": "Emulates the use of rockets without consuming them",
+  "tangerine.config.elytra_rocket.require_rocket": "Require rocket to use"
 }

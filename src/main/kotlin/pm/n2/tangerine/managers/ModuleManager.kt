@@ -38,6 +38,7 @@ object ModuleManager : Manager {
         PacketLoggerModule,
 
         BoatFlyModule,
+        ElytraRocketModule,
         FlightModule,
         IgnoreRotationModule,
         LiquidWalkModule,
